@@ -1,0 +1,44 @@
+/*
+ * Always set the map height explicitly to define the size of the div element
+ * that contains the map.
+ */
+#map {
+    height: 100%;
+    box-shadow: 1px 1px 8px 0 grey;
+    border-radius: 18px;
+    clear: both;
+    overflow: hidden;
+    background: #fff none repeat scroll 0 0;
+}
+
+/*
+ * Optional: Makes the sample page fill the window.
+ */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Zenkaku, sans-serif;
+  background-color: #fff;
+}
+
+.container{
+    max-width:1170px;
+    max-height: 600px;
+    margin:auto;
+    height: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.title {
+    font-family: Zenkaku, sans-serif;
+    padding-top: 0px;
+    position: relative;
+    left: 40%;
+}
+
+.text-center {
+    text-align: center!important;
+}
