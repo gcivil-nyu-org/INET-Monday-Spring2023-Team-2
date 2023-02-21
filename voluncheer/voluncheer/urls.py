@@ -19,4 +19,11 @@ from django.urls import include,path
 urlpatterns = [
     path('__debug__/', include('debug_toolbar.urls')),
     path("admin/", admin.site.urls),
+    path('jobboard/', include('job_board.urls')),
+    path('', include('chatroom.urls')),
+    path('login/', include('login.urls')),
+    path('registration/', include('registration.urls')),
+    path('map/', include('map.urls')),
+    path('user_profile/', include('user_profile.urls')),
+    path('organization_profile/', include('organization_profile.urls')),
 ]
