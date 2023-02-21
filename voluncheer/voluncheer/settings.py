@@ -116,6 +116,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+#You can change the logic of determining whether or not the Debug Toolbar should be shown with the SHOW_TOOLBAR_CALLBACK option.
+SHOW_TOOLBAR_CALLBACK = True
+
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
