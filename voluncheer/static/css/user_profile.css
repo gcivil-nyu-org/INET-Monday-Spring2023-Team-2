@@ -2,19 +2,19 @@
 @import url(https://fonts.googleapis.com/css?family=Dancing+Script);
 @font-face {
     font-family: 'Zenkaku';
-    src: url('../fonts/ZenKakuGothicNew-Light.ttf'); format('truetype');
+    src: url('../fonts/ZenKakuGothicNew-Light.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
     font-family: 'Zenkaku';
-    src: url('../fonts/ZenKakuGothicNew-Bold.ttf'); format('truetype');
+    src: url('../fonts/ZenKakuGothicNew-Bold.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
 }
 @font-face {
     font-family: 'Zenkaku';
-    src: url('../fonts/ZenKakuGothicNew-Regular.ttf'); format('truetype');
+    src: url('../fonts/ZenKakuGothicNew-Regular.ttf') format('truetype');
     font-weight: auto;
     font-style: normal;
 }

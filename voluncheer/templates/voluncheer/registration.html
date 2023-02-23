@@ -1,0 +1,87 @@
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Registration</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/registration.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    />
+    <script type="module" src="{% static 'js/map.js' %}"></script>
+  </head>
+  <body>
+    <div class="container">
+      <img
+        src="{% static 'images/voluncheer_logo.png' %}"
+        alt="logo"
+        class="logo title"
+        height="80px"
+      />
+      <h2>Registration</h2>  
+      <div class="i-am-centered">
+        <form method="POST" action=".">
+          
+          {% csrf_token %}
+          <div class="mb-3">
+           
+            <!-- rendering the form with django widget tweak -->
+            {% render_field form.role class='form-control' placeholder="Role" %}
+          </div>
+
+          <div class="mb-3">
+            <!-- rendering the form with django widget tweak -->
+            {% render_field form.first_name class='form-control' placeholder=form.first_name.label %}
+          </div>
+
+          <div class="mb-3">
+            
+            <!-- rendering the form with django widget tweak -->
+            {% render_field form.last_name class='form-control' placeholder=form.last_name.label %}
+          </div>
+
+          <div class="mb-3">
+           
+            <!-- rendering the form with django widget tweak -->
+            {% render_field form.age class='form-control' placeholder=form.age.label %}
+          </div>
+
+          
+          <div class="mb-3">  
+            
+            <!-- rendering the form with django widget tweak -->
+            {% render_field form.email class='form-control' placeholder=form.email.label %}
+          </div>
+
+          <div class="mb-3">
+            
+            <!-- rendering the form with django widget tweak -->
+            {% render_field form.password class='form-control' placeholder=form.password.label %}
+          </div>
+
+          <button class="btn btn-outline-success">Submit</button>
+          <!-- incase of any form related errors -->
+          {{form.errors}}
+        </form>
+      </div>
+      <p class="text-center top_spac">
+        <br />
+        Copyright &copy 2023 VolunCheer, org. All Rights Reserved. <br />
+      </p>
+    </div>
+
+    <!--
+     The `defer` attribute causes the callback to execute after the full HTML
+     document has been parsed. For non-blocking uses, avoiding race conditions,
+     and consistent behavior across browsers, consider loading using Promises
+     with https://www.npmjs.com/package/@googlemaps/js-api-loader.
+    -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDXECAEeD8c8tqT_zI7OBSXmFrVHK4Fs8&callback=initMap&v=weekly"
+      defer
+    ></script>
+  </body>
+</html>
