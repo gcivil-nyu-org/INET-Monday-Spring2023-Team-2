@@ -1,2 +1,3 @@
 #Put requirements here to have a consistent environment for everyone if necessary.
 django-debug-toolbar
+django-widget-tweaks
