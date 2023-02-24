@@ -9,6 +9,7 @@ ROLE_CHOICES = (
 )
 
 class User(AbstractUser):
+    username = None
     first_name = models.CharField(max_length = 200)
     last_name = models.CharField(max_length = 200)
     date_of_birth = models.DateField(blank = True, null = True) 
@@ -16,6 +17,7 @@ class User(AbstractUser):
     password = models.CharField(max_length = 127)
     role = models.CharField(max_length = 12, choices = ROLE_CHOICES, default = 'volunteer')
 
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [role]
 
     class Meta:
