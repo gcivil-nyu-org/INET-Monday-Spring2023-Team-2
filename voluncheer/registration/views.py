@@ -2,9 +2,11 @@ from django.shortcuts import render
 from .forms import InputForm
 from django.http import HttpResponse
 from django.template import loader
+from django.views.generic.edit import CreateView, FormView
  
-# Create your views here.
-def registration_view(request):
-    context ={}
-    context['form']= InputForm()
-    return render(request, "voluncheer/registration.html", context)
+# ======================== Registration ============================
+class registration_form(CreateView):
+    form_class = InputForm
+    template_name = 'voluncheer/registration.html'
+    success_url = '/login/'
+    

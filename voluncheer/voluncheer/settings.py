@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "organization_profile.apps.OrganizationProfileConfig",
     "login.apps.LoginConfig",
     "map.apps.MapConfig",
+    "registration.apps.RegistrationConfig",
     "user_profile.apps.UserProfileConfig",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -145,3 +146,5 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "registration.User"
