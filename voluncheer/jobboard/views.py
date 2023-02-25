@@ -60,7 +60,7 @@ def jobboard(request):
     return render(request, 'voluncheer/jobboard.html', context)
 
 
-def jobboard_select(request):
+def select(request):
     job_lists = Job.objects.order_by('-job_pubdate'[:20])
     context = {'job_lists': job_lists}
     return render(request, 'voluncheer/jobboard.html', context)

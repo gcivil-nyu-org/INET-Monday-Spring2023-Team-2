@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "chatroom.apps.ChatroomConfig",
-    "job_board.apps.JobBoardConfig",
+    "jobboard.apps.JobBoardConfig",
     "organization_profile.apps.OrganizationProfileConfig",
     "login.apps.LoginConfig",
     "map.apps.MapConfig",
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_extensions",
     "debug_toolbar",
 ]
 

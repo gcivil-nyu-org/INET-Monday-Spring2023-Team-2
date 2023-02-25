@@ -11,3 +11,4 @@ class Organization(models.Model):
     organization_address_city = models.CharField(max_length=256, default="")
     organization_image = models.CharField(max_length=256, default="images/organize_image_unknown.png")
     organization_website = models.CharField(max_length=256, default="")
+
