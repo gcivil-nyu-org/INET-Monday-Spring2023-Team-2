@@ -28,7 +28,7 @@ DEBUG = True
 
 # Security
 CSRF_TRUSTED_ORIGINS = [
-    "https://joeleu-effective-umbrella-7v5x7pxxw64frqv7-8000.preview.app.github.dev",
+    # TODO: add the address of the hosting platform here.
 ]
 
 ALLOWED_HOSTS = []
