@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from job_board import views
 
 app_name = 'job_board'
 urlpatterns = [

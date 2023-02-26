@@ -26,25 +26,33 @@ SECRET_KEY = "django-insecure-snh-g_^mv%l437fv(^*#%hzl!p2bf7++q#5a-#9+lqu5yv$$yw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# Security
+CSRF_TRUSTED_ORIGINS = [
+    # TODO: add the address of the hosting platform here.
+]
+
 ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    "chatroom.apps.ChatroomConfig",
-    "job_board.apps.JobBoardConfig",
-    "organization_profile.apps.OrganizationProfileConfig",
-    "login.apps.LoginConfig",
-    "map.apps.MapConfig",
-    "user_profile.apps.UserProfileConfig",
+    # Django built-ins
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # External applications
     "debug_toolbar",
+    "crispy_forms",
+    "crispy_bootstrap5",
+    # Local applications
+    "chatroom.apps.ChatroomConfig",
+    "job_board.apps.JobBoardConfig",
+    "map.apps.MapConfig",
+    "profiles.apps.ProfilesConfig",
 ]
 
 MIDDLEWARE = [
@@ -55,8 +63,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    #You should include the Debug Toolbar middleware as early as possible in the list. 
-    # However, it must come after any other middleware that encodes the response’s content, such as GZipMiddleware.
+    # You should include the Debug Toolbar middleware as early as possible in
+    # the list.
+    # However, it must come after any other middleware that encodes the
+    # response’s content, such as GZipMiddleware.
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
@@ -115,21 +125,17 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
-
 USE_TZ = True
 
-#You can change the logic of determining whether or not the Debug Toolbar should be shown with the SHOW_TOOLBAR_CALLBACK option.
+# You can change the logic of determining whether or not the Debug Toolbar
+# should be shown with the SHOW_TOOLBAR_CALLBACK option.
 SHOW_TOOLBAR_CALLBACK = True
 
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -144,3 +150,15 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Authentication and authorization
+AUTH_USER_MODEL = "profiles.User"
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+ACCOUNT_USERNAME_REQUIRED = False
+
+# Crispy Forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

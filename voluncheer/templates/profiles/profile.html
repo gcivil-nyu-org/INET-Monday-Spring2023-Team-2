@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  {% if user.is_organization %}
+  <h2 class="mb-3">{{ organization }}</h2>
+    <div class="card-footer text-muted">
+      Email: <strong>{{ user.email }}</strong>
+    </div>
+  </div>
+  {% elif user.is_volunteer %}
+  <h2 class="mb-3">Hi {{ volunteer }}!</h2>
+    <div class="card-footer text-muted">
+      Email: <strong>{{ user.email }}</strong><br>
+      Date of Birth: <strong>{{ volunteer.date_of_birth }}</strong><br>
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}
