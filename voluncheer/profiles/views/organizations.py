@@ -1,13 +1,8 @@
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
-from django.utils.decorators import method_decorator
 from django.views.generic import CreateView
-from django.views.generic import DetailView
 
-from profiles.decorators import organization_required
 from profiles.forms.organizations import OrganizationCreationForm
-from profiles.models import Organization
 from profiles.models import User
 
 

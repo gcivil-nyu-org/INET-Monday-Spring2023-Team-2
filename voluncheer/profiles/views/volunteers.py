@@ -1,14 +1,9 @@
 from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
-from django.utils.decorators import method_decorator
 from django.views.generic import CreateView
-from django.views.generic import DetailView
 
-from profiles.decorators import volunteer_required
 from profiles.forms.volunteers import VolunteerCreationForm
 from profiles.models import User
-from profiles.models import Volunteer
 
 
 class VolunteerSignUpView(CreateView):
