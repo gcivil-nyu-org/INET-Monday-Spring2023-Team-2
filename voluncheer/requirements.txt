@@ -1,2 +1,4 @@
-#Put requirements here to have a consistent environment for everyone if necessary.
-django-debug-toolbar
+# Put requirements here to have a consistent environment for everyone.
+Django==4.1.7
+django_debug_toolbar==3.8.1
+sqlparse==0.4.3
