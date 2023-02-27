@@ -26,12 +26,12 @@ SECRET_KEY = "django-insecure-snh-g_^mv%l437fv(^*#%hzl!p2bf7++q#5a-#9+lqu5yv$$yw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# Security
 CSRF_TRUSTED_ORIGINS = [
-    # TODO: add the address of the hosting platform here.
+    "voluncheer-dev.us-west-2.elasticbeanstalk.com",
 ]
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "voluncheer-dev.us-west-2.elasticbeanstalk.com",
+]
 
 
 # Application definition
@@ -97,7 +97,7 @@ WSGI_APPLICATION = "voluncheer.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
 
@@ -139,12 +139,8 @@ INTERNAL_IPS = [
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = "static/"
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

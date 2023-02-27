@@ -26,4 +26,12 @@ class ProfileView(DetailView):
             kwargs["organization"] = Organization.objects.get(pk=user)
         if user.is_volunteer:
             kwargs["volunteer"] = Volunteer.objects.get(pk=user)
+            badge_urls = []
+            badge_list = kwargs["volunteer"].badges.split(",")
+            for badge in badge_list:
+                try:
+                    badge_urls.append(Volunteer.BADGES[badge])
+                except:
+                    pass
+            kwargs["badge_urls"] = badge_urls
         return super().get_context_data(**kwargs)
