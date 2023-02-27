@@ -1,4 +1,7 @@
-# Team Project repo
+# VolunCHEER
+
+[![Python Version](https://img.shields.io/badge/python-3.6-brightgreen.svg)](https://python.org)
+[![Django Version](https://img.shields.io/badge/django-4.1.7-brightgreen.svg)](https://djangoproject.com)
 
 ## Development Environment
 
