@@ -1,18 +1,158 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
   {% if user.is_organization %}
   <h2 class="mb-3">{{ organization }}</h2>
+    <!-- Sidenav -->
+    <div class="sidenav">
+        <div class="profile">
+            <img src="{% static organization.organization_image %}" alt="" width="100" height="100"/>
+            <div class="name">
+                {{ organization.name }}
+            </div>
+        </div>
+        <div class="sidenav-url">
+            <div class="url">
+                <a href="#profile" class="active">FOLLOW</a>
+                <hr align="center">
+            </div>
+            <div class="url">
+                <a href="#settings">IMPACT</a>
+                <hr align="center">
+            </div>
+        </div>
+    </div>
+    <!-- End -->
+
+    <!-- Main -->
+    <div class="main">
+        <h2>ABOUT US</h2>
+        <div class="card">
+            <div class="card-body">
+{#                <i class="fa fa-pen fa-xs edit"></i>#}
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Webpage</td>
+                            <td>:</td>
+                            <td>{{ organization.website }}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>:</td>
+                            <td>{{ user.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Address</td>
+                            <td>:</td>
+                            <td>{{ organization.address_city }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h2>POSTED JOBS</h2>
+        <div class="card">
+            {% csrf_token %}
+                {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+                {% for job in job_lists %}
+                    <article>
+					    <a href="#"><img src="{% static job.job_image %}" alt="" class="vol-position-image" width="275px"/></a>
+					    <p class="vol-position-disciption-h1">{{ job.job_title }}</p>
+                        <p class="vol-position-disciption-h3">{{ job.job_pubdate }}</p>
+                        <p class="vol-position-disciption-h2">{{ job.job_location }}</p>
+                        <p class="vol-position-disciption-h2">{{ job.job_worktime }}</p>
+                        <p class="vol-position-disciption-p">{{ job.job_discription }}</p>
+                        <div class="url"><a href="#" class="readmore">Connect</a></div>
+                        <hr align="center">
+				    </article>
+                {% endfor %}
+        </div>
+    </div>
+    <!-- End -->
+
     <div class="card-footer text-muted">
       Email: <strong>{{ user.email }}</strong>
     </div>
   </div>
   {% elif user.is_volunteer %}
   <h2 class="mb-3">Hi {{ volunteer }}!</h2>
-    <div class="card-footer text-muted">
+  </div>
+    <!-- Side Nav -->
+    <div class="sidenav">
+        <div class="profile">
+            <img src="{% static volunteer.user_image %}" alt="" width="100" height="100"/>
+            <div class="name">
+                {{ volunteer.first_name }}, {{ volunteer.last_name }}
+            </div>
+            <div class="job">
+                {{ user.email }}
+            </div>
+        </div>
+
+        <div class="sidenav-url">
+            <div class="url">
+                <a href="#profile" class="active">PROFILE</a>
+                <hr align="center">
+            </div>
+            <div class="url">
+                <a href="#settings">SETTINGS</a>
+                <hr align="center">
+            </div>
+        </div>
+    </div>
+    <!-- Main -->
+    <div class="main">
+        <h2>ABOUT ME</h2>
+        <div class="card">
+            <div class="card-body">
+{#                <i class="fa fa-pen fa-xs edit"></i>#}
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Last Name</td>
+                            <td>:</td>
+                            <td>{{ volunteer.last_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>First Name</td>
+                            <td>:</td>
+                            <td>{{ volunteer.first_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Date of Birth</td>
+                            <td>:</td>
+                            <td>{{ volunteer.date_of_birth }}</td>
+                        </tr>
+                        <tr>
+                            <td>Skills</td>
+                            <td>:</td>
+                            <td>{{ volunteer.user_skill }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h2>MY BADGES</h2>
+        <div class="card">
+            <div class="profile-badge">
+                {% csrf_token %}
+                {% for badge in badge_urls %}
+                <span class="fa-stack fa-sm">
+                    <img src="../../static/{{ badge }}" alt="" width="78px" height="78px"/>
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- End -->
+
+    <div class="card-footer text-muted main">
       Email: <strong>{{ user.email }}</strong><br>
       Date of Birth: <strong>{{ volunteer.date_of_birth }}</strong><br>
     </div>
-  </div>
+    <!-- End -->
   {% endif %}
 {% endblock %}
