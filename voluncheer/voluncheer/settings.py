@@ -23,29 +23,40 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-snh-g_^mv%l437fv(^*#%hzl!p2bf7++q#5a-#9+lqu5yv$$yw"
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# CSRF_TRUSTED_ORIGINS = [
+#     "voluncheer-dev.us-west-2.elasticbeanstalk.com",
+# ]
+# ALLOWED_HOSTS = [
+#     "voluncheer-dev.us-west-2.elasticbeanstalk.com",
+# ]
+# Security
+CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://127.0.0.1"]
+_CSRF_TRUSTED_ORIGINS_CSV = os.getenv("CSRF_TRUSTED_ORIGINS_CSV")
+if _CSRF_TRUSTED_ORIGINS_CSV:
+    CSRF_TRUSTED_ORIGINS = _CSRF_TRUSTED_ORIGINS_CSV.split(",")
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+_ALLOWED_HOSTS_CSV = os.getenv("ALLOWED_HOSTS_CSV")
+if _ALLOWED_HOSTS_CSV:
+    ALLOWED_HOSTS = _ALLOWED_HOSTS_CSV.split(",")
 
 # Application definition
-
 INSTALLED_APPS = [
-    "chatroom.apps.ChatroomConfig",
-    "jobboard.apps.JobBoardConfig",
-    "organization_profile.apps.OrganizationProfileConfig",
-    "login.apps.LoginConfig",
-    "map.apps.MapConfig",
-    "user_profile.apps.UserProfileConfig",
+    # Django built-ins
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_extensions",
-    "debug_toolbar",
+    # External applications
+    "crispy_forms",
+    "crispy_bootstrap5",
+    # Local applications
+    "chatroom.apps.ChatroomConfig",
+    "job_board.apps.JobBoardConfig",
+    "map.apps.MapConfig",
+    "profiles.apps.ProfilesConfig",
 ]
 
 MIDDLEWARE = [
@@ -56,9 +67,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    #You should include the Debug Toolbar middleware as early as possible in the list. 
-    # However, it must come after any other middleware that encodes the response’s content, such as GZipMiddleware.
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "voluncheer.urls"
@@ -66,11 +74,12 @@ ROOT_URLCONF = "voluncheer.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        'DIRS': [(os.path.join(BASE_DIR, 'templates')),],
+        "DIRS": [
+            (os.path.join(BASE_DIR, "templates")),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
-                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -88,7 +97,7 @@ WSGI_APPLICATION = "voluncheer.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
     }
 }
 
@@ -116,32 +125,46 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
-
 USE_TZ = True
 
-#You can change the logic of determining whether or not the Debug Toolbar should be shown with the SHOW_TOOLBAR_CALLBACK option.
+# You can change the logic of determining whether or not the Debug Toolbar
+# should be shown with the SHOW_TOOLBAR_CALLBACK option.
 SHOW_TOOLBAR_CALLBACK = True
 
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = "static/"
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Authentication and authorization
+AUTH_USER_MODEL = "profiles.User"
+LOGIN_URL = "login"
+LOGOUT_URL = "logout"
+LOGIN_REDIRECT_URL = "home"
+LOGOUT_REDIRECT_URL = "home"
+ACCOUNT_USERNAME_REQUIRED = False
+
+# Crispy Forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.getenv("IS_PRODUCTION") != "true"
+
+if DEBUG:
+    INSTALLED_APPS.append("debug_toolbar")
+    MIDDLEWARE.append("debug_toolbar.middleware.DebugToolbarMiddleware")
+    TEMPLATES[0].get("OPTIONS", {}).get("context_processors", []).append(
+        "django.template.context_processors.debug"
+    )

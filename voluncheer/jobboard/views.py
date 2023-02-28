@@ -1,12 +1,9 @@
 from django.shortcuts import render
-
-# Create your views here.
-from django.shortcuts import render, get_object_or_404
-from django.utils import timezone
 from django.apps import apps
-from .models import *
 
-Organization = apps.get_model('organization_profile', 'Organization')
+from job_board.models import Job
+
+Organization = apps.get_model('profiles', 'Organization')
 
 # ======================== Job Board ============================
 test_jobs = [
@@ -64,4 +61,3 @@ def select(request):
     job_lists = Job.objects.order_by('-job_pubdate'[:20])
     context = {'job_lists': job_lists}
     return render(request, 'voluncheer/jobboard.html', context)
-
