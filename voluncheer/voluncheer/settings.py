@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     # Local applications
     "chatroom.apps.ChatroomConfig",
-    "jobboard.apps.JobBoardConfig",
+    "jobboard.apps.JobboardConfig",
     "map.apps.MapConfig",
     "profiles.apps.ProfilesConfig",
 ]

@@ -4,7 +4,9 @@ from django.urls import path
 from profiles.views.home import home
 from profiles.views.profile import ProfileView
 
+app_name = "profiles"
 urlpatterns = [
+    #Uncomment when home page is ready
     path("", home, name="home"),
     path("profile/", ProfileView.as_view(), name="profile"),
     path("organizations/", include(([
