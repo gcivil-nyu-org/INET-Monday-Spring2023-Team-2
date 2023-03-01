@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Job(models.Model):
+    id=models.IntegerField(primary_key=True)
     organization = models.ForeignKey("profiles.Organization", on_delete=models.CASCADE)
     title = models.CharField(max_length=256)
     pubdate = models.DateTimeField('date published')
