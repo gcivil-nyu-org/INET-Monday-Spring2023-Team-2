@@ -159,6 +159,8 @@ ACCOUNT_USERNAME_REQUIRED = False
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+# Backend Email (testing)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("IS_PRODUCTION") != "true"
 
