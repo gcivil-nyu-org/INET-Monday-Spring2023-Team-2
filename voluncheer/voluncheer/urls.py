@@ -32,6 +32,6 @@ urlpatterns = [
 
     # Unimplemented urls.
     # path("chat/", include("chatroom.urls")),
-    # path("jobboard/", include("job_board.urls")),
-    # path("map/", include("map.urls")),
+    path("jobboard/", include("jobboard.urls")),
+    path("map/", include("map.urls")),
 ]
