@@ -6,6 +6,15 @@ from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
 
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from django.core.mail import send_mail, BadHeaderError
+from django.contrib.auth.forms import PasswordResetForm
+from django.template.loader import render_to_string
+from django.db.models.query_utils import Q
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
 
 @method_decorator([login_required], name='dispatch')
 class ProfileView(DetailView):
@@ -35,3 +44,28 @@ class ProfileView(DetailView):
                     pass
             kwargs["badge_urls"] = badge_urls
         return super().get_context_data(**kwargs)
+    
+    def password_reset_request(request):
+        if request.method == "POST":
+            password_reset_form = PasswordResetForm(request.POST)
+            if password_reset_form.is_valid():
+                data = password_reset_form.cleaned_data['email']
+                associated_user = User.objects.filter(Q(email=data)).first()
+                if associated_user:
+                    subject = "Password Reset Request"
+                    message = render_to_string("template_reset_password.html", {
+                      'email': associated_user.email,
+                      'user': associated_user,
+                      'domain': '127.0.0.1:8000',
+                      'site_name': 'VolunCHEER',
+                      'uid': urlsafe_base64_encode(force_bytes(associated_user.pk)),
+                      'token': default_token_generator.make_token(associated_user),
+                      "protocol": 'https' if request.is_secure() else 'http'
+                    })
+                    try:
+                        send_mail(subject, message, 'admin@admin.com', [associated_user.email], fail_silently=False)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect ("/password_reset/done/")
+        password_reset_form = PasswordResetForm()
+        return render(request=request, template_name="password_reset.html", context={"password_reset_form":password_reset_form})
