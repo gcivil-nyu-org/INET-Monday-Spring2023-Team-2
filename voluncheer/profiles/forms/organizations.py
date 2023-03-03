@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 
 from profiles.models import Organization
@@ -26,8 +27,16 @@ class OrganizationCreationForm(UserCreationForm):
         )
         return user
 
+
+""" OrganizationChangeForm
+
+This form is for edit organization profile.
+"""
+
+
 class OrganizationChangeForm(UserChangeForm):
     password = None
+
     class Meta(UserChangeForm.Meta):
         model = Organization
         fields = ("name",)

@@ -1,5 +1,6 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
 from django.db import transaction
 
@@ -9,7 +10,7 @@ from profiles.models import Volunteer
 
 _is_alpha = RegexValidator(
     regex=r"^[a-zA-Z]+$",
-    message="Only upper and lower case English alphabet characters are allowed.",
+    message="Only upper and lower case English alphabet characters are allowed.",  # noqa: E501
 )
 
 
@@ -36,11 +37,23 @@ class VolunteerCreationForm(UserCreationForm):
         )
         return user
 
+
+""" VolunteerChangeForm
+
+This form is for edit volunteer profile.
+"""
+
+
 class VolunteerChangeForm(UserChangeForm):
     password = None
+
     class Meta(UserChangeForm.Meta):
         model = Volunteer
-        fields = ("first_name", "last_name", "date_of_birth",)
+        fields = (
+            "first_name",
+            "last_name",
+            "date_of_birth",
+        )
 
     def save(self, commit=True):
         user = self.instance

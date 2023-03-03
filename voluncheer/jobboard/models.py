@@ -2,9 +2,11 @@ from django.db import models
 
 
 class Job(models.Model):
-    organization = models.ForeignKey("profiles.Organization", on_delete=models.CASCADE)
+    organization = models.ForeignKey(
+        "profiles.Organization", on_delete=models.CASCADE
+    )  # noqa: E501
     title = models.CharField(max_length=256)
-    pubdate = models.DateTimeField('date published')
+    pubdate = models.DateTimeField("date published")
     description = models.CharField(max_length=1024)
     location = models.CharField(max_length=256)
     worktime = models.CharField(max_length=256, default="Not Specified")
