@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.validators import RegexValidator
 from django.db import transaction
 
@@ -35,3 +35,18 @@ class VolunteerCreationForm(UserCreationForm):
             date_of_birth=self.cleaned_data.get("date_of_birth"),
         )
         return user
+
+class VolunteerChangeForm(UserChangeForm):
+    password = None
+    class Meta(UserChangeForm.Meta):
+        model = Volunteer
+        fields = ("first_name", "last_name", "date_of_birth",)
+
+    def save(self, commit=True):
+        user = self.instance
+        volunteer = Volunteer.objects.get(pk=user)
+        if self.is_valid():
+            volunteer.first_name = self.cleaned_data.get("first_name")
+            volunteer.last_name = self.cleaned_data.get("last_name")
+            volunteer.date_of_birth = self.cleaned_data.get("date_of_birth")
+            volunteer.save()
