@@ -5,6 +5,7 @@ from django.contrib.auth.models import AbstractUser
 
 class UserType(models.IntegerChoices):
     """Container for all possible user types."""
+
     ADMIN = 0, "Admin"
     ORGANIZATION = 1, "Organization"
     VOLUNTEER = 2, "Volunteer"
@@ -12,6 +13,7 @@ class UserType(models.IntegerChoices):
 
 class UserManager(BaseUserManager):
     """UserManager allows the app to override the required username field."""
+
     use_in_migrations = True
 
     def _create_user(self, email, password, **extra_fields):
@@ -47,16 +49,17 @@ class User(AbstractUser):
     """A User represents an abstract authenticated entity.
 
     Each user is associated with a particular Profile type
-    (Volunteer|Organization) granting authorization to claim, modify, and delete
-    the associated profile.
+    (Volunteer|Organization) granting authorization to claim,
+    modify, and delete the associated profile.
 
     Attributes:
         email: the unique email address associated with a particular user.
         password: the secret password to use during authentication.
     """
+
     username = None
     email = models.EmailField(
-        verbose_name='email address',
+        verbose_name="email address",
         max_length=254,
         unique=True,
     )
@@ -67,7 +70,7 @@ class User(AbstractUser):
     objects = UserManager()
 
     REQUIRED_FIELDS = []
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = "email"
 
     def __str__(self):
         return self.email
@@ -95,6 +98,7 @@ class Organization(models.Model):
         user: the one-to-one mapping of an authenticated user.
         name: the official name of the organization.
     """
+
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
@@ -117,6 +121,7 @@ class Volunteer(models.Model):
             last name in English speaking countries).
         date_of_birth: the birth date of an individual.
     """
+
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
