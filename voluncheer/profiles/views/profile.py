@@ -55,7 +55,7 @@ def profile_update(request):
     elif request.user.is_organization:
         form = OrganizationChangeForm(request.POST, instance=request.user)
     else:
-        raise Exception(
+        raise ValueError(
             "profile_update: user must either a volunteer or an organizaiton."
         )
     form.save()

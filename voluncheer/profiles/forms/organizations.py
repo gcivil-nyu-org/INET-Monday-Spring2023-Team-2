@@ -28,13 +28,9 @@ class OrganizationCreationForm(UserCreationForm):
         return user
 
 
-""" OrganizationChangeForm
-
-This form is for edit organization profile.
-"""
-
-
 class OrganizationChangeForm(UserChangeForm):
+    """This form is for edit organization profile."""
+
     password = None
 
     class Meta(UserChangeForm.Meta):
