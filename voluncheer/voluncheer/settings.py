@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     "job_board.apps.JobBoardConfig",
     "map.apps.MapConfig",
     "profiles.apps.ProfilesConfig",
+    # Email verification
+    "verify_email.apps.VerifyEmailConfig",
 ]
 
 MIDDLEWARE = [
@@ -137,6 +139,16 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'ss16949@nyu.edu'
+# EMAIL_HOST_PASSWORD = 'wqdnwpvulhibvubo'
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PW')
+
+# DEFAULT_FROM_EMAIL = 'ss16949@nyu.edu'
+PASSWORD_RESET_TIMEOUT = 14400
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, "static")

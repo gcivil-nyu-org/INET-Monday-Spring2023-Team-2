@@ -1,0 +1,40 @@
+<!-- {% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+Hi {{ user.username }},
+Please click on the link to confirm your registration,
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+
+{% endblock %} -->
+
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %} 
+{% block content %}
+
+<!--Reset Password-->
+<!-- <div class="container p-5">
+  <h2 class="font-weight-bold mt-3">Email Verification</h2>
+  <hr />
+  <p>
+    Hi {{ user.username }},Please click on the link to confirm your registration,http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+  </p>
+  <form method="POST">
+    {% csrf_token %} {{ form|crispy }}
+    <button class="btn btn-primary" type="submit">Send email</button>
+  </form>
+</div> -->
+<!-- <div>
+  <h2>Hey {{ user.username }}</h2>
+
+  <h3>We noticed you just sign up on our website<h3>
+  <a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}">Please <strong>confirm your email address</strong> and activate your account</a>
+</div> -->
+{% autoescape off %}  
+Greetings, {{ user.username }},  
+Kindly click below given link to confirm your registration, 
+http://{{ domain }}{% url 'activate' uidb64=uid token=token %}  
+{% endautoescape %}  
+
+{% endblock %}

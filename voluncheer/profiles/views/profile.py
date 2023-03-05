@@ -14,7 +14,16 @@ from django.template.loader import render_to_string
 from django.db.models.query_utils import Q
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
+from django.utils.encoding import force_str
+from profiles.forms.volunteers import VolunteerCreationForm
+from profiles.tokens import account_activation_token
+from django.contrib.auth import get_user_model
+from django.core.mail import EmailMessage
+from django.contrib.sites.shortcuts import get_current_site
+
+
+UserModel = get_user_model()
+
 
 @method_decorator([login_required], name='dispatch')
 class ProfileView(DetailView):
@@ -44,7 +53,7 @@ class ProfileView(DetailView):
                     pass
             kwargs["badge_urls"] = badge_urls
         return super().get_context_data(**kwargs)
-    
+
     def password_reset_request(request):
         if request.method == "POST":
             password_reset_form = PasswordResetForm(request.POST)
@@ -54,18 +63,47 @@ class ProfileView(DetailView):
                 if associated_user:
                     subject = "Password Reset Request"
                     message = render_to_string("template_reset_password.html", {
-                      'email': associated_user.email,
-                      'user': associated_user,
-                      'domain': '127.0.0.1:8000',
-                      'site_name': 'VolunCHEER',
-                      'uid': urlsafe_base64_encode(force_bytes(associated_user.pk)),
-                      'token': default_token_generator.make_token(associated_user),
-                      "protocol": 'https' if request.is_secure() else 'http'
+                        'email': associated_user.email,
+                        'user': associated_user,
+                        'domain': '127.0.0.1:8000',
+                        'site_name': 'VolunCHEER',
+                        'uid': urlsafe_base64_encode(force_bytes(associated_user.pk)),
+                        'token': default_token_generator.make_token(associated_user),
+                        "protocol": 'https' if request.is_secure() else 'http'
                     })
                     try:
-                        send_mail(subject, message, 'admin@admin.com', [associated_user.email], fail_silently=False)
+                        send_mail(subject, message, 'admin@admin.com',
+                                  [associated_user.email], fail_silently=False)
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
-                    return redirect ("/password_reset/done/")
+                    return redirect("/password_reset/done/")
         password_reset_form = PasswordResetForm()
-        return render(request=request, template_name="password_reset.html", context={"password_reset_form":password_reset_form})
+        return render(request=request, template_name="password_reset.html", context={"password_reset_form": password_reset_form})
+
+    def signup(request):
+        if request.method == 'POST':
+            form = VolunteerCreationForm(request.POST)
+            if form.is_valid():
+                # the form has to be saved in the memory and not in DB
+                user = form.save(commit=False)
+                user.is_active = False
+                user.save()
+                # This is  to obtain the current cite domain
+                mail_subject = 'The Activation link has been sent to your email address'
+                message = render_to_string('registration/activate_account.html', {
+                    'user': user,
+                    'email': user.email,
+                    'domain': '127.0.0.1:8000',
+                    'uid': urlsafe_base64_encode(force_str(user.pk)),
+                    'token': account_activation_token.make_token(user),
+                    "protocol": 'https' if request.is_secure() else 'http'
+                })
+                try:
+                    send_mail(mail_subject, message, 'admin@admin.com',
+                              [user.email], fail_silently=False)
+                except BadHeaderError:
+                    return HttpResponse('Invalid header found.')
+                return redirect("registration/check_email")
+        else:
+            form = VolunteerCreationForm()
+        return render(request, 'registration/signup.html', {'form': form})

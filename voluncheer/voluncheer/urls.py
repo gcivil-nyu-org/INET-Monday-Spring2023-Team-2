@@ -20,7 +20,7 @@ from django.contrib.auth import views as auth_views
 
 from profiles.views.home import SignUpView
 from profiles.views.organizations import OrganizationSignUpView
-from profiles.views.volunteers import VolunteerSignUpView
+from profiles.views.volunteers import VolunteerSignUpView, ActivateView
 
 urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
@@ -28,11 +28,18 @@ urlpatterns = [
     path("", include("profiles.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/signup/", SignUpView.as_view(), name="signup"),
-    path("accounts/signup/organization/", OrganizationSignUpView.as_view(), 
+    path("accounts/signup/organization/", OrganizationSignUpView.as_view(),
          name="organization_signup"),
-    path("accounts/signup/volunteer/", VolunteerSignUpView.as_view(), 
+    path("accounts/signup/volunteer/", VolunteerSignUpView.as_view(),
          name="volunteer_signup"),
+    path('activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',
+         ActivateView.as_view(), name='activate'),
+    # path("accounts/signup/volunteer/verification", VolunteerSignUpView.as_view(),
+    #      name="email_verification"),
+    # path('activate/<uidb64>/<token>/', ActivateView.as_view(), name="activate"),
+    # path('check-email/', CheckEmailView.as_view(), name="check_email"),
     # Unimplemented urls.
+    # path('success/', SuccessView.as_view(), name="success"),
     # path("chat/", include("chatroom.urls")),
     # path("jobboard/", include("job_board.urls")),
     # path("map/", include("map.urls")),

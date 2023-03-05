@@ -3,6 +3,14 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
 from django.db import transaction
 
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth import get_user_model
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_encode
+from django.template.loader import render_to_string
+
+from profiles.tokens import account_activation_token
+
 from profiles.models import User
 from profiles.models import UserType
 from profiles.models import Volunteer
@@ -24,7 +32,8 @@ class VolunteerCreationForm(UserCreationForm):
 
     @transaction.atomic
     def save(self, commit=True):
-        user = super().save(commit=False)
+        user = super(VolunteerCreationForm, self).save(commit=False)
+        user.email = self.cleaned_data['email']
         user.type = UserType.VOLUNTEER
         if commit:
             user.save()
@@ -35,3 +44,18 @@ class VolunteerCreationForm(UserCreationForm):
             date_of_birth=self.cleaned_data.get("date_of_birth"),
         )
         return user
+
+    def send_activation_email(self, request, user):
+        current_site = get_current_site(request)
+        subject = 'Activate Your Account'
+        message = render_to_string(
+            'registration/activate_account.html',
+            {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_str(user.pk)),
+                'token': account_activation_token.make_token(user),
+            }
+        )
+
+        user.email_user(subject, message, html_message=message)
