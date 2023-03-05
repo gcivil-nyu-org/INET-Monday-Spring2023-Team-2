@@ -1,4 +1,5 @@
 from django.urls import path
+from django.urls import re_path
 
 from profiles.views.home import home
 from profiles.views.profile import ProfileView
