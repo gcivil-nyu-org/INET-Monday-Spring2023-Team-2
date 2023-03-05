@@ -8,6 +8,7 @@ from profiles.models import User
 
 class VolunteerSignUpView(CreateView):
     """Displays a form for volunteers to sign up with."""
+
     model = User
     form_class = VolunteerCreationForm
     template_name = "registration/signup_form.html"

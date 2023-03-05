@@ -1,16 +1,11 @@
-from django.test import Client
 from django.test import TestCase
-from django.urls import reverse
 
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
 from profiles.models import Volunteer
 
-from map import urls
-from map import views
-
-'''
+"""
 Commented out for now until I figure out the namespace and app_name diff
 class ProfilesTestCase(TestCase):
     def test_page_loads(self):
@@ -19,7 +14,9 @@ class ProfilesTestCase(TestCase):
             appNameAndUrl = urls.app_name+":"+url.name
             response = c.get(reverse(appNameAndUrl))
             self.assertEqual(response.status_code, 200)
-'''
+"""
+
+
 class UserTest(TestCase):
     """Test cases for the basic user type."""
 
