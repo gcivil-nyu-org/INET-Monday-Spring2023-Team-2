@@ -28,12 +28,18 @@ urlpatterns = [
     path("", include("profiles.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/signup/", SignUpView.as_view(), name="signup"),
-    path("accounts/signup/organization/", OrganizationSignUpView.as_view(), 
-         name="organization_signup"),
-    path("accounts/signup/volunteer/", VolunteerSignUpView.as_view(), 
-         name="volunteer_signup"),
+    path(
+        "accounts/signup/organization/",
+        OrganizationSignUpView.as_view(),
+        name="organization_signup",
+    ),
+    path(
+        "accounts/signup/volunteer/",
+        VolunteerSignUpView.as_view(),
+        name="volunteer_signup",
+    ),
     # Unimplemented urls.
     # path("chat/", include("chatroom.urls")),
-    # path("jobboard/", include("job_board.urls")),
-    # path("map/", include("map.urls")),
+    path("jobboard/", include("jobboard.urls")),
+    path("map/", include("map.urls")),
 ]
