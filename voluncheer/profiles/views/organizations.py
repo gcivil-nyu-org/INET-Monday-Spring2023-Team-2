@@ -8,6 +8,7 @@ from profiles.models import User
 
 class OrganizationSignUpView(CreateView):
     """Displays a form for organizations to sign up with."""
+
     model = User
     form_class = OrganizationCreationForm
     template_name = "registration/signup_form.html"
