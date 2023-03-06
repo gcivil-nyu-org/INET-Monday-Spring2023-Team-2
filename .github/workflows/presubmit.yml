@@ -1,0 +1,56 @@
+name: Continuous Integration
+run-name: ${{ github.workflow }} run for ${{ github.actor }} in ${{ github.ref_name }}
+
+on:
+  push:
+  pull_request:
+    branches:
+      - develop
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: "15 2 * * *"
+
+env:
+  MINIMUM_COVERAGE: 70
+
+defaults:
+  run:
+    shell: bash
+    working-directory: voluncheer
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.actor }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  format-lint-test:
+    name: Checks format, lints, runs tests, and checks coverage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code Locally
+        uses: actions/checkout@v3
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.7
+          cache: pip
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      - name: Check Python Format with Black
+        run: black --check .
+      - name: Lint Python with Flake8
+        run: flake8 .
+      - name: Execute Python Django Test Cases
+        run: python manage.py test
+      - name: Check Test Coverage
+        run: |
+          coverage run --source "." manage.py test
+          coverage lcov --fail-under=${MINIMUM_COVERAGE}
+      - name: Report Coverage to Coveralls
+        if: ${{ success() }}
+        uses: coverallsapp/github-action@v1
+        with:
+          base-path: voluncheer
+          github-token: ${{ github.token }}
+          path-to-lcov: voluncheer/coverage.lcov
