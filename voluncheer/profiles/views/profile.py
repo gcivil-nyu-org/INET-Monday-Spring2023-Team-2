@@ -56,7 +56,7 @@ class ProfileView(DetailView):
                 instance=self.request.user
             )  # noqa: E501
         return super().get_context_data(**kwargs)
-        
+
     def password_reset_request(request):
         if request.method == "POST":
             password_reset_form = PasswordResetForm(request.POST)
@@ -99,6 +99,7 @@ class ProfileView(DetailView):
             context={"password_reset_form": password_reset_form},
         )
 
+
 def profile_update(request):
     """Get profile update POST and call save function on ChangeForms."""
     if request.user.is_volunteer:
@@ -111,5 +112,3 @@ def profile_update(request):
         )
     form.save()
     return redirect("profile")
-
-    
