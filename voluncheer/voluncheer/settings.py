@@ -169,11 +169,13 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Backend Email (testing)
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django_ses.SESBackend'
-AWS_ACCESS_KEY_ID = 'YOUR-ACCESS-KEY-ID'
-AWS_SECRET_ACCESS_KEY = 'YOUR-SECRET-ACCESS-KEY'
-AWS_SES_REGION_NAME = 'us-west-2' #(ex: us-east-2)
-AWS_SES_REGION_ENDPOINT ='email.us-west-2.amazonaws.com' #(ex: email.us-east-2.amazonaws.com)
+EMAIL_BACKEND = "django_ses.SESBackend"
+AWS_ACCESS_KEY_ID = "YOUR-ACCESS-KEY-ID"
+AWS_SECRET_ACCESS_KEY = "YOUR-SECRET-ACCESS-KEY"
+AWS_SES_REGION_NAME = "us-west-2"  # (ex: us-east-2)
+AWS_SES_REGION_ENDPOINT = (
+    "email.us-west-2.amazonaws.com"  # (ex: email.us-east-2.amazonaws.com)
+)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("IS_PRODUCTION") != "true"
 
