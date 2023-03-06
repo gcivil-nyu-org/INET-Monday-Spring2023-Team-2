@@ -56,14 +56,14 @@ class ProfileView(DetailView):
                     message = render_to_string("template_reset_password.html", {
                       'email': associated_user.email,
                       'user': associated_user,
-                      'domain': '127.0.0.1:8000',
+                      'domain': 'http://voluncheer-dev.us-west-2.elasticbeanstalk.com/',
                       'site_name': 'VolunCHEER',
                       'uid': urlsafe_base64_encode(force_bytes(associated_user.pk)),
                       'token': default_token_generator.make_token(associated_user),
                       "protocol": 'https' if request.is_secure() else 'http'
                     })
                     try:
-                        send_mail(subject, message, 'admin@admin.com', [associated_user.email], fail_silently=False)
+                        send_mail(subject, message, 'AWS_verified_email_address', [associated_user.email], fail_silently=False)
                     except BadHeaderError:
                         return HttpResponse('Invalid header found.')
                     return redirect ("/password_reset/done/")
