@@ -13,6 +13,8 @@ on:
 
 env:
   MINIMUM_COVERAGE: 70
+  APP_NAME: "voluncheer"
+  AWS_REGION: us-east-1
 
 defaults:
   run:
@@ -23,6 +25,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.actor }}-${{ github.ref_name }}
   cancel-in-progress: true
 
+permissions:
+  id-token: write
+  contents: read
+
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   format-lint-test:
     name: Checks format, lints, runs tests, and checks coverage
@@ -30,27 +40,16 @@ jobs:
     steps:
       - name: Checkout Code Locally
         uses: actions/checkout@v3
-      - name: Set up Python 3.7
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.7
-          cache: pip
-      - name: Install Dependencies
-        run: pip install -r requirements.txt
-      - name: Check Python Format with Black
-        run: black --check .
-      - name: Lint Python with Flake8
-        run: flake8 --filename=*.py --exclude=test_*,*_initial.py --max-line-length 100 --ignore=F401 .
-      - name: Execute Python Django Test Cases
-        run: python manage.py test
-      - name: Check Test Coverage
-        run: |
-          coverage run --source "." manage.py test
-          coverage lcov --fail-under=${MINIMUM_COVERAGE}
-      - name: Report Coverage to Coveralls
+      - name: Prepare Environment
+        uses: ./.github/actions/prepare
+      - name: Format and Lint Python
+        uses: ./.github/actions/format
+      - name: Test Python
+        uses: ./.github/actions/test
+      - name: Deploy to AWS
+        # Only deploy when a PR on develop and/or main has been merged.
+        # if: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == true }}
         if: ${{ success() }}
-        uses: coverallsapp/github-action@v1
+        uses: ./.github/actions/deploy
         with:
-          base-path: voluncheer
-          github-token: ${{ github.token }}
-          path-to-lcov: voluncheer/coverage.lcov
+          app-name: voluncheer
