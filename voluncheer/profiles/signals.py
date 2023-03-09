@@ -5,8 +5,9 @@ from .models import Volunteer
 
 User = get_user_model()
 
+
 @receiver(post_save, sender=User)
 def volunteer_signup(sender, instance, created, **kwargs):
     if created:
-        if not hasattr(instance, 'volunteer'):
+        if not hasattr(instance, "volunteer"):
             Volunteer.objects.create(user=instance)

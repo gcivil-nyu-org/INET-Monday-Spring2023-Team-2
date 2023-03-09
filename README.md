@@ -1,7 +1,19 @@
 # VolunCHEER
 
-[![Python Version](https://img.shields.io/badge/python-3.6-brightgreen.svg)](https://python.org)
-[![Django Version](https://img.shields.io/badge/django-4.1.7-brightgreen.svg)](https://djangoproject.com)
+[![Python Version](https://img.shields.io/badge/python-3.7-brightgreen.svg)](https://python.org)
+[![Django Version](https://img.shields.io/badge/django-3.2.8-brightgreen.svg)](https://djangoproject.com)
+
+## Build and Test Status
+
+### Main
+
+![Main Status](https://github.com/gcivil-nyu-org/INET-Monday-Spring2023-Team-2/actions/workflows/presubmit.yml/badge.svg?branch=main)
+![Coverage Status](https://coveralls.io/repos/github/gcivil-nyu-org/INET-Monday-Spring2023-Team-2/badge.svg?branch=main)
+
+### Develop
+
+![Develop Status](https://github.com/gcivil-nyu-org/INET-Monday-Spring2023-Team-2/actions/workflows/presubmit.yml/badge.svg?branch=develop)
+![Coverage Status](https://coveralls.io/repos/github/gcivil-nyu-org/INET-Monday-Spring2023-Team-2/badge.svg?branch=develop)
 
 ## Development Environment
 

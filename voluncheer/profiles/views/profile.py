@@ -56,31 +56,49 @@ class ProfileView(DetailView):
                 instance=self.request.user
             )  # noqa: E501
         return super().get_context_data(**kwargs)
-    
+
     def password_reset_request(request):
-            if request.method == "POST":
-                password_reset_form = PasswordResetForm(request.POST)
-                if password_reset_form.is_valid():
-                    data = password_reset_form.cleaned_data['email']
-                    associated_user = User.objects.filter(Q(email=data)).first()
-                    if associated_user:
-                        subject = "Password Reset Request"
-                        message = render_to_string("template_reset_password.html", {
-                        'email': associated_user.email,
-                        'user': associated_user,
-                        'domain': 'http://voluncheer-dev.us-west-2.elasticbeanstalk.com/',
-                        'site_name': 'VolunCHEER',
-                        'uid': urlsafe_base64_encode(force_bytes(associated_user.pk)),
-                        'token': default_token_generator.make_token(associated_user),
-                        "protocol": 'https' if request.is_secure() else 'http'
-                        })
-                        try:
-                            send_mail(subject, message, 'AWS_verified_email_address', [associated_user.email], fail_silently=False)
-                        except BadHeaderError:
-                            return HttpResponse('Invalid header found.')
-                        return redirect ("/password_reset/done/")
-            password_reset_form = PasswordResetForm()
-            return render(request=request, template_name="password_reset.html", context={"password_reset_form":password_reset_form})
+        if request.method == "POST":
+            password_reset_form = PasswordResetForm(request.POST)
+            if password_reset_form.is_valid():
+                data = password_reset_form.cleaned_data["email"]
+                associated_user = User.objects.filter(Q(email=data)).first()
+                if associated_user:
+                    subject = "Password Reset Request"
+                    message = render_to_string(
+                        "template_reset_password.html",
+                        {
+                            "email": associated_user.email,
+                            "user": associated_user,
+                            "domain": "http://voluncheer-dev.us-west-2.elasticbeanstalk.com/",
+                            "site_name": "VolunCHEER",
+                            "uid": urlsafe_base64_encode(
+                                force_bytes(associated_user.pk)
+                            ),
+                            "token": default_token_generator.make_token(
+                                associated_user
+                            ),
+                            "protocol": "https" if request.is_secure() else "http",
+                        },
+                    )
+                    try:
+                        send_mail(
+                            subject,
+                            message,
+                            "AWS_verified_email_address",
+                            [associated_user.email],
+                            fail_silently=False,
+                        )
+                    except BadHeaderError:
+                        return HttpResponse("Invalid header found.")
+                    return redirect("/password_reset/done/")
+        password_reset_form = PasswordResetForm()
+        return render(
+            request=request,
+            template_name="password_reset.html",
+            context={"password_reset_form": password_reset_form},
+        )
+
 
 def profile_update(request):
     """Get profile update POST and call save function on ChangeForms."""
