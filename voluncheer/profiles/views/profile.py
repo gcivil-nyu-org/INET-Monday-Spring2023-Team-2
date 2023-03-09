@@ -70,7 +70,7 @@ class ProfileView(DetailView):
                         {
                             "email": associated_user.email,
                             "user": associated_user,
-                            "domain": "http://voluncheer-dev.us-west-2.elasticbeanstalk.com/", # noqa E501
+                            "domain": "http://voluncheer-dev.us-west-2.elasticbeanstalk.com/",  # noqa E501
                             "site_name": "VolunCHEER",
                             "uid": urlsafe_base64_encode(
                                 force_bytes(associated_user.pk)
@@ -78,7 +78,9 @@ class ProfileView(DetailView):
                             "token": default_token_generator.make_token(
                                 associated_user
                             ),
-                            "protocol": "https" if request.is_secure() else "http", # noqa E501
+                            "protocol": "https"
+                            if request.is_secure()
+                            else "http",  # noqa E501
                         },
                     )
                     try:
