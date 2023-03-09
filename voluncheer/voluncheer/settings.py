@@ -47,7 +47,7 @@ if _ALLOWED_HOSTS_CSV:
 # Application definition
 INSTALLED_APPS = [
     # Django built-ins
-    #"django.contrib.admin",
+    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",

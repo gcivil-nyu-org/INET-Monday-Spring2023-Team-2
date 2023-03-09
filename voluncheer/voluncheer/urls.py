@@ -24,7 +24,7 @@ from profiles.views.volunteers import VolunteerSignUpView
 
 urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
-    #path("admin/", admin.site.urls),
+    path("admin/", admin.site.urls),
     path("", include("profiles.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/signup/", SignUpView.as_view(), name="signup"),
