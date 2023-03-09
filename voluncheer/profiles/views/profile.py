@@ -35,6 +35,8 @@ class ProfileView(DetailView):
         del args, kwargs  # Unused.
         return self.request.user
 
+    
+    
     def get_context_data(self, **kwargs):
         """Returns additional contextual information for display."""
         user = self.request.user
@@ -57,22 +59,31 @@ class ProfileView(DetailView):
                 instance=self.request.user
             )  # noqa: E501
         return super().get_context_data(**kwargs)
-    """
-    def user_photo_view_request(request):
+    
+    def display_profile_photo(request):
+        user= request.user
+        if request.method == 'GET':
+            user = User.objects.get(pk=user.id)
+            return render(request, 'profiles/display_profile_photo.html', {'profile_photo': user})
+        
+    def user_photo_view(request):
+        #might not be the correct syntax
         if request.user.is_organization:
-            user = Organization.objects.get(pk=request.user)
-            form = OrganizationCreationForm(instance=user)
+            form = OrganizationChangeForm
         elif request.user.is_volunteer:
-            form = VolunteerCreationForm(instance=user)
-        if request.method=='POST':
-            form=PhotoForm(request.POST,request.FILES)
-            if form.is_valid():
-                form.save()
-                return redirect('profile')
+            form = VolunteerChangeForm
+        if request.method == 'POST':
+            formRet = form(request.POST, request.FILES)
+            if formRet.is_valid():
+                formRet.save()
+                return redirect('success')
             else:
-                form = UserPhotoForm(instance=user)
-        return render(request,'user_photo.html',{'form':form})
-    """
+                formRet = form()
+        return render(request, 'photo_image_form.html', {'form': form})
+    
+    def success(request):
+        return HttpResponse('successfully uploaded')
+    
     def password_reset_request(request):
         if request.method == "POST":
             password_reset_form = PasswordResetForm(request.POST)
@@ -119,7 +130,7 @@ class ProfileView(DetailView):
 def profile_update(request):
     """Get profile update POST and call save function on ChangeForms."""
     if request.user.is_volunteer:
-        form = VolunteerChangeForm(request.POST, instance=request.user)
+        form = VolunteerChangeForm(request.POST, instance=request.user,)
     elif request.user.is_organization:
         form = OrganizationChangeForm(request.POST, instance=request.user)
     else:
