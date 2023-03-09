@@ -58,11 +58,13 @@ def activateEmail(request, user, to_email):
         },
     )
     try:
-        send_mail(subject, message, "admin@admin.com", [to_email], fail_silently=False) # noqa E501
+        send_mail(
+            subject, message, "admin@admin.com", [to_email], fail_silently=False
+        )  # noqa E501
         messages.success(
             request,
             f"Dear <b>{user}</b>, please go to your email <b>{to_email}</b> inbox and click on \
-        the received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.", # noqa E501
+        the received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.",  # noqa E501
         )
     except BadHeaderError:
         return HttpResponse("Invalid header found.")
