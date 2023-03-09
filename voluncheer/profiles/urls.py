@@ -7,6 +7,6 @@ from profiles.views.profile import profile_update
 
 urlpatterns = [
     path("", home, name="home"),
-    path(r"^profile/$", ProfileView.as_view(), name="profile"),
-    path(r"^profile/update/$", profile_update, name="profile_update"),
+    re_path(r"^profile/$", ProfileView.as_view(), name="profile"),
+    re_path(r"^profile/update/$", profile_update, name="profile_update"),
 ]

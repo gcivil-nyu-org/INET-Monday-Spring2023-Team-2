@@ -5,6 +5,5 @@
 __pycache__/
 **/__pycache__/
 .env
-voluncheer/db.sqlite3
 **/.coverage
 **/coverage.lcov

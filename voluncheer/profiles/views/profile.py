@@ -29,6 +29,7 @@ class ProfileView(DetailView):
     context_object_name = "user"
     template_name = "profiles/profile.html"
 
+    
     def get_object(self, *args, **kwargs):
         """Returns the user object for display."""
         del args, kwargs  # Unused.
@@ -56,7 +57,22 @@ class ProfileView(DetailView):
                 instance=self.request.user
             )  # noqa: E501
         return super().get_context_data(**kwargs)
-
+    """
+    def user_photo_view_request(request):
+        if request.user.is_organization:
+            user = Organization.objects.get(pk=request.user)
+            form = OrganizationCreationForm(instance=user)
+        elif request.user.is_volunteer:
+            form = VolunteerCreationForm(instance=user)
+        if request.method=='POST':
+            form=PhotoForm(request.POST,request.FILES)
+            if form.is_valid():
+                form.save()
+                return redirect('profile')
+            else:
+                form = UserPhotoForm(instance=user)
+        return render(request,'user_photo.html',{'form':form})
+    """
     def password_reset_request(request):
         if request.method == "POST":
             password_reset_form = PasswordResetForm(request.POST)

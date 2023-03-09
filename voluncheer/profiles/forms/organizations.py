@@ -13,7 +13,7 @@ class OrganizationCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("email",)
+        fields = ("email", "photo")
 
     @transaction.atomic
     def save(self, commit=True):
@@ -35,7 +35,7 @@ class OrganizationChangeForm(UserChangeForm):
 
     class Meta(UserChangeForm.Meta):
         model = Organization
-        fields = ("name",)
+        fields = ("name", "photo")
 
     def save(self, commit=True):
         user = self.instance
