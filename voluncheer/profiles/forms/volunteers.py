@@ -29,12 +29,12 @@ class VolunteerCreationForm(UserCreationForm):
         user.type = UserType.VOLUNTEER
         if commit:
             user.save()
-        Volunteer.objects.create(
-            user=user,
-            first_name=self.cleaned_data.get("first_name"),
-            last_name=self.cleaned_data.get("last_name"),
-            date_of_birth=self.cleaned_data.get("date_of_birth"),
-        )
+            Volunteer.objects.create(
+                user=user,
+                first_name=self.cleaned_data.get("first_name"),
+                last_name=self.cleaned_data.get("last_name"),
+                date_of_birth=self.cleaned_data.get("date_of_birth"),
+            )
         return user
 
 

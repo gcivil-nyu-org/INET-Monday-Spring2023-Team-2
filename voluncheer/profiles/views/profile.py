@@ -56,19 +56,6 @@ class ProfileView(DetailView):
                 instance=self.request.user
             )  # noqa: E501
         return super().get_context_data(**kwargs)
-
-    def profile_update(request):
-        """Get profile update POST and call save function on ChangeForms."""
-        if request.user.is_volunteer:
-            form = VolunteerChangeForm(request.POST, instance=request.user)
-        elif request.user.is_organization:
-            form = OrganizationChangeForm(request.POST, instance=request.user)
-        else:
-            raise ValueError(
-                "profile_update: user must either a volunteer or an organizaiton."
-            )
-        form.save()
-        return redirect("profile")
     
     def password_reset_request(request):
             if request.method == "POST":
@@ -94,3 +81,16 @@ class ProfileView(DetailView):
                         return redirect ("/password_reset/done/")
             password_reset_form = PasswordResetForm()
             return render(request=request, template_name="password_reset.html", context={"password_reset_form":password_reset_form})
+
+def profile_update(request):
+    """Get profile update POST and call save function on ChangeForms."""
+    if request.user.is_volunteer:
+        form = VolunteerChangeForm(request.POST, instance=request.user)
+    elif request.user.is_organization:
+        form = OrganizationChangeForm(request.POST, instance=request.user)
+    else:
+        raise ValueError(
+            "profile_update: user must either a volunteer or an organizaiton."
+        )
+    form.save()
+    return redirect("profile")
