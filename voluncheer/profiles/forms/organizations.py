@@ -24,6 +24,7 @@ class OrganizationCreationForm(UserCreationForm):
         Organization.objects.create(
             user=user,
             name=self.cleaned_data.get("name"),
+            photo=self.cleaned_data.get("photo"),
         )
         return user
 
@@ -42,4 +43,5 @@ class OrganizationChangeForm(UserChangeForm):
         organization = Organization.objects.get(pk=user)
         if self.is_valid():
             organization.name = self.cleaned_data.get("name")
+            organization.photo = self.cleaned_data.get("photo")
             organization.save()

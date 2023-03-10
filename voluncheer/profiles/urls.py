@@ -9,9 +9,9 @@ from profiles.views.profile import profile_update
 
 urlpatterns = [
     path("", home, name="home"),
-    path('user_profile_photos', ProfileView.display_profile_photo, name='profile_photo'),
+    # path('user_profile_photos', ProfileView.display_profile_photo, name='profile_photo'),
     re_path(r"^profile/$", ProfileView.as_view(), name="profile"),
     re_path(r"^profile/update/$", profile_update, name="profile_update"),
 ]
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

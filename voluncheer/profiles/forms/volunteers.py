@@ -22,7 +22,7 @@ class VolunteerCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ("email", "photo")
-        
+
     @transaction.atomic
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -34,6 +34,7 @@ class VolunteerCreationForm(UserCreationForm):
             first_name=self.cleaned_data.get("first_name"),
             last_name=self.cleaned_data.get("last_name"),
             date_of_birth=self.cleaned_data.get("date_of_birth"),
+            photo=self.cleaned_data.get("photo"),
         )
         return user
 
@@ -49,12 +50,7 @@ class VolunteerChangeForm(UserChangeForm):
 
     class Meta(UserChangeForm.Meta):
         model = Volunteer
-        fields = (
-            "first_name",
-            "last_name",
-            "date_of_birth",
-            "photo"
-        )
+        fields = ("first_name", "last_name", "date_of_birth", "photo")
 
     def save(self, commit=True):
         user = self.instance
@@ -63,4 +59,5 @@ class VolunteerChangeForm(UserChangeForm):
             volunteer.first_name = self.cleaned_data.get("first_name")
             volunteer.last_name = self.cleaned_data.get("last_name")
             volunteer.date_of_birth = self.cleaned_data.get("date_of_birth")
+            volunteer.photo = self.cleaned_data.get("photo")
             volunteer.save()

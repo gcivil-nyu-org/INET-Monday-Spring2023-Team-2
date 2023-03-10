@@ -29,14 +29,11 @@ class ProfileView(DetailView):
     context_object_name = "user"
     template_name = "profiles/profile.html"
 
-    
     def get_object(self, *args, **kwargs):
         """Returns the user object for display."""
         del args, kwargs  # Unused.
         return self.request.user
 
-    
-    
     def get_context_data(self, **kwargs):
         """Returns additional contextual information for display."""
         user = self.request.user
@@ -59,13 +56,8 @@ class ProfileView(DetailView):
                 instance=self.request.user
             )  # noqa: E501
         return super().get_context_data(**kwargs)
-    
-    def display_profile_photo(request):
-        user= request.user
-        if request.method == 'GET':
-            user = User.objects.get(pk=user.id)
-            return render(request, 'profiles/display_profile_photo.html', {'profile_photo': user})
-        
+
+    """
     def user_photo_view(request):
         #might not be the correct syntax
         if request.user.is_organization:
@@ -79,11 +71,12 @@ class ProfileView(DetailView):
                 return redirect('success')
             else:
                 formRet = form()
-        return render(request, 'photo_image_form.html', {'form': form})
-    
+        return render(request, 'photo_image_form.html', {'form': formRet})
+    """
+
     def success(request):
-        return HttpResponse('successfully uploaded')
-    
+        return HttpResponse("successfully uploaded")
+
     def password_reset_request(request):
         if request.method == "POST":
             password_reset_form = PasswordResetForm(request.POST)
@@ -130,9 +123,15 @@ class ProfileView(DetailView):
 def profile_update(request):
     """Get profile update POST and call save function on ChangeForms."""
     if request.user.is_volunteer:
-        form = VolunteerChangeForm(request.POST, instance=request.user,)
+        form = VolunteerChangeForm(
+            request.POST,
+            request.FILES,
+            instance=request.user,
+        )
     elif request.user.is_organization:
-        form = OrganizationChangeForm(request.POST, instance=request.user)
+        form = OrganizationChangeForm(
+            request.POST, request.FILES, instance=request.user
+        )
     else:
         raise ValueError(
             "profile_update: user must either a volunteer or an organizaiton."
