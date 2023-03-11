@@ -9,6 +9,13 @@
             <div class="name">
                 {{ organization.name }}
             </div>
+            <div class="email">
+                {{ user.email }}
+            </div>
+            <hr align="center">
+            <div class="self-description">
+                <p>{{ organization.description }}</p>
+            </div>
         </div>
         <div class="sidenav-url">
             <div class="url">
@@ -36,11 +43,7 @@
                         </tr>
                         <tr>
                         Website:
-                        <input type="text" value="{{ organization.website }}" contenteditable="false">
-                        </tr>
-                        <tr>
-                        E-mail:
-                        <input type="text" value="{{ organization.email }}" contenteditable="false">
+                        <a href="https://{{ organization.website }}"><input type="text" value="{{ organization.website }}" contenteditable="false"></a>
                         </tr>
                     </div>
                     <form method="post" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
@@ -84,8 +87,12 @@
             <div class="name">
                 {{ volunteer.first_name }}, {{ volunteer.last_name }}
             </div>
-            <div class="job">
+            <div class="email">
                 {{ user.email }}
+            </div>
+            <hr align="center">
+            <div class="self-description">
+                <p>{{ volunteer.description }}</p>
             </div>
         </div>
 
