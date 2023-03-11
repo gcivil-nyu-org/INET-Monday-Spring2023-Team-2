@@ -38,10 +38,13 @@ class ProfileView(DetailView):
         """Returns additional contextual information for display."""
         user = self.request.user
         if user.is_organization:
-            kwargs["organization"] = Organization.objects.get(pk=user)
+            organization_profile = Organization.objects.get(pk=user)
+            kwargs["organization"] = organization_profile
             kwargs["user_form"] = OrganizationChangeForm(
                 instance=self.request.user
             )  # noqa: E501
+            job_lists = organization_profile.job_set.all()
+            kwargs["job_lists"] = job_lists
         if user.is_volunteer:
             kwargs["volunteer"] = Volunteer.objects.get(pk=user)
             badge_urls = []

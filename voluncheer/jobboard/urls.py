@@ -1,10 +1,13 @@
 from django.urls import path
 
-from jobboard import views
+from jobboard.views.jobboard import jobboard, select
+from jobboard.views.postajob import post_a_job
 
-app_name = "jobboard"
+
 urlpatterns = [
-    path("", views.jobboard, name="jobboard"),
+    path("", jobboard, name="jobboard"),
     # Jobboard
-    path("select", views.select, name="select"),
+    path("select", select, name="select"),
+    # Post a Job
+    path("post_a_job", post_a_job, name="post_a_job"),
 ]

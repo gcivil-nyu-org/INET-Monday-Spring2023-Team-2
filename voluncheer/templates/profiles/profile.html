@@ -12,7 +12,7 @@
         </div>
         <div class="sidenav-url">
             <div class="url">
-                <a href="#profile" class="active">FOLLOW</a>
+                <a href="{% url 'post_a_job' %}" class="active">POST A JOB</a>
                 <hr align="center">
             </div>
             <div class="url">
@@ -58,11 +58,10 @@
                 {% for job in job_lists %}
                     <article>
 					    <a href="#"><img src="{% static job.job_image %}" alt="" class="vol-position-image" width="275px"/></a>
-					    <p class="vol-position-disciption-h1">{{ job.job_title }}</p>
-                        <p class="vol-position-disciption-h3">{{ job.job_pubdate }}</p>
-                        <p class="vol-position-disciption-h2">{{ job.job_location }}</p>
-                        <p class="vol-position-disciption-h2">{{ job.job_worktime }}</p>
-                        <p class="vol-position-disciption-p">{{ job.job_discription }}</p>
+					    <p class="vol-position-disciption-h1">{{ job.title }}</p>
+                        <p class="vol-position-disciption-h3">{{ job.pubdate }}</p>
+                        <p class="vol-position-disciption-h2">{{ job.address_1 }}</p>
+                        <p class="vol-position-disciption-h2">{{ job.description }}</p>
                         <div class="url"><a href="#" class="readmore">Connect</a></div>
                         <hr align="center">
 				    </article>
