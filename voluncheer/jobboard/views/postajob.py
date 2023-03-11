@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render, redirect
 
 from jobboard.forms.postajob import PostAJobForm
@@ -12,5 +13,8 @@ def post_a_job(request):
 
             return redirect("home")
     else:
-        job_form = PostAJobForm(instance=request.user)
-        return render(request, "jobboard/postajob.html", {"job_form": job_form})
+        if not request.user.is_anonymous:
+            job_form = PostAJobForm(instance=request.user)
+            return render(request, "jobboard/postajob.html", {"job_form": job_form})
+        else:
+            return render(request, "jobboard/postajob.html", {})

@@ -127,7 +127,7 @@
 		<div id="secwrapper">
 			<section>
 {#      django script goes here       #}
-            <form class="jobs-showcase" action="{% url 'jobboard:select' %}" method="post">
+            <form class="jobs-showcase" action="{% url 'select' %}" method="post">
 				<article id="photobox">
 					<h1>Badges You Can Earn</h1>
 					<img src="../../static/images/badge-1.png" alt=""/>
@@ -149,11 +149,11 @@
                 {% for job in job_lists %}
                     <article>
 					    <a href="#"><img src="{% static job.job_image %}" alt="" class="vol-position-image" width="275px"/></a>
-					    <p class="vol-position-disciption-h1">{{ job.job_title }}</p>
-                        <p class="vol-position-disciption-h3">{{ job.job_pubdate }}</p>
-                        <p class="vol-position-disciption-h2">{{ job.job_location }}</p>
-                        <p class="vol-position-disciption-h2">{{ job.job_worktime }}</p>
-                        <p>{{ job.job_discription }}</p>
+					    <p class="vol-position-disciption-h1">{{ job.title }}</p>
+                        <p class="vol-position-disciption-h3">{{ job.pubdate }}</p>
+                        <p class="vol-position-disciption-h2">{{ job.address_1 }}</p>
+                        <p class="vol-position-disciption-h2">{{ job.date }}</p>
+                        <p>{{ job.description }}</p>
                         <a href="#" class="readmore">Connect</a>
 				    </article>
                 {% endfor %}
