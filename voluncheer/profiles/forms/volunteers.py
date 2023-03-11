@@ -53,6 +53,8 @@ class VolunteerChangeForm(UserChangeForm):
             "first_name",
             "last_name",
             "date_of_birth",
+            "badges",
+            "description",
         )
 
     def save(self, commit=True):
@@ -62,4 +64,6 @@ class VolunteerChangeForm(UserChangeForm):
             volunteer.first_name = self.cleaned_data.get("first_name")
             volunteer.last_name = self.cleaned_data.get("last_name")
             volunteer.date_of_birth = self.cleaned_data.get("date_of_birth")
+            volunteer.badges = self.cleaned_data.get("badges")
+            volunteer.description = self.cleaned_data.get("description")
             volunteer.save()

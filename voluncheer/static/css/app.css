@@ -268,6 +268,9 @@ td {
 .edit-form input {
     width: 100%;
 }
+.edit-form textarea {
+    width: 100%;
+}
 #edit-form-edit {
     display: none;
 }
