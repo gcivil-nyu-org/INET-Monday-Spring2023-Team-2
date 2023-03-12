@@ -1,11 +1,9 @@
-name: Continuous Integration
+name: Continuous Deployment
 run-name: ${{ github.workflow }} run for ${{ github.actor }} in ${{ github.ref_name }}
 
 on:
   push:
-  workflow_dispatch:
-  schedule:
-    - cron: "15 2 * * *"
+    branches: [develop, main]
 
 defaults:
   run:
@@ -16,9 +14,13 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.actor }}-${{ github.ref_name }}
   cancel-in-progress: true
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
-  format-lint-and-test:
-    name: Continuous Integration
+  test-and-deploy:
+    name: Test and Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code Locally
@@ -29,3 +31,9 @@ jobs:
         uses: ./.github/actions/format
       - name: Test Python
         uses: ./.github/actions/test
+      - name: Deploy to AWS
+        # Only deploy when a PR on develop and/or main has been merged.
+        if: ${{ success() }}
+        uses: ./.github/actions/deploy
+        with:
+          app-name: voluncheer
