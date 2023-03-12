@@ -57,7 +57,7 @@ class User(AbstractUser):
         email: the unique email address associated with a particular user.
         password: the secret password to use during authentication.
     """
-
+    
     username = None
     email = models.EmailField(
         verbose_name="email address",
@@ -67,7 +67,7 @@ class User(AbstractUser):
     date_joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     type = models.IntegerField(choices=UserType.choices)
-    photo = models.ImageField(upload_to="images/", default="default-profile-pic.png")
+    photo = models.ImageField(upload_to="media/", default="default-profile-pic.png")
     objects = UserManager()
 
     REQUIRED_FIELDS = []
@@ -106,7 +106,7 @@ class Organization(models.Model):
         primary_key=True,
     )
     name = models.CharField(max_length=200)
-    photo = models.ImageField(upload_to="images/", default="default-profile-pic.png")
+    photo = models.ImageField(upload_to="media/", default="default-profile-pic.png")
 
     def __str__(self):
         return self.name
@@ -133,7 +133,7 @@ class Volunteer(models.Model):
     last_name = models.CharField(max_length=200)
     date_of_birth = models.DateField(blank=True, null=True)
     badges = models.CharField(max_length=1024, default="")
-    photo = models.ImageField(upload_to="images/", default="default-profile-pic.png")
+    photo = models.ImageField(upload_to="media/", default="default-profile-pic.png")
     BADGES = {
         "Badge 1": "images/badge-1.png",
         "Badge 2": "images/badge-2.png",

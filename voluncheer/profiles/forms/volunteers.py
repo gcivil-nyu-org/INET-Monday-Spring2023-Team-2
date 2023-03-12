@@ -18,6 +18,7 @@ class VolunteerCreationForm(UserCreationForm):
     first_name = forms.CharField(required=True, validators=[_is_alpha])
     last_name = forms.CharField(required=True, validators=[_is_alpha])
     date_of_birth = forms.DateField(required=True)
+    photo = forms.ImageField()
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -47,7 +48,7 @@ This form is for edit volunteer profile.
 
 class VolunteerChangeForm(UserChangeForm):
     password = None
-
+    photo = forms.ImageField()
     class Meta(UserChangeForm.Meta):
         model = Volunteer
         fields = ("first_name", "last_name", "date_of_birth", "photo")

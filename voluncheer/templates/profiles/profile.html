@@ -44,8 +44,12 @@
                         E-mail:
                         <input type="text" value="{{ organization.email }}" contenteditable="false">
                         </tr>
+                        <tr>
+                        Photo:
+                        <input type="image" value="{{ user.photo }}" contenteditable="false">
+                        </tr>
                     </div>
-                    <form method="post" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
+                    <form method="post" class="edit-form" id="edit-form-edit" enctype="multipart/form-data" action="{% url 'profile_update' %}">
                         {% csrf_token %}
                         {{ user_form }}
                         <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>
@@ -123,8 +127,12 @@
                         Date of birth:
                         <input type="text" value="{{ volunteer.date_of_birth }}" contenteditable="false">
                         </tr>
+                        <tr>
+                        Photo:
+                        <input type="image" value="{{ user.photo }}" contenteditable="false">
+                        </tr>
                     </div>
-                    <form method="post" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
+                    <form method="post" class="edit-form" id="edit-form-edit" enctype="multipart/form-data" action="{% url 'profile_update' %}">
                         {% csrf_token %}
                         {{ user_form }}
                         <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>
