@@ -21,10 +21,10 @@ class OrganizationCreationForm(UserCreationForm):
         user.type = UserType.ORGANIZATION
         if commit:
             user.save()
-        Organization.objects.create(
-            user=user,
-            name=self.cleaned_data.get("name"),
-        )
+            Organization.objects.create(
+                user=user,
+                name=self.cleaned_data.get("name"),
+            )
         return user
 
 
