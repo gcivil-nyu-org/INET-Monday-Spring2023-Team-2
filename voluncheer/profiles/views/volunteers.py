@@ -59,7 +59,11 @@ def activateEmail(request, user, to_email):
     )
     try:
         send_mail(
-            subject, message, "admin@admin.com", [to_email], fail_silently=False # noqa E501
+            subject,
+            message,
+            "admin@admin.com",
+            [to_email],
+            fail_silently=False,  # noqa E501
         )  # noqa E501
         messages.success(
             request,
