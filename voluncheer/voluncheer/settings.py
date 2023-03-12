@@ -27,22 +27,22 @@ if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 SECRET_KEY = os.environ["SECRET_KEY"]
 
+# CSRF_TRUSTED_ORIGINS = [
+#     "voluncheer-dev.us-west-2.elasticbeanstalk.com",
+# ]
+# ALLOWED_HOSTS = [
+#     "voluncheer-dev.us-west-2.elasticbeanstalk.com",
+# ]
 # Security
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost",
-    "http://127.0.0.1",
-]
+CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://127.0.0.1"]
 _CSRF_TRUSTED_ORIGINS_CSV = os.getenv("CSRF_TRUSTED_ORIGINS_CSV")
 if _CSRF_TRUSTED_ORIGINS_CSV:
-    CSRF_TRUSTED_ORIGINS.extend(_CSRF_TRUSTED_ORIGINS_CSV.split(","))
+    CSRF_TRUSTED_ORIGINS = _CSRF_TRUSTED_ORIGINS_CSV.split(",")
 
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 _ALLOWED_HOSTS_CSV = os.getenv("ALLOWED_HOSTS_CSV")
 if _ALLOWED_HOSTS_CSV:
-    ALLOWED_HOSTS.extend(_ALLOWED_HOSTS_CSV.split(","))
+    ALLOWED_HOSTS = _ALLOWED_HOSTS_CSV.split(",")
 
 # Application definition
 INSTALLED_APPS = [
