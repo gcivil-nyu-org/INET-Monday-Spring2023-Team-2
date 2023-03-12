@@ -3,7 +3,6 @@ run-name: ${{ github.workflow }} run for ${{ github.actor }} in ${{ github.ref_n
 
 on:
   push:
-    branches-ignore: [develop, main]
   workflow_dispatch:
   schedule:
     - cron: "15 2 * * *"
