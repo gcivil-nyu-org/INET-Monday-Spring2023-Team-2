@@ -10,6 +10,22 @@ from opportunityboard.models import Opportunity
 class PostAnOpportunityForm(forms.ModelForm):
     """This is the form used for creating a new opportunity for organization users"""
 
+    date = forms.DateTimeField(
+        input_formats=["%d/%m/%Y %H:%M"],
+        widget=forms.DateTimeInput(
+            attrs={
+                "type": "datetime-local",
+            }
+        ),
+    )
+    duration = forms.DurationField(
+        widget=forms.TimeInput(
+            attrs={
+                "type": "time",
+            }
+        ),
+    )
+
     class Meta:
         model = Opportunity
         fields = (
