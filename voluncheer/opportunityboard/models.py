@@ -35,8 +35,8 @@ class Opportunity(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORIES)
     title = models.CharField(max_length=255)
     description = models.TextField()
-    date = models.DateTimeField(null=True, blank=True)
-    duration = models.DurationField(null=True, blank=True)
+    date = models.DateTimeField()
+    duration = models.DurationField()
     address_1 = models.CharField(max_length=255)
     address_2 = models.CharField(null=True, blank=True, max_length=255)
     longitude = models.DecimalField(
@@ -45,7 +45,7 @@ class Opportunity(models.Model):
     latitude = models.DecimalField(
         null=True, blank=True, max_digits=9, decimal_places=6
     )
-    staffing = models.IntegerField(null=True, blank=True)
+    staffing = models.IntegerField()
     is_published = models.BooleanField(default=False)
 
     def __str__(self):

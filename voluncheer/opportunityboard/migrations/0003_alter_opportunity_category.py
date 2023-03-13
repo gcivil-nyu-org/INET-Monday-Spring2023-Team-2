@@ -4,15 +4,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('opportunityboard', '0002_job_organization'),
+        ("opportunityboard", "0002_job_organization"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='opportunity',
-            name='category',
-            field=models.CharField(choices=[('sports', 'Sports'), ('animals', 'Animal'), ('community', 'Community'), ('environment', 'Environment'), ('healthcare', 'Healthcare')], max_length=20),
+            model_name="opportunity",
+            name="category",
+            field=models.CharField(
+                choices=[
+                    ("sports", "Sports"),
+                    ("animals", "Animal"),
+                    ("community", "Community"),
+                    ("environment", "Environment"),
+                    ("healthcare", "Healthcare"),
+                ],
+                max_length=20,
+            ),
         ),
     ]
