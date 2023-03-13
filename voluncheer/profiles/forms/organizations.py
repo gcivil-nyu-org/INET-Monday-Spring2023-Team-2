@@ -14,7 +14,7 @@ class OrganizationCreationForm(UserCreationForm):
     
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("email", "photo")
+        fields = ("email",)
 
     @transaction.atomic
     def save(self, commit=True):

@@ -49,7 +49,7 @@
                         <input type="image" value="{{ organization.photo }}" contenteditable="false">
                         </tr>
                     </div>
-                    <form method="post" class="edit-form" id="edit-form-edit" enctype="multipart/form-data" action="{% url 'profile_update' %}">
+                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
                         {% csrf_token %}
                         {{ user_form }}
                         <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>
@@ -132,7 +132,7 @@
                         <input type="image" value="{{volunteer.photo }}" contenteditable="false">
                         </tr>
                     </div>
-                    <form method="post" class="edit-form" id="edit-form-edit" enctype="multipart/form-data" action="{% url 'profile_update' %}">
+                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
                         {% csrf_token %}
                         {{ user_form }}
                         <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>

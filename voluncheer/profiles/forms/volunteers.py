@@ -23,7 +23,7 @@ class VolunteerCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("email", "photo")
+        fields = ("email",)
 
     @transaction.atomic
     def save(self, commit=True):
@@ -61,5 +61,6 @@ class VolunteerChangeForm(UserChangeForm):
             volunteer.first_name = self.cleaned_data.get("first_name")
             volunteer.last_name = self.cleaned_data.get("last_name")
             volunteer.date_of_birth = self.cleaned_data.get("date_of_birth")
+            print("cleaned photo:", self.cleaned_data.get("photo"))
             volunteer.photo = self.cleaned_data.get("photo")
             volunteer.save()
