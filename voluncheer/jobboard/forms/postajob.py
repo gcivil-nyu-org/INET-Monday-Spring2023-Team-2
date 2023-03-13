@@ -10,6 +10,22 @@ from jobboard.models import Job
 class PostAJobForm(forms.ModelForm):
     """This is the form used for creating a new job for organization users"""
 
+    date = forms.DateTimeField(
+        input_formats=["%d/%m/%Y %H:%M"],
+        widget=forms.DateTimeInput(
+            attrs={
+                "type": "datetime-local",
+            }
+        ),
+    )
+    duration = forms.DurationField(
+        widget=forms.TimeInput(
+            attrs={
+                "type": "time",
+            }
+        ),
+    )
+
     class Meta:
         model = Job
         fields = (
@@ -33,8 +49,8 @@ class PostAJobForm(forms.ModelForm):
             job.category = self.cleaned_data.get("category")
             job.title = self.cleaned_data.get("title")
             job.description = self.cleaned_data.get("description")
-            # job.date = self.cleaned_data.get("date")
-            # job.duration = self.cleaned_data.get("duration")
+            job.date = self.cleaned_data.get("date")
+            job.duration = self.cleaned_data.get("duration")
             job.address_1 = self.cleaned_data.get("address_1")
             job.address_2 = self.cleaned_data.get("address_2")
             job.is_published = self.cleaned_data.get("is_published")

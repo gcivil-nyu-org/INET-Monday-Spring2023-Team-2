@@ -5,6 +5,8 @@ from jobboard.forms.postajob import PostAJobForm
 
 
 def post_a_job(request):
+    if request.user.is_anonymous:
+        return redirect("home")
     if request.method == "POST":
         form = PostAJobForm(request.POST, instance=request.user)
         if form.is_valid():
@@ -12,9 +14,5 @@ def post_a_job(request):
             form.save()
 
             return redirect("home")
-    else:
-        if not request.user.is_anonymous:
-            job_form = PostAJobForm(instance=request.user)
-            return render(request, "jobboard/postajob.html", {"job_form": job_form})
-        else:
-            return render(request, "jobboard/postajob.html", {})
+    job_form = PostAJobForm(instance=request.user)
+    return render(request, "jobboard/postajob.html", {"job_form": job_form})

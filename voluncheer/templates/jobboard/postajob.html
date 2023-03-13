@@ -30,6 +30,7 @@
             <div class="card-body">
                 <form method="post" class="edit-form" id="" action="{% url 'post_a_job' %}">
                     {% csrf_token %}
+                    {% if error %}<p>{{ error }}</p>{% endif %}
                     {{ job_form.as_p }}
                     <button type="submit" id="edit-form-edit-btn" class="edit-form">Post</button>
                 </form>
