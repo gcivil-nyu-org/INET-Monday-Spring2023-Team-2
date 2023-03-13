@@ -1,0 +1,9 @@
+.idea/
+**/.idea/
+.DS_Store
+**/.DS_Store
+__pycache__/
+**/__pycache__/
+voluncheer/db.sqlite3
+**/.coverage
+**/coverage.lcov
