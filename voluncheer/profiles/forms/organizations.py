@@ -10,10 +10,11 @@ from profiles.models import UserType
 
 class OrganizationCreationForm(UserCreationForm):
     name = forms.CharField(required=True)
+    photo = forms.ImageField()
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("email", "photo")
+        fields = ("email",)
 
     @transaction.atomic
     def save(self, commit=True):
