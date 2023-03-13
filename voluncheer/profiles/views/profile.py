@@ -40,11 +40,9 @@ class ProfileView(DetailView):
         if user.is_organization:
             organization_profile = Organization.objects.get(pk=user)
             kwargs["organization"] = organization_profile
-            kwargs["user_form"] = OrganizationChangeForm(
-                instance=self.request.user
-            )  # noqa: E501
-            job_lists = organization_profile.job_set.all()
-            kwargs["job_lists"] = job_lists
+            kwargs["user_form"] = OrganizationChangeForm(instance=self.request.user)
+            opportunity_lists = organization_profile.opportunity_set.all()
+            kwargs["opportunity_lists"] = opportunity_lists
         if user.is_volunteer:
             kwargs["volunteer"] = Volunteer.objects.get(pk=user)
             badge_urls = []

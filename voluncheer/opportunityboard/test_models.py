@@ -3,13 +3,13 @@ from django.test import TestCase
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
-from jobboard.models import Job
+from opportunityboard.models import Opportunity
 
 import datetime
 
 
-class JobTest(TestCase):
-    """Test cases for Job model"""
+class OpportunityTest(TestCase):
+    """Test cases for Opportunity model"""
 
     def setUp(self):
         """See base class."""
@@ -22,8 +22,8 @@ class JobTest(TestCase):
             name="Jedi Council",
         )
 
-    def test_job_details(self):
-        """Test basic job details"""
+    def test_opportunity_details(self):
+        """Test basic opportunity details"""
 
         description = (
             "Please help us support our community at this week's"
@@ -38,7 +38,7 @@ class JobTest(TestCase):
             minute=0,
         )
 
-        soup = Job.objects.create(
+        soup = Opportunity.objects.create(
             organization=self.jedi,
             category="community",
             title="Cloud City Soup Kitchen",

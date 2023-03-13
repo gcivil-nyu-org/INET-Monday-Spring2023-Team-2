@@ -35,11 +35,17 @@ class OrganizationChangeForm(UserChangeForm):
 
     class Meta(UserChangeForm.Meta):
         model = Organization
-        fields = ("name",)
+        fields = (
+            "name",
+            "website",
+            "description",
+        )
 
     def save(self, commit=True):
         user = self.instance
         organization = Organization.objects.get(pk=user)
         if self.is_valid():
             organization.name = self.cleaned_data.get("name")
+            organization.website = self.cleaned_data.get("website")
+            organization.description = self.cleaned_data.get("description")
             organization.save()
