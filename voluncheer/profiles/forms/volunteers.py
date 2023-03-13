@@ -7,6 +7,7 @@ from django.db import transaction
 from profiles.models import User
 from profiles.models import UserType
 from profiles.models import Volunteer
+from voluncheer import settings
 
 _is_alpha = RegexValidator(
     regex=r"^[a-zA-Z]+$",

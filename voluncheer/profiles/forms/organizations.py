@@ -6,6 +6,7 @@ from django.db import transaction
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
+from voluncheer import settings
 
 class OrganizationCreationForm(UserCreationForm):
     name = forms.CharField(required=True)
@@ -36,12 +37,12 @@ class OrganizationChangeForm(UserChangeForm):
     photo = forms.ImageField()
     class Meta(UserChangeForm.Meta):
         model = Organization
-        fields = ("name","photo")
+        fields = ("name", "photo")
 
     def save(self, commit=True):
         user = self.instance
         organization = Organization.objects.get(pk=user)
         if self.is_valid():
             organization.name = self.cleaned_data.get("name")
-            user.photo = self.cleaned_data.get("photo")
+            organization.photo = self.cleaned_data.get("photo")
             organization.save()
