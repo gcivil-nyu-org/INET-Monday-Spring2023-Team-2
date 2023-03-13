@@ -19,7 +19,7 @@
         </div>
         <div class="sidenav-url">
             <div class="url">
-                <a href="{% url 'post_an_opportunity' %}" class="active">POST A JOB</a>
+                <a href="{% url 'post_an_opportunity' %}" class="active">POST A OPPORTUNITY</a>
                 <hr align="center">
             </div>
             <div class="url">
@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        <h2>POSTED JOBS</h2>
+        <h2>POSTED OPPORTUNITIES</h2>
         <div class="card">
             {% csrf_token %}
                 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
