@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% if user.is_organization %}
+    <!-- Sidenav -->
+    <div class="sidenav">
+        <div class="profile">
+            <img src="{% static organization.organization_image %}" alt="" width="100" height="100"/>
+            <div class="name">
+                {{ organization.name }}
+            </div>
+        </div>
+        <div class="sidenav-url">
+            <div class="url">
+                <a href="{% url 'post_an_opportunity' %}" class="active">POST A JOB</a>
+                <hr align="center">
+            </div>
+            <div class="url">
+                <a href="#settings">IMPACT</a>
+                <hr align="center">
+            </div>
+        </div>
+    </div>
+    <!-- End -->
+
+    <!-- Main -->
+    <div class="main">
+        <h2>JOB DETAILS</h2>
+        <div class="card">
+            <div class="card-body">
+                <form method="post" class="edit-form" id="" action="{% url 'post_an_opportunity' %}">
+                    {% csrf_token %}
+                    {{ opportunity_form.as_p }}
+                    <button type="submit" id="edit-form-edit-btn" class="edit-form">Post</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}
