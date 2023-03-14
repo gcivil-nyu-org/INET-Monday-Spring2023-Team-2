@@ -5,9 +5,10 @@
     <!-- Sidenav -->
     <div class="sidenav">
         <div class="profile">
-            <div class="col-md-4">
+            {% if organization.photo %}
                 <img src="{{organization.photo.url}}" alt="profile pic" width="100" height="100"/>
-            </div>
+                <hr align="center">
+            {% endif %}
             <div class="name">
                 {{ organization.name }}
             </div>
@@ -86,9 +87,10 @@
     <!-- Side Nav -->
     <div class="sidenav">
         <div class="profile">
-            <div class="col-md-4">
+            {% if volunteer.photo %}
                 <img src="{{volunteer.photo.url}}" alt="profile pic" width="100" height="100"/>
-            </div>
+                <hr align="center">
+            {% endif %}
             <div class="name">
                 {{ volunteer.first_name }}, {{ volunteer.last_name }}
             </div>

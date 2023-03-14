@@ -4,29 +4,57 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Job',
+            name="Job",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('pubdate', models.DateTimeField(blank=True, null=True)),
-                ('category', models.CharField(choices=[('healthcare', 'Healthcare'), ('community', 'Community'), ('animals', 'Animal'), ('sports', 'Sports'), ('environment', 'Environment')], max_length=20)),
-                ('title', models.CharField(max_length=255)),
-                ('description', models.TextField()),
-                ('date', models.DateTimeField()),
-                ('duration', models.DurationField()),
-                ('address_1', models.CharField(max_length=255)),
-                ('address_2', models.CharField(blank=True, max_length=255, null=True)),
-                ('longitude', models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)),
-                ('latitude', models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)),
-                ('staffing', models.IntegerField()),
-                ('is_published', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("pubdate", models.DateTimeField(blank=True, null=True)),
+                (
+                    "category",
+                    models.CharField(
+                        choices=[
+                            ("healthcare", "Healthcare"),
+                            ("community", "Community"),
+                            ("animals", "Animal"),
+                            ("sports", "Sports"),
+                            ("environment", "Environment"),
+                        ],
+                        max_length=20,
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("description", models.TextField()),
+                ("date", models.DateTimeField()),
+                ("duration", models.DurationField()),
+                ("address_1", models.CharField(max_length=255)),
+                ("address_2", models.CharField(blank=True, max_length=255, null=True)),
+                (
+                    "longitude",
+                    models.DecimalField(
+                        blank=True, decimal_places=6, max_digits=9, null=True
+                    ),
+                ),
+                (
+                    "latitude",
+                    models.DecimalField(
+                        blank=True, decimal_places=6, max_digits=9, null=True
+                    ),
+                ),
+                ("staffing", models.IntegerField()),
+                ("is_published", models.BooleanField(default=False)),
             ],
         ),
     ]

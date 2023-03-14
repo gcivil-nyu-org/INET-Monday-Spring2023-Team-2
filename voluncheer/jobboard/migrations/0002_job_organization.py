@@ -5,18 +5,19 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('profiles', '0001_initial'),
-        ('jobboard', '0001_initial'),
+        ("profiles", "0001_initial"),
+        ("jobboard", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='job',
-            name='organization',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='profiles.organization'),
+            model_name="job",
+            name="organization",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="profiles.organization"
+            ),
         ),
     ]
