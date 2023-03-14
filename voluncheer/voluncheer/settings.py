@@ -168,6 +168,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Backend Email (testing)
+
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # PASSWORD_RESET_TIMEOUT = 600
 # EMAIL_BACKEND = 'django_ses.SESBackend'

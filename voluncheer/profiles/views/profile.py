@@ -70,7 +70,7 @@ class ProfileView(DetailView):
                         {
                             "email": associated_user.email,
                             "user": associated_user,
-                            "domain": "http://voluncheer-dev.us-west-2.elasticbeanstalk.com/",  # noqa E501
+                            "domain": "127.0.0.1:8000",  # noqa E501
                             "site_name": "VolunCHEER",
                             "uid": urlsafe_base64_encode(
                                 force_bytes(associated_user.pk)
@@ -87,7 +87,7 @@ class ProfileView(DetailView):
                         send_mail(
                             subject,
                             message,
-                            "AWS_verified_email_address",
+                            "admin@voluncheer.com",
                             [associated_user.email],
                             fail_silently=False,
                         )
