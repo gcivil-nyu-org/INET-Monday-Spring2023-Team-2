@@ -4,6 +4,6 @@
 **/.DS_Store
 __pycache__/
 **/__pycache__/
-.env
+voluncheer/db.sqlite3
 **/.coverage
 **/coverage.lcov
