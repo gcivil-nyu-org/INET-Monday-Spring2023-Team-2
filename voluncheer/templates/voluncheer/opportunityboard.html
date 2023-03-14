@@ -1,5 +1,7 @@
-<!DOCTYPE html>
-<html>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
     <head>
         <meta charset="utf-8" />
         {% load static %}
@@ -15,17 +17,6 @@
     <!--[if IE 8 ]><body class="ie8"><![endif]-->
     <!--[if IE 9 ]><body class="ie9"><![endif]-->
     <!--[if !IE]><!--><body><!--<![endif]-->
-		<header>
-{#			<h1><a href="#">VolunCheer</a></h1>#}
-            <img src="{% static 'images/voluncheer_logo.png' %}" alt="logo" class="logo">
-			<nav>
-				<ul>
-					<li><a href="#" class="current">HOME</a></li>
-					<li><a href="#">OPPORTUNITIES</a></li>
-					<li><a href="#">POST A OPPORTUNITY</a></li>
-					<li><a href="#">LOGIN</a></li>
-				</ul>
-			</nav>
 		</header>
         <div id="opportunitysearch">
             <div class="s007">
@@ -150,9 +141,10 @@
                     <article>
 					    <a href="#"><img src="{% static opportunity.opportunity_image %}" alt="" class="vol-position-image" width="275px"/></a>
 					    <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
-                        <p class="vol-position-disciption-h3">{{ opportunity.pubdate }}</p>
-                        <p class="vol-position-disciption-h2">{{ opportunity.address_1 }}</p>
-                        <p class="vol-position-disciption-h2">{{ opportunity.date }}</p>
+                        <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                        <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
+                        <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
+                        <p class="vol-position-disciption-h2">Duration: {{ opportunity.duration }}</p>
                         <p>{{ opportunity.description }}</p>
                         <a href="#" class="readmore">Connect</a>
 				    </article>
@@ -211,9 +203,8 @@
       });
 
     </script>
-</html>
 		
-		
+{% endblock %}		
 			
     
     
