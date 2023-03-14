@@ -1,1 +1,1 @@
-python3 -m black -t py38 --check tests
+python3 -m black -t py38 --check .
