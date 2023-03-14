@@ -9,10 +9,17 @@
             <div class="name">
                 {{ organization.name }}
             </div>
+            <div class="email">
+                {{ user.email }}
+            </div>
+            <hr align="center">
+            <div class="self-description">
+                <p>{{ organization.description }}</p>
+            </div>
         </div>
         <div class="sidenav-url">
             <div class="url">
-                <a href="#profile" class="active">FOLLOW</a>
+                <a href="{% url 'post_an_opportunity' %}" class="active">POST AN OPPORTUNITY</a>
                 <hr align="center">
             </div>
             <div class="url">
@@ -36,11 +43,7 @@
                         </tr>
                         <tr>
                         Website:
-                        <input type="text" value="{{ organization.website }}" contenteditable="false">
-                        </tr>
-                        <tr>
-                        E-mail:
-                        <input type="text" value="{{ organization.email }}" contenteditable="false">
+                        <a href="https://{{ organization.website }}"><input type="text" value="{{ organization.website }}" contenteditable="false"></a>
                         </tr>
                     </div>
                     <form method="post" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
@@ -51,18 +54,19 @@
             </div>
         </div>
 
-        <h2>POSTED JOBS</h2>
+        <h2>POSTED OPPORTUNITIES</h2>
         <div class="card">
             {% csrf_token %}
                 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-                {% for job in job_lists %}
+                {% for opportunity in opportunity_lists %}
                     <article>
-					    <a href="#"><img src="{% static job.job_image %}" alt="" class="vol-position-image" width="275px"/></a>
-					    <p class="vol-position-disciption-h1">{{ job.job_title }}</p>
-                        <p class="vol-position-disciption-h3">{{ job.job_pubdate }}</p>
-                        <p class="vol-position-disciption-h2">{{ job.job_location }}</p>
-                        <p class="vol-position-disciption-h2">{{ job.job_worktime }}</p>
-                        <p class="vol-position-disciption-p">{{ job.job_discription }}</p>
+					    <a href="#"><img src="{% static opportunity.opportunity_image %}" alt="" class="vol-position-image" width="275px"/></a>
+					    <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
+                        <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                        <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
+                        <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
+                        <p class="vol-position-disciption-h2">Duration: {{ opportunity.duration }}</p>
+                        <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
                         <div class="url"><a href="#" class="readmore">Connect</a></div>
                         <hr align="center">
 				    </article>
@@ -84,8 +88,12 @@
             <div class="name">
                 {{ volunteer.first_name }}, {{ volunteer.last_name }}
             </div>
-            <div class="job">
+            <div class="email">
                 {{ user.email }}
+            </div>
+            <hr align="center">
+            <div class="self-description">
+                <p>{{ volunteer.description }}</p>
             </div>
         </div>
 
