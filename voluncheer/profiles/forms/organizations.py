@@ -7,6 +7,8 @@ from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
 
+import logging
+
 
 class OrganizationCreationForm(UserCreationForm):
     name = forms.CharField(required=True)
@@ -49,4 +51,5 @@ class OrganizationChangeForm(UserChangeForm):
             organization.photo = self.cleaned_data.get("photo")
             organization.save()
         else:
-            print("Organization change form is not valid")
+            logger = logging.getLogger(__name__)
+            logger.exception(self.errors)

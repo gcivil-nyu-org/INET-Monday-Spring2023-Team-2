@@ -8,6 +8,9 @@ from profiles.models import User
 from profiles.models import UserType
 from profiles.models import Volunteer
 
+import logging
+
+
 _is_alpha = RegexValidator(
     regex=r"^[a-zA-Z]+$",
     message="Only upper and lower case English alphabet characters are allowed.",  # noqa: E501
@@ -63,8 +66,8 @@ class VolunteerChangeForm(UserChangeForm):
             volunteer.first_name = self.cleaned_data.get("first_name")
             volunteer.last_name = self.cleaned_data.get("last_name")
             volunteer.date_of_birth = self.cleaned_data.get("date_of_birth")
-            print("cleaned photo:", self.cleaned_data.get("photo"))
             volunteer.photo = self.cleaned_data.get("photo")
             volunteer.save()
         else:
-            print("volunteer change form is not valid")
+            logger = logging.getLogger(__name__)
+            logger.exception(self.errors)

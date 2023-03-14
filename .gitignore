@@ -8,3 +8,6 @@ voluncheer/db.sqlite3
 **/.coverage
 **/coverage.lcov
 .vscode/
+.env
+static/images/
+blackAndFlake8.sh
