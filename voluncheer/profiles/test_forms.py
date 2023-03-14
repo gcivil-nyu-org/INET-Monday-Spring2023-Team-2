@@ -67,7 +67,7 @@ class OrganizationCreationFormTest(TestCase):
         # No default photo displayed
         form2 = OrganizationChangeForm(data=data2)
         # assert that the photo has been changed
-        self.assertEqual(form2.data["photo"],"sith-lord.jpg")
+        self.assertEqual(form2.data["photo"], "sith-lord.jpg")
 
 
 class VolunteerCreationFormTest(TestCase):
@@ -163,7 +163,7 @@ class VolunteerCreationFormTest(TestCase):
         form1 = VolunteerCreationForm(data=data1)
         form1.save(self)
         self.assertIsNone(form1.data.get("photo"))
-        #No default photo displayed
+        # No default photo displayed
         form2 = VolunteerChangeForm(data=data2)
         # assert that the photo has been changed
-        self.assertEqual(form2.data["photo"],"sith-lord.jpg")
+        self.assertEqual(form2.data["photo"], "sith-lord.jpg")
