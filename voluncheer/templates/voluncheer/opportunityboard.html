@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <head>
+        <meta charset="utf-8" />
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/opportunityboard.css' %}">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
+        <!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <title>VolunCheer - Opportunities</title>
+    </head>
+    <!--[if IE 6 ]><body class="ie6 old_ie"><![endif]-->
+    <!--[if IE 7 ]><body class="ie7 old_ie"><![endif]-->
+    <!--[if IE 8 ]><body class="ie8"><![endif]-->
+    <!--[if IE 9 ]><body class="ie9"><![endif]-->
+    <!--[if !IE]><!--><body><!--<![endif]-->
+		</header>
+        <div id="opportunitysearch">
+            <div class="s007">
+              <form>
+                <div class="inner-form">
+                  <div class="basic-search">
+                    <div class="input-field">
+                      <div class="icon-wrap">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 20 20">
+                          <path d="M18.869 19.162l-5.943-6.484c1.339-1.401 2.075-3.233 2.075-5.178 0-2.003-0.78-3.887-2.197-5.303s-3.3-2.197-5.303-2.197-3.887 0.78-5.303 2.197-2.197 3.3-2.197 5.303 0.78 3.887 2.197 5.303 3.3 2.197 5.303 2.197c1.726 0 3.362-0.579 4.688-1.645l5.943 6.483c0.099 0.108 0.233 0.162 0.369 0.162 0.121 0 0.242-0.043 0.338-0.131 0.204-0.187 0.217-0.503 0.031-0.706zM1 7.5c0-3.584 2.916-6.5 6.5-6.5s6.5 2.916 6.5 6.5-2.916 6.5-6.5 6.5-6.5-2.916-6.5-6.5z"></path>
+                        </svg>
+                      </div>
+                      <input id="search" type="text" placeholder="Search..." />
+                      <div class="result-count">
+                        <span>108 </span>results</div>
+                    </div>
+                  </div>
+                  <div class="advance-search">
+                    <span class="desc">Advanced Search</span>
+                    <div class="row">
+                      <div class="input-field">
+                        <div class="input-select">
+                          <select data-trigger="" name="choices-single-defaul">
+                              <option placeholder="" value="">ORGANIZATIONS</option>
+                              <option>FOOD FIRST</option>
+                              <option>FLORENCE E. SMITH SENIOR SERVICES</option>
+                              <option>NYC PRIDE</option>
+                              <option>ETC.</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="input-field">
+                        <div class="input-select">
+                          <select data-trigger="" name="choices-single-defaul">
+                            <option placeholder="" value="">WORK HOUR</option>
+                            <option>PART-TIME</option>
+                            <option>FULL-TIME</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="input-field">
+                        <div class="input-select">
+                          <select data-trigger="" name="choices-single-defaul">
+                            <option placeholder="" value="">WORK PLACE</option>
+                            <option>IN-PERSON</option>
+                            <option>REMOTE</option>
+                            <option>FUSION</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+{#                    <div class="row second">#}
+{#                      <div class="input-field">#}
+{#                        <div class="input-select">#}
+{#                          <select data-trigger="" name="choices-single-defaul">#}
+{#                            <option placeholder="" value="">SALE</option>#}
+{#                            <option>SALE</option>#}
+{#                            <option>SUBJECT B</option>#}
+{#                            <option>SUBJECT C</option>#}
+{#                          </select>#}
+{#                        </div>#}
+{#                      </div>#}
+{#                      <div class="input-field">#}
+{#                        <div class="input-select">#}
+{#                          <select data-trigger="" name="choices-single-defaul">#}
+{#                            <option placeholder="" value="">TIME</option>#}
+{#                            <option>THIS WEEK</option>#}
+{#                            <option>SUBJECT B</option>#}
+{#                            <option>SUBJECT C</option>#}
+{#                          </select>#}
+{#                        </div>#}
+{#                      </div>#}
+{#                      <div class="input-field">#}
+{#                        <div class="input-select">#}
+{#                          <select data-trigger="" name="choices-single-defaul">#}
+{#                            <option placeholder="" value="">TYPE</option>#}
+{#                            <option>TYPE</option>#}
+{#                            <option>SUBJECT B</option>#}
+{#                            <option>SUBJECT C</option>#}
+{#                          </select>#}
+{#                        </div>#}
+{#                      </div>#}
+{#                    </div>#}
+{#                    <div class="row third">#}
+                      <div class="input-field">
+                        <button class="btn-search">Search</button>
+                        <button class="btn-delete" id="delete">Delete</button>
+                      </div>
+                    </div>
+                  </div>
+              </form>
+            </div>
+        </div>
+{#		<div id="adbanner">#}
+{#			<div id="ad">#}
+{#				<a href="#"><p>Advertise Here</p></a>#}
+{#			</div>#}
+{#		</div>#}
+		<div id="secwrapper">
+			<section>
+{#      django script goes here       #}
+            <form class="opportunities-showcase" action="{% url 'select' %}" method="post">
+				<article id="photobox">
+					<h1>Badges You Can Earn</h1>
+					<img src="../../static/images/badge-1.png" alt=""/>
+                    <img src="../../static/images/badge-2.png" alt=""/>
+                    <img src="../../static/images/badge-3.png" alt=""/>
+                    <img src="../../static/images/badge-4.png" alt=""/>
+                    <img src="../../static/images/badge-5.png" alt=""/>
+                    <img src="../../static/images/badge-6.png" alt=""/>
+				</article>
+{#				<article>#}
+{#					<a href="#"><img src="../../static/images/5.jpg" alt=""/></a>#}
+{#					<h1>Aenean Quis Dignissim Diam</h1>#}
+{#					<p>Vulputate ac sit aenean quis dignissim diam. Etiam venenatis congue velit, varius gravida mi volutpat ac. Sed ut pretium dolor. Etiam tempor felis ac eros dictum quis consectetur dolor tristique. Aliquam scelerisque, odio vel luctus commodo, nisl nisl vehicula metus, ut lobortis eros sem blandit est.</p>#}
+{#					<a href="#" class="readmore">Read more</a>#}
+{#				</article>#}
+{#      django script goes here       #}
+                {% csrf_token %}
+                {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+                {% for opportunity in opportunity_lists %}
+                    <article>
+					    <a href="#"><img src="{% static opportunity.opportunity_image %}" alt="" class="vol-position-image" width="275px"/></a>
+					    <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
+                        <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                        <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
+                        <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
+                        <p class="vol-position-disciption-h2">Duration: {{ opportunity.duration }}</p>
+                        <p>{{ opportunity.description }}</p>
+                        <a href="#" class="readmore">Connect</a>
+				    </article>
+                {% endfor %}
+                <article id="sponsors">
+					<h1>Sponsors</h1>
+					<a href="#"><p>Advertise here</p></a><a href="#"><p>Advertise here</p></a><a href="#"><p>Advertise here</p></a><a href="#"><p>Advertise here</p></a>
+				</article>
+            </form>
+{#      django script ends here       #}
+			</section>
+		</div>
+		<footer>
+			<p>Copyright &copy 2023 VolunCheer, org.  All Rights Reserved.</p>
+		</footer>
+	</body>
+
+
+
+    <script src={% static "js/extention/choices.js" %}></script>
+    <script>
+      const customSelects = document.querySelectorAll("select");
+      const deleteBtn = document.getElementById('delete')
+      const choices = new Choices('select',
+      {
+        searchEnabled: false,
+        removeItemButton: true,
+        itemSelectText: '',
+      });
+      for (let i = 0; i < customSelects.length; i++)
+      {
+        customSelects[i].addEventListener('addItem', function(event)
+        {
+          if (event.detail.value)
+          {
+            let parent = this.parentNode.parentNode
+            parent.classList.add('valid')
+            parent.classList.remove('invalid')
+          }
+          else
+          {
+            let parent = this.parentNode.parentNode
+            parent.classList.add('invalid')
+            parent.classList.remove('valid')
+          }
+        }, false);
+      }
+      deleteBtn.addEventListener("click", function(e)
+      {
+        e.preventDefault()
+        const deleteAll = document.querySelectorAll('.choices__button')
+        for (let i = 0; i < deleteAll.length; i++)
+        {
+          deleteAll[i].click();
+        }
+      });
+
+    </script>
+		
+{% endblock %}		
+			
+    
+    

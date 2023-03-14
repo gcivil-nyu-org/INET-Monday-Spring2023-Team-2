@@ -104,7 +104,7 @@ body {
     padding-top: 20px;
 }
 
-.job {
+.opportunity {
     font-size: 16px;
     font-weight: normal;
     padding-top: 10px;
@@ -266,6 +266,9 @@ td {
     width: 90%;
 }
 .edit-form input {
+    width: 100%;
+}
+.edit-form textarea {
     width: 100%;
 }
 #edit-form-edit {
