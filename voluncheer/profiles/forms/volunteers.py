@@ -7,7 +7,6 @@ from django.db import transaction
 from profiles.models import User
 from profiles.models import UserType
 from profiles.models import Volunteer
-from voluncheer import settings
 
 _is_alpha = RegexValidator(
     regex=r"^[a-zA-Z]+$",
@@ -16,10 +15,11 @@ _is_alpha = RegexValidator(
 
 
 class VolunteerCreationForm(UserCreationForm):
+
     first_name = forms.CharField(required=True, validators=[_is_alpha])
     last_name = forms.CharField(required=True, validators=[_is_alpha])
     date_of_birth = forms.DateField(required=True)
-    photo = forms.ImageField()
+    photo = forms.ImageField(required=False)
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -38,6 +38,7 @@ class VolunteerCreationForm(UserCreationForm):
             date_of_birth=self.cleaned_data.get("date_of_birth"),
             photo=self.cleaned_data.get("photo"),
         )
+
         return user
 
 
@@ -49,7 +50,8 @@ This form is for edit volunteer profile.
 
 class VolunteerChangeForm(UserChangeForm):
     password = None
-    photo = forms.ImageField()
+    photo = forms.ImageField(required=False)
+
     class Meta(UserChangeForm.Meta):
         model = Volunteer
         fields = ("first_name", "last_name", "date_of_birth", "photo")
@@ -57,6 +59,7 @@ class VolunteerChangeForm(UserChangeForm):
     def save(self, commit=True):
         user = self.instance
         volunteer = Volunteer.objects.get(pk=user)
+
         if self.is_valid():
             volunteer.first_name = self.cleaned_data.get("first_name")
             volunteer.last_name = self.cleaned_data.get("last_name")
@@ -64,3 +67,5 @@ class VolunteerChangeForm(UserChangeForm):
             print("cleaned photo:", self.cleaned_data.get("photo"))
             volunteer.photo = self.cleaned_data.get("photo")
             volunteer.save()
+        else:
+            print("volunteer change form is not valid")

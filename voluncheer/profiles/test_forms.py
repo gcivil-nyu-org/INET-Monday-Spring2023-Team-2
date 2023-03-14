@@ -2,6 +2,8 @@ from django.test import TestCase
 
 from profiles.forms.volunteers import VolunteerCreationForm
 from profiles.forms.organizations import OrganizationCreationForm
+from profiles.forms.organizations import OrganizationChangeForm
+from profiles.forms.volunteers import VolunteerChangeForm
 
 
 class OrganizationCreationFormTest(TestCase):
@@ -40,6 +42,34 @@ class OrganizationCreationFormTest(TestCase):
         form1.save(self)  # Submitting form 1
         form2 = OrganizationCreationForm(data=data2)
         self.assertFalse(form2.is_valid())
+
+    def test_organization_can_add_photo(self):
+        """Test that organization can add photo"""
+        data1 = {
+            "name": "Sith Lords",
+            "email": "sith@sith.com",
+            "password1": "come_to_the_dark_side",
+            "password2": "come_to_the_dark_side",
+            "type": "UserType.ORGANIZATION,",
+        }
+        data2 = {
+            "name": "The Sith Lords",
+            "email": "sith@sith.com",
+            "password1": "come_to_the_dark_side_again",
+            "password2": "come_to_the_dark_side_again",
+            "type": "UserType.ORGANIZATION,",
+            "photo": "sith-lord.jpg",
+        }
+
+        form1 = OrganizationCreationForm(data=data1)
+        form1.save(self)
+        self.assertTrue(form1.data.get("photo") is None)
+        # assert that there is an initial default photo
+        self.assertTrue(form1.fields["photo"])
+        form2 = OrganizationChangeForm(data=data2)
+        self.assertTrue(form2.data["photo"])
+        # assert that the photo has been changed
+        self.assertTrue(form2.data["photo"] == "sith-lord.jpg")
 
 
 class VolunteerCreationFormTest(TestCase):
@@ -84,7 +114,7 @@ class VolunteerCreationFormTest(TestCase):
         form = VolunteerCreationForm(data)
         self.assertFalse(form.is_valid())
 
-    def test_organization_must_submit_unique_email(self):
+    def test_volunteer_must_submit_unique_email(self):
         """Test that volunteer email must be unique"""
         data1 = {
             "first_name": "Han",
@@ -110,3 +140,34 @@ class VolunteerCreationFormTest(TestCase):
         form1.save(self)  # Submitting form 1
         form2 = VolunteerCreationForm(data=data2)
         self.assertFalse(form2.is_valid())
+
+    def test_volunteer_can_add_photo(self):
+        """Test that volunteer can add photo"""
+        data1 = {
+            "first_name": "Han",
+            "last_name": "Solo",
+            "date_of_birth": "1942-07-13",
+            "email": "millenium@falcon.com",
+            "password1": "ch3wb@cc@",
+            "password2": "ch3wb@cc@",
+            "type": "UserType.VOLUNTEER,",
+        }
+        data2 = {
+            "first_name": "Harrison",
+            "last_name": "Ford",
+            "date_of_birth": "1942-07-13",
+            "email": "millenium@falcon.com",
+            "password1": "ch3wb@cc@",
+            "password2": "ch3wb@cc@",
+            "type": "UserType.VOLUNTEER,",
+            "photo": "sith-lord.jpg",
+        }
+        form1 = VolunteerCreationForm(data=data1)
+        form1.save(self)
+        self.assertTrue(form1.data.get("photo") is None)
+        # assert that there is an initial default photo
+        self.assertTrue(form1.fields["photo"])
+        form2 = VolunteerChangeForm(data=data2)
+        self.assertTrue(form2.data["photo"])
+        # assert that the photo has been changed
+        self.assertTrue(form2.data["photo"] == "sith-lord.jpg")

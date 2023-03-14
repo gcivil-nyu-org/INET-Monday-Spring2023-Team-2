@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
-from voluncheer import settings
 
 
 class UserType(models.IntegerChoices):
@@ -17,23 +16,22 @@ class UserManager(BaseUserManager):
 
     use_in_migrations = True
 
-    def _create_user(self, email, photo, password, **extra_fields):
+    def _create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError("creating a user requires an email field")
         email = self.normalize_email(email)
-        photo = self.normalize_photo(photo)
-        user = self.model(email=email, photo=photo, **extra_fields)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, photo, password=None, **extra_fields):
+    def create_user(self, email, password=None, **extra_fields):
         """Creates and ordinary, everyday non-super user."""
         extra_fields["is_staff"] = False
         extra_fields["is_superuser"] = False
-        return self._create_user(email, photo, password, **extra_fields)
+        return self._create_user(email, password, **extra_fields)
 
-    def create_superuser(self, email, photo, password, **extra_fields):
+    def create_superuser(self, email, password, **extra_fields):
         """Creates an Admin superuser."""
         extra_fields["is_staff"] = True
         extra_fields["is_superuser"] = True
@@ -44,7 +42,7 @@ class UserManager(BaseUserManager):
         if extra_fields.get("is_superuser") is not True:
             raise ValueError("a superuser must have is_superuser=True.")
 
-        return self._create_user(email, photo, password, **extra_fields)
+        return self._create_user(email, password, **extra_fields)
 
 
 class User(AbstractUser):
@@ -58,7 +56,7 @@ class User(AbstractUser):
         email: the unique email address associated with a particular user.
         password: the secret password to use during authentication.
     """
-    
+
     username = None
     email = models.EmailField(
         verbose_name="email address",
@@ -107,7 +105,9 @@ class Organization(models.Model):
         primary_key=True,
     )
     name = models.CharField(max_length=200)
-    photo = models.ImageField(upload_to="images/", default="images/user-0.png")
+    photo = models.ImageField(
+        upload_to="images/", default="images/user-0.png", blank=True, null=True
+    )
 
     def __str__(self):
         return self.name
@@ -134,7 +134,9 @@ class Volunteer(models.Model):
     last_name = models.CharField(max_length=200)
     date_of_birth = models.DateField(blank=True, null=True)
     badges = models.CharField(max_length=1024, default="")
-    photo = models.ImageField(upload_to="images/", default="images/user-0.png")
+    photo = models.ImageField(
+        upload_to="images/", default="images/user-0.png", blank=True, null=True
+    )
     BADGES = {
         "Badge 1": "images/badge-1.png",
         "Badge 2": "images/badge-2.png",

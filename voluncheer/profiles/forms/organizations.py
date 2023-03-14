@@ -6,12 +6,12 @@ from django.db import transaction
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
-from voluncheer import settings
+
 
 class OrganizationCreationForm(UserCreationForm):
     name = forms.CharField(required=True)
-    photo = forms.ImageField()
-    
+    photo = forms.ImageField(required=False)
+
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ("email",)
@@ -34,7 +34,9 @@ class OrganizationChangeForm(UserChangeForm):
     """This form is for edit organization profile."""
 
     password = None
-    photo = forms.ImageField()
+
+    photo = forms.ImageField(required=False)
+
     class Meta(UserChangeForm.Meta):
         model = Organization
         fields = ("name", "photo")
@@ -46,3 +48,5 @@ class OrganizationChangeForm(UserChangeForm):
             organization.name = self.cleaned_data.get("name")
             organization.photo = self.cleaned_data.get("photo")
             organization.save()
+        else:
+            print("Organization change form is not valid")

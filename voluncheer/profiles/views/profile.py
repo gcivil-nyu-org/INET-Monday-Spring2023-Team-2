@@ -57,26 +57,6 @@ class ProfileView(DetailView):
             )  # noqa: E501
         return super().get_context_data(**kwargs)
 
-    """
-    def user_photo_view(request):
-        #might not be the correct syntax
-        if request.user.is_organization:
-            form = OrganizationChangeForm
-        elif request.user.is_volunteer:
-            form = VolunteerChangeForm
-        if request.method == 'POST':
-            formRet = form(request.POST, request.FILES)
-            if formRet.is_valid():
-                formRet.save()
-                return redirect('success')
-            else:
-                formRet = form()
-        return render(request, 'photo_image_form.html', {'form': formRet})
-    """
-
-    def success(request):
-        return HttpResponse("successfully uploaded")
-
     def password_reset_request(request):
         if request.method == "POST":
             password_reset_form = PasswordResetForm(request.POST)
@@ -85,12 +65,13 @@ class ProfileView(DetailView):
                 associated_user = User.objects.filter(Q(email=data)).first()
                 if associated_user:
                     subject = "Password Reset Request"
+                    domain_name = "http://voluncheer-dev.us-west-2.elasticbeanstalk.com/"
                     message = render_to_string(
                         "template_reset_password.html",
                         {
                             "email": associated_user.email,
                             "user": associated_user,
-                            "domain": "http://voluncheer-dev.us-west-2.elasticbeanstalk.com/",
+                            "domain": domain_name,
                             "site_name": "VolunCHEER",
                             "uid": urlsafe_base64_encode(
                                 force_bytes(associated_user.pk)
@@ -123,6 +104,7 @@ class ProfileView(DetailView):
 def profile_update(request):
     """Get profile update POST and call save function on ChangeForms."""
     if request.user.is_volunteer:
+        print("volunteer File", request.FILES)
         form = VolunteerChangeForm(
             request.POST,
             request.FILES,
