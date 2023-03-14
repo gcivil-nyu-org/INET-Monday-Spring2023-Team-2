@@ -1,0 +1,1 @@
+docker run -it --rm --name black -v $(pwd):/mycode -d python:3.6 /bin/bash

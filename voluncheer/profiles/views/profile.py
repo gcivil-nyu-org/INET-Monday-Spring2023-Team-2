@@ -65,7 +65,9 @@ class ProfileView(DetailView):
                 associated_user = User.objects.filter(Q(email=data)).first()
                 if associated_user:
                     subject = "Password Reset Request"
-                    domain_name = "http://voluncheer-dev.us-west-2.elasticbeanstalk.com/"
+                    domain_name = (
+                        "http://voluncheer-dev.us-west-2.elasticbeanstalk.com/"
+                    )
                     message = render_to_string(
                         "template_reset_password.html",
                         {

@@ -15,7 +15,6 @@ _is_alpha = RegexValidator(
 
 
 class VolunteerCreationForm(UserCreationForm):
-
     first_name = forms.CharField(required=True, validators=[_is_alpha])
     last_name = forms.CharField(required=True, validators=[_is_alpha])
     date_of_birth = forms.DateField(required=True)
