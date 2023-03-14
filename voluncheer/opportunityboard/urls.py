@@ -9,5 +9,5 @@ urlpatterns = [
     # Opportunityboard
     path("select", select, name="select"),
     # Post an Opportunity
-    path("create", post_an_opportunity, name="post_an_opportunity"),
+    path("post", post_an_opportunity, name="post_an_opportunity"),
 ]
