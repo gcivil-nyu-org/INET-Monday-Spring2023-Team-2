@@ -105,6 +105,10 @@ class Organization(models.Model):
         primary_key=True,
     )
     name = models.CharField(max_length=200)
+    website = models.CharField(max_length=200, default="")
+    description = models.TextField(
+        help_text="Introduce your organization here.", default=""
+    )
 
     def __str__(self):
         return self.name
@@ -131,6 +135,7 @@ class Volunteer(models.Model):
     last_name = models.CharField(max_length=200)
     date_of_birth = models.DateField(blank=True, null=True)
     badges = models.CharField(max_length=1024, default="")
+    description = models.TextField(help_text="Introduce yourself here.", default="")
 
     BADGES = {
         "Badge 1": "images/badge-1.png",
