@@ -62,8 +62,10 @@
                     <article>
 					    <a href="#"><img src="{% static opportunity.opportunity_image %}" alt="" class="vol-position-image" width="275px"/></a>
 					    <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
-                        <p class="vol-position-disciption-h3">{{ opportunity.pubdate }}</p>
-                        <p class="vol-position-disciption-h2">{{ opportunity.address_1 }}</p>
+                        <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                        <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
+                        <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
+                        <p class="vol-position-disciption-h2">Duration: {{ opportunity.duration }}</p>
                         <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
                         <div class="url"><a href="#" class="readmore">Connect</a></div>
                         <hr align="center">

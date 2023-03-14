@@ -1,11 +1,9 @@
-from django.shortcuts import render
 from django.apps import apps
+from django.shortcuts import render
 
 from opportunityboard.models import Opportunity
 
 Organization = apps.get_model("profiles", "Organization")
-
-# ======================== Opportunity Board ============================
 
 
 def opportunityboard(request):

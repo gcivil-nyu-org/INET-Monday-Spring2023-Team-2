@@ -238,13 +238,8 @@ article p{
 }
 
 footer{
-	background-color: white;
 	height: 28px;
 	color: #888;
-	padding-left: 30%;
-    border: 1px solid #c8c8c8;
-    border-radius: 3px;
-    box-shadow: 0 -2px 3px #ccc;
 }
 footer p{
 	margin: 5px 0 0 12%;
@@ -882,8 +877,9 @@ legend {
       justify-content: center;
   -ms-flex-align: center;
       align-items: center;
-  padding-top: 80px;
-    padding-bottom: 20px;
+  padding-top: 0px;
+  margin-top: -40px;
+  padding-bottom: 20px;
   font-family: Zenkaku, sans-serif;
 }
 

@@ -1,9 +1,9 @@
 from django.test import TestCase
 
+from opportunityboard.models import Opportunity
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
-from opportunityboard.models import Opportunity
 
 import datetime
 
