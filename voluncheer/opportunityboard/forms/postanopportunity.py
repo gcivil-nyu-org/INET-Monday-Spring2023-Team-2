@@ -31,6 +31,8 @@ class PostAnOpportunityForm(forms.ModelForm):
             "category",
             "title",
             "description",
+            "date",
+            "duration",
             "address_1",
             "address_2",
             "is_published",
