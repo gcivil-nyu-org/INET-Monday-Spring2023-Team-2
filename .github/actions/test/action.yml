@@ -1,5 +1,10 @@
 name: Test Python
 description: Runs Python tests and checks coverage when tests pass
+inputs:
+  minimum-coverage:
+    default: "85"
+    description: The minimum required code coverage percentage
+    required: false
 runs:
   using: composite
   steps:
@@ -12,7 +17,7 @@ runs:
       working-directory: voluncheer
       run: |
         coverage run --source "." manage.py test
-        coverage lcov --fail-under=${MINIMUM_COVERAGE}
+        coverage lcov --fail-under=${{ inputs.minimum-coverage }}
     - name: Report Coverage to Coveralls
       if: ${{ success() }}
       uses: coverallsapp/github-action@v1
