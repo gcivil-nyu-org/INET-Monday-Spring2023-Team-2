@@ -4,3 +4,4 @@
 !.elasticbeanstalk/*.global.yml
 .env
 static/images/
+nukeSqlitedb.sh
