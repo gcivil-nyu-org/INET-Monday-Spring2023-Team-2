@@ -1,10 +1,10 @@
+from django.contrib.auth.tokens import default_token_generator
+from django.core import mail
+from profiles.models import User
 from django.test import TestCase
 from django.urls import reverse
-from profiles.models import User
-from django.core import mail
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
-from django.contrib.auth.tokens import default_token_generator
 
 
 class PasswordResetTest(TestCase):

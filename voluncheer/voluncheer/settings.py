@@ -168,10 +168,8 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 EMAIL_BACKEND = "django_ses.SESBackend"
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-AWS_SES_REGION_NAME = "us-east-1"  # (ex: us-east-2)
-AWS_SES_REGION_ENDPOINT = (
-    "email.us-east-1.amazonaws.com"  # (ex: email.us-east-2.amazonaws.com)
-)
+AWS_SES_REGION_NAME = "us-east-2"
+AWS_SES_REGION_ENDPOINT = "email.us-east-2.amazonaws.com"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("IS_PRODUCTION") != "true"
 
