@@ -56,7 +56,14 @@ class VolunteerChangeForm(UserChangeForm):
 
     class Meta(UserChangeForm.Meta):
         model = Volunteer
-        fields = ("first_name", "last_name", "date_of_birth", "photo")
+        fields = (
+            "first_name",
+            "last_name",
+            "date_of_birth",
+            "badges",
+            "photo",
+            "description",
+        )
 
     @transaction.atomic
     def save(self, commit=True):
@@ -68,6 +75,8 @@ class VolunteerChangeForm(UserChangeForm):
             volunteer.last_name = self.cleaned_data.get("last_name")
             volunteer.date_of_birth = self.cleaned_data.get("date_of_birth")
             volunteer.photo = self.cleaned_data.get("photo")
+            volunteer.badges = self.cleaned_data.get("badges")
+            volunteer.description = self.cleaned_data.get("description")
             volunteer.save()
         else:
             logger = logging.getLogger(__name__)

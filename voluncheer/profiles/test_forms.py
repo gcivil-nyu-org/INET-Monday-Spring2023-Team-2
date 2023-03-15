@@ -1,9 +1,15 @@
+from datetime import datetime
+
 from django.test import TestCase
 
-from profiles.forms.volunteers import VolunteerCreationForm
-from profiles.forms.organizations import OrganizationCreationForm
+from profiles.models import Organization
+from profiles.models import Volunteer
+from profiles.models import User
 from profiles.forms.organizations import OrganizationChangeForm
+from profiles.forms.organizations import OrganizationCreationForm
+from profiles.forms.volunteers import VolunteerCreationForm
 from profiles.forms.volunteers import VolunteerChangeForm
+from profiles.models import UserType
 
 
 class OrganizationCreationFormTest(TestCase):
@@ -136,3 +142,82 @@ class VolunteerCreationFormTest(TestCase):
         form2 = VolunteerChangeForm(data=data2)
         # assert that the photo has been changed
         self.assertEqual(form2.data["photo"], "sith-lord.jpg")
+
+
+class VolunteerChangeFormTest(TestCase):
+    """Test cases for Volunteer Change form"""
+
+    def setUp(self):
+        """See base class."""
+        self.form = VolunteerChangeForm()
+        self.user = Volunteer.objects.create(
+            user=User.objects.create(
+                email="luke@jedi.com",
+                password="NOOOOOOOOOOOOOOOOOOO",
+                type=UserType.VOLUNTEER,
+            ),
+            first_name="Luke",
+            last_name="Skywalker",
+            date_of_birth="1955-09-25",
+            description="I want to come with you to Alderaan.",
+        )
+        self.user.save()
+
+    def test_validation(self):
+        """Test volunteer profile update validation"""
+        self.assertNotEqual(self.user.first_name, "R2D2")
+        self.assertNotEqual(self.user.last_name, "Robot")
+        self.assertNotEqual(
+            self.user.date_of_birth, datetime.strptime("2000-01-01", "%Y-%m-%d").date()
+        )
+        self.assertNotEqual(self.user.badges, "badge-2,badge-4")
+        self.assertNotEqual(self.user.description, "beep_boop")
+        data = {
+            "first_name": "R2D2",
+            "last_name": "Robot",
+            "date_of_birth": "2000-01-01",
+            "badges": "badge-2,badge-4",
+            "description": "beep_boop",
+        }
+        form = VolunteerChangeForm(data=data, instance=self.user)
+        self.assertFalse(form.save())
+        self.assertEqual(self.user.first_name, "R2D2")
+        self.assertEqual(self.user.last_name, "Robot")
+        self.assertEqual(
+            self.user.date_of_birth, datetime.strptime("2000-01-01", "%Y-%m-%d").date()
+        )
+        self.assertEqual(self.user.badges, "badge-2,badge-4")
+        self.assertEqual(self.user.description, "beep_boop")
+
+
+class OrganizationChangeFormTest(TestCase):
+    """Test cases for Organization Change form"""
+
+    def setUp(self):
+        """See base class."""
+        self.form = OrganizationChangeForm()
+        self.user = Organization.objects.create(
+            user=User.objects.create(
+                email="jedi@jedi.com",
+                password="peace_and_justice_for_the_galaxy",
+                type=UserType.ORGANIZATION,
+            ),
+            name="Jedi Council",
+        )
+        self.user.save()
+
+    def test_validation(self):
+        """Test organization profile update validation"""
+        self.assertNotEqual(self.user.name, "Dije")
+        self.assertNotEqual(self.user.website, "www.google.com")
+        self.assertNotEqual(self.user.description, "beep_boop")
+        data = {
+            "name": "Dije",
+            "website": "www.google.com",
+            "description": "beep_boop",
+        }
+        form = OrganizationChangeForm(data=data, instance=self.user)
+        self.assertFalse(form.save())
+        self.assertEqual(self.user.name, "Dije")
+        self.assertEqual(self.user.website, "www.google.com")
+        self.assertEqual(self.user.description, "beep_boop")

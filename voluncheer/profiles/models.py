@@ -108,6 +108,10 @@ class Organization(models.Model):
     photo = models.ImageField(
         upload_to="images/", default="images/user-0.png", blank=True, null=True
     )
+    website = models.CharField(max_length=200, default="")
+    description = models.TextField(
+        help_text="Introduce your organization here.", default=""
+    )
 
     def __str__(self):
         return self.name
@@ -137,6 +141,8 @@ class Volunteer(models.Model):
     photo = models.ImageField(
         upload_to="images/", default="images/user-0.png", blank=True, null=True
     )
+    description = models.TextField(help_text="Introduce yourself here.", default="")
+
     BADGES = {
         "Badge 1": "images/badge-1.png",
         "Badge 2": "images/badge-2.png",

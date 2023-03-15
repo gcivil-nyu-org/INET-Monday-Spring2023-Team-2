@@ -20,6 +20,7 @@ class UserTest(TestCase):
             first_name="Luke",
             last_name="Skywalker",
             date_of_birth="1955-09-25",
+            description="I want to come with you to Alderaan.",
         )
         self.jedi = Organization.objects.create(
             user=User.objects.create(
@@ -79,6 +80,7 @@ class UserTest(TestCase):
         self.assertEqual(self.vader.name, "Darth Vader")
         self.assertEqual(self.vader.date_of_birth, "1931-01-17")
         self.assertEqual(self.vader.photo, "darth-vader.jpg")
+        self.assertEqual(self.luke.description, "I want to come with you to Alderaan.")
 
     def test_admin_details(self):
         """Tests admin account has proper attributes."""

@@ -41,7 +41,12 @@ class OrganizationChangeForm(UserChangeForm):
 
     class Meta(UserChangeForm.Meta):
         model = Organization
-        fields = ("name", "photo")
+        fields = (
+            "name",
+            "website",
+            "photo",
+            "description",
+        )
 
     @transaction.atomic
     def save(self, commit=True):
@@ -50,6 +55,8 @@ class OrganizationChangeForm(UserChangeForm):
         if self.is_valid():
             organization.name = self.cleaned_data.get("name")
             organization.photo = self.cleaned_data.get("photo")
+            organization.website = self.cleaned_data.get("website")
+            organization.description = self.cleaned_data.get("description")
             organization.save()
         else:
             logger = logging.getLogger(__name__)
