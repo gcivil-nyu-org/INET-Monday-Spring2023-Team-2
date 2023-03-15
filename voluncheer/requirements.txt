@@ -27,3 +27,4 @@ six==1.16.0
 sqlparse==0.4.3
 urllib3==1.26.14
 verify-email==2.4.3
+Pillow==9.3.0

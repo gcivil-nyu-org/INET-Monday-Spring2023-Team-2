@@ -5,7 +5,10 @@
     <!-- Sidenav -->
     <div class="sidenav">
         <div class="profile">
-            <img src="{% static organization.organization_image %}" alt="" width="100" height="100"/>
+            {% if organization.photo %}
+                <img src="{{organization.photo.url}}" alt="profile pic" width="100" height="100"/>
+                <hr align="center">
+            {% endif %}
             <div class="name">
                 {{ organization.name }}
             </div>
@@ -45,8 +48,12 @@
                         Website:
                         <a href="https://{{ organization.website }}"><input type="text" value="{{ organization.website }}" contenteditable="false"></a>
                         </tr>
+                        <tr>
+                        Photo:
+                        <input type="image" value="{{ organization.photo }}" contenteditable="false">
+                        </tr>
                     </div>
-                    <form method="post" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
+                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
                         {% csrf_token %}
                         {{ user_form }}
                         <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>
@@ -84,7 +91,10 @@
     <!-- Side Nav -->
     <div class="sidenav">
         <div class="profile">
-            <img src="{% static volunteer.user_image %}" alt="" width="100" height="100"/>
+            {% if volunteer.photo %}
+                <img src="{{volunteer.photo.url}}" alt="profile pic" width="100" height="100"/>
+                <hr align="center">
+            {% endif %}
             <div class="name">
                 {{ volunteer.first_name }}, {{ volunteer.last_name }}
             </div>
@@ -127,8 +137,12 @@
                         Date of birth:
                         <input type="text" value="{{ volunteer.date_of_birth }}" contenteditable="false">
                         </tr>
+                        <tr>
+                        Photo:
+                        <input type="image" value="{{volunteer.photo }}" contenteditable="false">
+                        </tr>
                     </div>
-                    <form method="post" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
+                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
                         {% csrf_token %}
                         {{ user_form }}
                         <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>

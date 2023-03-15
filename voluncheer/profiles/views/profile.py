@@ -104,9 +104,15 @@ class ProfileView(DetailView):
 def profile_update(request):
     """Get profile update POST and call save function on ChangeForms."""
     if request.user.is_volunteer:
-        form = VolunteerChangeForm(request.POST, instance=request.user)
+        form = VolunteerChangeForm(
+            request.POST,
+            request.FILES,
+            instance=request.user,
+        )
     elif request.user.is_organization:
-        form = OrganizationChangeForm(request.POST, instance=request.user)
+        form = OrganizationChangeForm(
+            request.POST, request.FILES, instance=request.user
+        )
     else:
         raise ValueError(
             "profile_update: user must either a volunteer or an organizaiton."
