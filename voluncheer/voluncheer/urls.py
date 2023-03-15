@@ -18,28 +18,14 @@ from django.urls import include
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
-from profiles.views.home import SignUpView
-from profiles.views.organizations import OrganizationSignUpView
-from profiles.views.volunteers import VolunteerSignUpView
 
 urlpatterns = [
-    path("__debug__/", include("debug_toolbar.urls")),
-    path("admin/", admin.site.urls),
+    path("", include("django.contrib.auth.urls")),
     path("", include("profiles.urls")),
-    path("accounts/", include("django.contrib.auth.urls")),
-    path("accounts/signup/", SignUpView.as_view(), name="signup"),
-    path(
-        "accounts/signup/organization/",
-        OrganizationSignUpView.as_view(),
-        name="organization_signup",
-    ),
-    path(
-        "accounts/signup/volunteer/",
-        VolunteerSignUpView.as_view(),
-        name="volunteer_signup",
-    ),
+    path("admin/", admin.site.urls),
+    path("__debug__/", include("debug_toolbar.urls")),
+    path("map/", include("map.urls")),
+    path("opportunityboard/", include("opportunityboard.urls")),
     # Unimplemented urls.
     # path("chat/", include("chatroom.urls")),
-    path("opportunityboard/", include("opportunityboard.urls")),
-    path("map/", include("map.urls")),
 ]
