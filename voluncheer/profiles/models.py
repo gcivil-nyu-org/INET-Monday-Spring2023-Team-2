@@ -105,6 +105,13 @@ class Organization(models.Model):
         primary_key=True,
     )
     name = models.CharField(max_length=200)
+    photo = models.ImageField(
+        upload_to="images/", default="images/user-0.png", blank=True, null=True
+    )
+    website = models.CharField(max_length=200, default="")
+    description = models.TextField(
+        help_text="Introduce your organization here.", default=""
+    )
 
     def __str__(self):
         return self.name
@@ -131,6 +138,10 @@ class Volunteer(models.Model):
     last_name = models.CharField(max_length=200)
     date_of_birth = models.DateField(blank=True, null=True)
     badges = models.CharField(max_length=1024, default="")
+    photo = models.ImageField(
+        upload_to="images/", default="images/user-0.png", blank=True, null=True
+    )
+    description = models.TextField(help_text="Introduce yourself here.", default="")
 
     BADGES = {
         "Badge 1": "images/badge-1.png",

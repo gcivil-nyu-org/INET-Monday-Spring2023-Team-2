@@ -7,9 +7,12 @@ from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
 
+import logging
+
 
 class OrganizationCreationForm(UserCreationForm):
     name = forms.CharField(required=True)
+    photo = forms.ImageField(required=False)
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -21,10 +24,11 @@ class OrganizationCreationForm(UserCreationForm):
         user.type = UserType.ORGANIZATION
         if commit:
             user.save()
-            Organization.objects.create(
-                user=user,
-                name=self.cleaned_data.get("name"),
-            )
+        Organization.objects.create(
+            user=user,
+            name=self.cleaned_data.get("name"),
+            photo=self.cleaned_data.get("photo"),
+        )
         return user
 
 
@@ -33,13 +37,27 @@ class OrganizationChangeForm(UserChangeForm):
 
     password = None
 
+    photo = forms.ImageField(required=False)
+
     class Meta(UserChangeForm.Meta):
         model = Organization
-        fields = ("name",)
+        fields = (
+            "name",
+            "website",
+            "photo",
+            "description",
+        )
 
+    @transaction.atomic
     def save(self, commit=True):
         user = self.instance
         organization = Organization.objects.get(pk=user)
         if self.is_valid():
             organization.name = self.cleaned_data.get("name")
+            organization.photo = self.cleaned_data.get("photo")
+            organization.website = self.cleaned_data.get("website")
+            organization.description = self.cleaned_data.get("description")
             organization.save()
+        else:
+            logger = logging.getLogger(__name__)
+            logger.error(self.errors)

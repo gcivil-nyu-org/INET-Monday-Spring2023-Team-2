@@ -7,3 +7,6 @@ __pycache__/
 voluncheer/db.sqlite3
 **/.coverage
 **/coverage.lcov
+.env
+static/images/
+blackAndFlake8.sh

@@ -38,10 +38,11 @@ class ProfileView(DetailView):
         """Returns additional contextual information for display."""
         user = self.request.user
         if user.is_organization:
-            kwargs["organization"] = Organization.objects.get(pk=user)
-            kwargs["user_form"] = OrganizationChangeForm(
-                instance=self.request.user
-            )  # noqa: E501
+            organization_profile = Organization.objects.get(pk=user)
+            kwargs["organization"] = organization_profile
+            kwargs["user_form"] = OrganizationChangeForm(instance=self.request.user)
+            opportunity_lists = organization_profile.opportunity_set.all()
+            kwargs["opportunity_lists"] = opportunity_lists
         if user.is_volunteer:
             kwargs["volunteer"] = Volunteer.objects.get(pk=user)
             badge_urls = []
@@ -107,9 +108,15 @@ class ProfileView(DetailView):
 def profile_update(request):
     """Get profile update POST and call save function on ChangeForms."""
     if request.user.is_volunteer:
-        form = VolunteerChangeForm(request.POST, instance=request.user)
+        form = VolunteerChangeForm(
+            request.POST,
+            request.FILES,
+            instance=request.user,
+        )
     elif request.user.is_organization:
-        form = OrganizationChangeForm(request.POST, instance=request.user)
+        form = OrganizationChangeForm(
+            request.POST, request.FILES, instance=request.user
+        )
     else:
         raise ValueError(
             "profile_update: user must either a volunteer or an organizaiton."

@@ -11,23 +11,23 @@ CATEGORIES = {
 }
 
 
-class Job(models.Model):
+class Opportunity(models.Model):
     """
-    The Job type.
+    The Opportunity type.
 
     Attributes:
         organization: the many-to-one mapping of the organization.
-        pubdate: when job was published. *allowed to be blank for now
-        category: the type of job
-        title: the name of the job.
-        description: a description of the job.
-        date: the date and start time of the job.
-        duration: the length of the job, in hours and seconds.
-        address_1: the location of the job.
+        pubdate: when opportunity was published. *allowed to be blank for now
+        category: the type of opportunity
+        title: the name of the opportunity.
+        description: a description of the opportunity.
+        date: the date and start time of the opportunity.
+        duration: the length of the opportunity, in hours and seconds.
+        address_1: the location of the opportunity.
         address_2: reserved for an additional address field.
-        longitude: used for mapping the job. *allowed to be blank for now
-        latitude: used for mapping the job. *allowed to be blank for now
-        staffing: the requested number of volunteers for the job.
+        longitude: used for mapping the opportunity. *allowed to be blank for now
+        latitude: used for mapping the opportunity. *allowed to be blank for now
+        staffing: the requested number of volunteers for the opportunity.
     """
 
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
