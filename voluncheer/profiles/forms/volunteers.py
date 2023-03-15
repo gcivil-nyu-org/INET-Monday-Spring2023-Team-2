@@ -58,6 +58,7 @@ class VolunteerChangeForm(UserChangeForm):
         model = Volunteer
         fields = ("first_name", "last_name", "date_of_birth", "photo")
 
+    @transaction.atomic
     def save(self, commit=True):
         user = self.instance
         volunteer = Volunteer.objects.get(pk=user)
@@ -70,4 +71,4 @@ class VolunteerChangeForm(UserChangeForm):
             volunteer.save()
         else:
             logger = logging.getLogger(__name__)
-            logger.exception(self.errors)
+            logger.error(self.errors)

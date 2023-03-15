@@ -103,7 +103,6 @@ class ProfileView(DetailView):
 def profile_update(request):
     """Get profile update POST and call save function on ChangeForms."""
     if request.user.is_volunteer:
-        print("volunteer File", request.FILES)
         form = VolunteerChangeForm(
             request.POST,
             request.FILES,

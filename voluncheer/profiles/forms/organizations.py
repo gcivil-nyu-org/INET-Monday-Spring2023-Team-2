@@ -43,6 +43,7 @@ class OrganizationChangeForm(UserChangeForm):
         model = Organization
         fields = ("name", "photo")
 
+    @transaction.atomic
     def save(self, commit=True):
         user = self.instance
         organization = Organization.objects.get(pk=user)
@@ -52,4 +53,4 @@ class OrganizationChangeForm(UserChangeForm):
             organization.save()
         else:
             logger = logging.getLogger(__name__)
-            logger.exception(self.errors)
+            logger.error(self.errors)
