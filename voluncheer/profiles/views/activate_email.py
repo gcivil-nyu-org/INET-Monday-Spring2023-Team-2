@@ -31,7 +31,7 @@ def activateEmail(request, user, to_email):
         send_mail(
             subject,
             message,
-            "admin@admin.com",
+            "noreply.voluncheer@gmail.com",
             [to_email],
             fail_silently=False,  # noqa E501
         )  # noqa E501
