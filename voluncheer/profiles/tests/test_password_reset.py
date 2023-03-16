@@ -12,7 +12,6 @@ class PasswordResetTest(TestCase):
         self.user = User.objects.create_user(
             email="testuser@example.com",
             password="password",
-            is_active="True",
             type="2",
         )
         self.test_user = User.objects.get(email="testuser@example.com")

@@ -22,7 +22,6 @@ def activateEmail(request, user, to_email):
             if os.getenv("IS_PRODUCTION")
             else "127.0.0.1:8000",  # noqa E501
             "site_name": "VolunCHEER",
-            "site_name": "VolunCHEER",
             "uid": urlsafe_base64_encode(force_bytes(user.pk)),
             "token": default_token_generator.make_token(user),
             "protocol": "https" if request.is_secure() else "http",
