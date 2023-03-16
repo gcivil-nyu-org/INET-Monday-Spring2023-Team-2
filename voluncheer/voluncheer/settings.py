@@ -18,8 +18,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, MEDIA_URL)
-
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -142,12 +140,12 @@ INTERNAL_IPS = [
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-# STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
 # The following lines should be added while test locally.
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "static"),
+# ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -167,13 +165,14 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Backend Email (testing)
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = "django_ses.SESBackend"
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-AWS_SES_REGION_NAME = "us-east-2"
-AWS_SES_REGION_ENDPOINT = "email.us-east-2.amazonaws.com"
-DEFAULT_FROM_EMAIL = "noreply.voluncheer@gmail.com"
+if os.getenv("IS_PRODUCTION"):
+    EMAIL_BACKEND = "django_ses.SESBackend"
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+    AWS_SES_REGION_NAME = "us-east-2"
+    AWS_SES_REGION_ENDPOINT = "email.us-east-2.amazonaws.com"
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("IS_PRODUCTION") != "true"
 

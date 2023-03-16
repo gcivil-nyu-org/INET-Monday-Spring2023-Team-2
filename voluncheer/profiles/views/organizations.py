@@ -1,9 +1,8 @@
-from django.contrib.auth import login
 from django.shortcuts import redirect
 from django.views.generic import CreateView
-
 from profiles.forms.organizations import OrganizationCreationForm
-from profiles.models import User
+from profiles.models import User, Organization
+from profiles.views.activate_email import activateEmail
 
 
 class OrganizationSignUpView(CreateView):
@@ -20,6 +19,15 @@ class OrganizationSignUpView(CreateView):
 
     def form_valid(self, form):
         """Saves the new user and logs them in."""
-        user = form.save()
-        login(self.request, user)
-        return redirect("profile")
+        user = form.save(commit=False)
+        user.is_active = True
+        user.save()
+        organization_profile = Organization.objects.create(
+            user=user,
+            name=form.cleaned_data.get("name"),
+        )
+        organization_profile.save()
+        user.is_active = False
+        user.save()
+        activateEmail(self.request, user, form.cleaned_data.get("email"))
+        return redirect("login")
