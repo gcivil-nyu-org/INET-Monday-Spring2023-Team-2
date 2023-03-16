@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include
 from django.urls import path
-from django.contrib.auth import views as auth_views
+from django.conf.urls.static import static
 
 from profiles.views.home import SignUpView
 from profiles.views.organizations import OrganizationSignUpView
 from profiles.views.volunteers import VolunteerSignUpView
+from voluncheer import settings
+
 
 urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
@@ -42,4 +44,4 @@ urlpatterns = [
     # path("chat/", include("chatroom.urls")),
     path("opportunityboard/", include("opportunityboard.urls")),
     path("map/", include("map.urls")),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
