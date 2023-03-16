@@ -23,34 +23,26 @@ class PasswordResetTest(TestCase):
     def test_password_reset_form_view(self):
         response = self.client.get(reverse("password_reset"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(
-            response, "registration/password_reset_form.html"
-        )  # noqa E501
+        self.assertTemplateUsed(response, "registration/password_reset_form.html")
 
     def test_password_reset_form(self):
-        response = self.client.post(
-            reverse("password_reset"), {"email": self.test_user.email}
-        )
+        response = self.client.post(reverse("password_reset"), {"email": self.test_user.email})
         # self.assertRedirects(response, reverse('password_reset_done'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to, ["testuser@example.com"])
         self.assertIn("Password reset on testserver", mail.outbox[0].subject)
         self.assertIn(
-            "We received a request to reset the password for your account for this email address.",  # noqa E501
+            "We received a request to reset the password for your account for this email address.",
             mail.outbox[0].body,
         )
         self.assertIn(
-            reverse(
-                "password_reset_confirm", args=[self.uidb64, self.token]
-            ),  # noqaE501
+            reverse("password_reset_confirm", args=[self.uidb64, self.token]),
             mail.outbox[0].body,
         )
 
     def test_password_reset_link(self):
-        response = self.client.post(
-            reverse("password_reset"), {"email": self.test_user.email}
-        )
+        response = self.client.post(reverse("password_reset"), {"email": self.test_user.email})
         response = self.client.get(
             reverse("password_reset_confirm", args=[self.uidb64, self.token])
         )  # noqa E501S
@@ -60,14 +52,10 @@ class PasswordResetTest(TestCase):
         # make a GET request to the redirect URL
         response = self.client.get(redirect_url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(
-            response, "registration/password_reset_confirm.html"
-        )  # noqa E501
+        self.assertTemplateUsed(response, "registration/password_reset_confirm.html")
 
     def test_password_reset_confirm_view(self):
-        response = self.client.post(
-            reverse("password_reset"), {"email": self.test_user.email}
-        )
+        response = self.client.post(reverse("password_reset"), {"email": self.test_user.email})
         response = self.client.get(
             reverse("password_reset_confirm", args=[self.uidb64, self.token])
         )  # noqa E501S
@@ -87,13 +75,9 @@ class PasswordResetTest(TestCase):
 
         # check that password is updated in db
         updated_user = User.objects.get(email="testuser@example.com")
-        self.assertEqual(
-            updated_user.check_password("new_test_password"), True
-        )  # noqa E501
+        self.assertEqual(updated_user.check_password("new_test_password"), True)
 
     def test_password_reset_complete_view(self):
         response = self.client.get(reverse("password_reset_complete"))
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(
-            response, "registration/password_reset_complete.html"
-        )  # noqa E501
+        self.assertTemplateUsed(response, "registration/password_reset_complete.html")
