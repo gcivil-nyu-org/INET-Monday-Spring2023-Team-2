@@ -10,7 +10,7 @@
       {% else %}
       <h2>Sign up as a {{ user_type }}</h2>
       {% endif %}
-      <form method="post" novalidate>
+      <form method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
         {{ form|crispy }}
