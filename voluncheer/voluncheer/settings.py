@@ -165,14 +165,15 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Backend Email (testing)
-if os.getenv("IS_PRODUCTION"):
-    EMAIL_BACKEND = "django_ses.SESBackend"
-    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY")
-    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-    AWS_SES_REGION_NAME = "us-east-2"
-    AWS_SES_REGION_ENDPOINT = "email.us-east-2.amazonaws.com"
-else:
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# if os.getenv("IS_PRODUCTION"):
+EMAIL_BACKEND = "django_ses.SESBackend"
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_SES_REGION_NAME = "us-east-1"
+AWS_SES_REGION_ENDPOINT = "email.us-east-1.amazonaws.com"
+DEFAULT_FROM_EMAIL = "noreply.voluncheer@gmail.com"
+# else:
+#     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("IS_PRODUCTION") != "true"
 

@@ -18,7 +18,7 @@ def activateEmail(request, user, to_email):
         {
             "email": user.email,
             "user": user,
-            "domain": "voluncheer-main.us-east-1.elasticbeanstalk.com"  # noqa E501
+            "domain": "voluncheer-develop.us-east-1.elasticbeanstalk.com"  # noqa E501
             if os.getenv("IS_PRODUCTION")
             else "127.0.0.1:8000",  # noqa E501
             "site_name": "VolunCHEER",
