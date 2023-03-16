@@ -71,7 +71,7 @@ class ProfileView(DetailView):
                         {
                             "email": associated_user.email,
                             "user": associated_user,
-                            "domain": "voluncheer-main.us-east-1.elasticbeanstalk.com"  # noqa E501
+                            "domain": "voluncheer-develop.us-east-1.elasticbeanstalk.com"  # noqa E501
                             if os.getenv("IS_PRODUCTION")
                             else "127.0.0.1:8000",  # noqa E501
                             "site_name": "VolunCHEER",
@@ -90,7 +90,7 @@ class ProfileView(DetailView):
                         send_mail(
                             subject,
                             message,
-                            "admin@voluncheer.com",
+                            "noreply.voluncheer@gmail.com",
                             [associated_user.email],
                             fail_silently=False,
                         )
