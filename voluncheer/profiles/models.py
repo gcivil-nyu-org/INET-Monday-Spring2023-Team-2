@@ -109,9 +109,7 @@ class Organization(models.Model):
         upload_to="images/", default="images/user-0.png", blank=True, null=True
     )
     website = models.CharField(max_length=200, default="")
-    description = models.TextField(
-        help_text="Introduce your organization here.", default=""
-    )
+    description = models.TextField(help_text="Introduce your organization here.", default="")
 
     def __str__(self):
         return self.name

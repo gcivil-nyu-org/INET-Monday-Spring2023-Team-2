@@ -1,4 +1,3 @@
-from django.http import Http404
 from django.shortcuts import render, redirect
 
 from opportunityboard.forms.postanopportunity import PostAnOpportunityForm

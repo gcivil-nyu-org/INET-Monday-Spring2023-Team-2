@@ -51,9 +51,7 @@ class UserTest(TestCase):
             photo="sith-lord.jpg",
         )
 
-        self.admin = User.objects.create_superuser(
-            email="admin@starwars.com", password="admin"
-        )
+        self.admin = User.objects.create_superuser(email="admin@starwars.com", password="admin")
 
     def test_user_details(self):
         """Tests basic user details like active and type."""

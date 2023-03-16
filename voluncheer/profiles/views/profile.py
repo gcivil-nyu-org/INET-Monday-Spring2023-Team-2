@@ -53,9 +53,7 @@ class ProfileView(DetailView):
                 except KeyError:
                     pass
             kwargs["badge_urls"] = badge_urls
-            kwargs["user_form"] = VolunteerChangeForm(
-                instance=self.request.user
-            )  # noqa: E501
+            kwargs["user_form"] = VolunteerChangeForm(instance=self.request.user)
         return super().get_context_data(**kwargs)
 
     def password_reset_request(request):
@@ -73,12 +71,8 @@ class ProfileView(DetailView):
                             "user": associated_user,
                             "domain": "http://voluncheer-dev.us-west-2.elasticbeanstalk.com/",
                             "site_name": "VolunCHEER",
-                            "uid": urlsafe_base64_encode(
-                                force_bytes(associated_user.pk)
-                            ),
-                            "token": default_token_generator.make_token(
-                                associated_user
-                            ),
+                            "uid": urlsafe_base64_encode(force_bytes(associated_user.pk)),
+                            "token": default_token_generator.make_token(associated_user),
                             "protocol": "https" if request.is_secure() else "http",
                         },
                     )
@@ -110,12 +104,8 @@ def profile_update(request):
             instance=request.user,
         )
     elif request.user.is_organization:
-        form = OrganizationChangeForm(
-            request.POST, request.FILES, instance=request.user
-        )
+        form = OrganizationChangeForm(request.POST, request.FILES, instance=request.user)
     else:
-        raise ValueError(
-            "profile_update: user must either a volunteer or an organizaiton."
-        )
+        raise ValueError("profile_update: user must either a volunteer or an organizaiton.")
     form.save()
     return redirect("profile")

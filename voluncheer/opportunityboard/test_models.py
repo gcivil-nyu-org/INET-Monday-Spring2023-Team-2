@@ -26,8 +26,7 @@ class OpportunityTest(TestCase):
         """Test basic opportunity details"""
 
         description = (
-            "Please help us support our community at this week's"
-            "Cloud City soup kitchen"
+            "Please help us support our community at this week's" "Cloud City soup kitchen"
         )
         two_hours = datetime.timedelta(days=0, hours=2)
         a_date = datetime.datetime(

@@ -1,5 +1,4 @@
 from django import forms
-from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
 from opportunityboard.models import Opportunity

@@ -13,7 +13,7 @@ import logging
 
 _is_alpha = RegexValidator(
     regex=r"^[a-zA-Z]+$",
-    message="Only upper and lower case English alphabet characters are allowed.",  # noqa: E501
+    message="Only upper and lower case English alphabet characters are allowed.",
 )
 
 
