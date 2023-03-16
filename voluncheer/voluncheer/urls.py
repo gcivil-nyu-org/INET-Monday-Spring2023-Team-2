@@ -20,12 +20,10 @@ from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
-    path("", include("django.contrib.auth.urls")),
     path("", include("profiles.urls")),
+    path("accounts/", include("django.contrib.auth.urls")),
     path("admin/", admin.site.urls),
     path("__debug__/", include("debug_toolbar.urls")),
     path("map/", include("map.urls")),
     path("opportunityboard/", include("opportunityboard.urls")),
-    # Unimplemented urls.
-    # path("chat/", include("chatroom.urls")),
 ]

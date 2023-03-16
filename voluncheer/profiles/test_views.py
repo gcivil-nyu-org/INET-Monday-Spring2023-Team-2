@@ -17,7 +17,7 @@ class SignupViewTest(TestCase):
 
     def test_signup_form_exists_at_desired_location(self):
         """Tests accessing  signup form by URL"""
-        response = self.client.get("/accounts/signup/")
+        response = self.client.get("/signup/")
         self.assertEqual(response.status_code, 200)
 
     def test_signup_form_uses_correct_template(self):
@@ -37,7 +37,7 @@ class VolunteerSignUpViewTest(TestCase):
 
     def test_volunteer_signup_form_exists_at_desired_location(self):
         """Tests accessing signup form for volunteers by URL"""
-        response = self.client.get("/accounts/signup/volunteer/")
+        response = self.client.get("/signup/volunteer/")
         self.assertEqual(response.status_code, 200)
 
     def test_volunteer_signup_form_correct_template(self):
@@ -55,9 +55,9 @@ class OrganizationSignUpViewTest(TestCase):
         response = self.client.get(reverse("organization_signup"))
         self.assertEqual(response.status_code, 200)
 
-    def test__organization_signup_form_exists_at_desired_location(self):
+    def test_organization_signup_form_exists_at_desired_location(self):
         """Tests accessing signup form for organizations by URL"""
-        response = self.client.get("/accounts/signup/organization/")
+        response = self.client.get("/signup/organization/")
         self.assertEqual(response.status_code, 200)
 
     def test_organization_signup_form_uses_correct_template(self):

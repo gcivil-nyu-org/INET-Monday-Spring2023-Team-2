@@ -10,8 +10,8 @@ from profiles.views.volunteers import VolunteerSignUpView
 
 urlpatterns = [
     path("", home, name="home"),
-    path(r"^profile/$", ProfileView.as_view(), name="profile"),
-    path(r"^profile/update/$", profile_update, name="profile_update"),
+    path("profile/", ProfileView.as_view(), name="profile"),
+    path("profile/update/", profile_update, name="profile_update"),
     path("signup/", SignUpView.as_view(), name="signup"),
     path(
         "signup/organization/",
