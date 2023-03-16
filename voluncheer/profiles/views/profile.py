@@ -15,7 +15,7 @@ from django.db.models.query_utils import Q
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
-
+import os
 
 from profiles.forms.volunteers import VolunteerChangeForm
 from profiles.forms.organizations import OrganizationChangeForm
@@ -71,7 +71,9 @@ class ProfileView(DetailView):
                         {
                             "email": associated_user.email,
                             "user": associated_user,
-                            "domain": "http://voluncheer-dev.us-west-2.elasticbeanstalk.com/",
+                            "domain": "voluncheer-develop.us-east-1.elasticbeanstalk.com"  # noqa E501
+                            if os.getenv("IS_PRODUCTION")
+                            else "127.0.0.1:8000",  # noqa E501
                             "site_name": "VolunCHEER",
                             "uid": urlsafe_base64_encode(
                                 force_bytes(associated_user.pk)
@@ -79,14 +81,16 @@ class ProfileView(DetailView):
                             "token": default_token_generator.make_token(
                                 associated_user
                             ),
-                            "protocol": "https" if request.is_secure() else "http",
+                            "protocol": "https"
+                            if request.is_secure()
+                            else "http",  # noqa E501
                         },
                     )
                     try:
                         send_mail(
                             subject,
                             message,
-                            "AWS_verified_email_address",
+                            "noreply.voluncheer@gmail.com",
                             [associated_user.email],
                             fail_silently=False,
                         )
