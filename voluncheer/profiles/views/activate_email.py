@@ -18,9 +18,7 @@ def activateEmail(request, user, to_email):
         {
             "email": user.email,
             "user": user,
-            "domain": "voluncheer-develop.us-east-1.elasticbeanstalk.com"  # noqa E501
-            if os.getenv("IS_PRODUCTION")
-            else "127.0.0.1:8000",  # noqa E501
+            "domain": os.getenv("DOMAIN"),  # noqa E501
             "site_name": "VolunCHEER",
             "uid": urlsafe_base64_encode(force_bytes(user.pk)),
             "token": default_token_generator.make_token(user),
@@ -31,7 +29,7 @@ def activateEmail(request, user, to_email):
         send_mail(
             subject,
             message,
-            "noreply.voluncheer@gmail.com",
+            os.getenv("EMAIL"),
             [to_email],
             fail_silently=False,  # noqa E501
         )  # noqa E501

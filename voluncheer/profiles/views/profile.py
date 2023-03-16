@@ -71,10 +71,7 @@ class ProfileView(DetailView):
                         {
                             "email": associated_user.email,
                             "user": associated_user,
-                            "domain": "voluncheer-main.us-east-1.elasticbeanstalk.com"  # noqa E501
-                            if os.getenv("IS_PRODUCTION")
-                            else "voluncheer-develop.us-east-1.elasticbeanstalk.com",  # noqa E501
-                            # "127.0.0.1:8000",
+                            "domain": os.getenv("DOMAIN"),
                             "site_name": "VolunCHEER",
                             "uid": urlsafe_base64_encode(
                                 force_bytes(associated_user.pk)
@@ -91,7 +88,7 @@ class ProfileView(DetailView):
                         send_mail(
                             subject,
                             message,
-                            "noreply.voluncheer@gmail.com",
+                            os.getenv("EMAIL"),
                             [associated_user.email],
                             fail_silently=False,
                         )
