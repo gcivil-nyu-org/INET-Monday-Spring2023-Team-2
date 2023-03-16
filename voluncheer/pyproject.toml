@@ -6,3 +6,9 @@ extend-exclude = '''
   migrations/*
 )
 '''
+
+[tool.isort]
+profile = "black"
+skip_gitignore = true
+line_length = 100
+force_single_line = true

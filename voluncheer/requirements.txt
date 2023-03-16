@@ -16,6 +16,7 @@ Django-Verify-Email==2.0.3
 django-widget-tweaks==1.4.12
 django_debug_toolbar==3.8.1
 flake8==5.0.4
+isort
 jmespath==1.0.1
 pycares==4.3.0
 pycparser==2.21
