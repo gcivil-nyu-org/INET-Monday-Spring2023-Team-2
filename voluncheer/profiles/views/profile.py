@@ -88,7 +88,7 @@ class ProfileView(DetailView):
                         send_mail(
                             subject,
                             message,
-                            os.getenv("EMAIL"),
+                            os.getenv("AWS_SES_FROM_EMAIL"),
                             [associated_user.email],
                             fail_silently=False,
                         )

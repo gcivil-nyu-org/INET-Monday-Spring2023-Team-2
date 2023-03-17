@@ -29,7 +29,7 @@ def activateEmail(request, user, to_email):
         send_mail(
             subject,
             message,
-            os.getenv("EMAIL"),
+            os.getenv("AWS_SES_FROM_EMAIL"),
             [to_email],
             fail_silently=False,  # noqa E501
         )  # noqa E501
