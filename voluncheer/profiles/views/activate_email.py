@@ -18,7 +18,7 @@ def activateEmail(request, user, to_email):
         {
             "email": user.email,
             "user": user,
-            "domain": os.getenv("DOMAIN"),  # noqa E501
+            "domain": os.getenv("AWS_SES_DOMAIN"),  # noqa E501
             "site_name": "VolunCHEER",
             "uid": urlsafe_base64_encode(force_bytes(user.pk)),
             "token": default_token_generator.make_token(user),

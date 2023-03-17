@@ -71,7 +71,7 @@ class ProfileView(DetailView):
                         {
                             "email": associated_user.email,
                             "user": associated_user,
-                            "domain": os.getenv("DOMAIN"),
+                            "domain": os.getenv("AWS_SES_DOMAIN"),
                             "site_name": "VolunCHEER",
                             "uid": urlsafe_base64_encode(
                                 force_bytes(associated_user.pk)
