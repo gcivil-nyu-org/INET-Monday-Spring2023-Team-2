@@ -1,11 +1,11 @@
+import datetime
+
 from django.test import TestCase
 
 from opportunityboard.models import Opportunity
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
-
-import datetime
 
 
 class OpportunityTest(TestCase):

@@ -1,8 +1,10 @@
 # from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from django.views.generic import CreateView
+
 from profiles.forms.volunteers import VolunteerCreationForm
-from profiles.models import User, Volunteer
+from profiles.models import User
+from profiles.models import Volunteer
 from profiles.views.activate_email import activateEmail
 
 

@@ -1,10 +1,11 @@
 from django.contrib.auth.tokens import default_token_generator
 from django.core import mail
-from profiles.models import User
 from django.test import TestCase
 from django.urls import reverse
-from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+
+from profiles.models import User
 
 
 class PasswordResetTest(TestCase):
@@ -27,7 +28,6 @@ class PasswordResetTest(TestCase):
 
     def test_password_reset_form(self):
         response = self.client.post(reverse("password_reset"), {"email": self.test_user.email})
-        # self.assertRedirects(response, reverse('password_reset_done'))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to, ["testuser@example.com"])
@@ -58,7 +58,7 @@ class PasswordResetTest(TestCase):
         response = self.client.post(reverse("password_reset"), {"email": self.test_user.email})
         response = self.client.get(
             reverse("password_reset_confirm", args=[self.uidb64, self.token])
-        )  # noqa E501S
+        )
         self.assertEqual(response.status_code, 302)
         # extract the URL to which the user was redirected
         redirect_url = response.url
