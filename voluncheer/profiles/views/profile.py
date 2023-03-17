@@ -1,21 +1,25 @@
+import os
+
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import BadHeaderError
+from django.core.mail import send_mail
+from django.db.models.query_utils import Q
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.views.generic import DetailView
 
+from profiles.forms.organizations import OrganizationChangeForm
+from profiles.forms.volunteers import VolunteerChangeForm
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.core.mail import send_mail, BadHeaderError
-from django.contrib.auth.forms import PasswordResetForm
-from django.template.loader import render_to_string
-from django.db.models.query_utils import Q
-from django.utils.http import urlsafe_base64_encode
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
-from profiles.forms.volunteers import VolunteerChangeForm
-from profiles.forms.organizations import OrganizationChangeForm
 from voluncheer.settings import AWS_SES_FROM_EMAIL, AWS_SES_DOMAIN
 
 
@@ -51,9 +55,7 @@ class ProfileView(DetailView):
                 except KeyError:
                     pass
             kwargs["badge_urls"] = badge_urls
-            kwargs["user_form"] = VolunteerChangeForm(
-                instance=self.request.user
-            )  # noqa: E501
+            kwargs["user_form"] = VolunteerChangeForm(instance=self.request.user)
         return super().get_context_data(**kwargs)
 
     def password_reset_request(request):
@@ -71,15 +73,9 @@ class ProfileView(DetailView):
                             "user": associated_user,
                             "domain": AWS_SES_DOMAIN,
                             "site_name": "VolunCHEER",
-                            "uid": urlsafe_base64_encode(
-                                force_bytes(associated_user.pk)
-                            ),
-                            "token": default_token_generator.make_token(
-                                associated_user
-                            ),
-                            "protocol": "https"
-                            if request.is_secure()
-                            else "http",  # noqa E501
+                            "uid": urlsafe_base64_encode(force_bytes(associated_user.pk)),
+                            "token": default_token_generator.make_token(associated_user),
+                            "protocol": "https" if request.is_secure() else "http",
                         },
                     )
                     try:
@@ -110,12 +106,8 @@ def profile_update(request):
             instance=request.user,
         )
     elif request.user.is_organization:
-        form = OrganizationChangeForm(
-            request.POST, request.FILES, instance=request.user
-        )
+        form = OrganizationChangeForm(request.POST, request.FILES, instance=request.user)
     else:
-        raise ValueError(
-            "profile_update: user must either a volunteer or an organizaiton."
-        )
+        raise ValueError("profile_update: user must either a volunteer or an organizaiton.")
     form.save()
     return redirect("profile")

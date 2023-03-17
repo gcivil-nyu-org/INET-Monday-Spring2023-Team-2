@@ -1,13 +1,12 @@
-from profiles.views.activate_email import activate
-from django.urls import path
-from django.urls import re_path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.urls import path
+from django.urls import re_path
 
+from profiles.views.activate_email import activate
 from profiles.views.home import home
 from profiles.views.profile import ProfileView
 from profiles.views.profile import profile_update
-
 
 urlpatterns = [
     path("", home, name="home"),

@@ -1,8 +1,8 @@
 from django.urls import path
 
-from opportunityboard.views.opportunityboard import opportunityboard, select
+from opportunityboard.views.opportunityboard import opportunityboard
+from opportunityboard.views.opportunityboard import select
 from opportunityboard.views.postanopportunity import post_an_opportunity
-
 
 urlpatterns = [
     path("", opportunityboard, name="opportunityboard"),
