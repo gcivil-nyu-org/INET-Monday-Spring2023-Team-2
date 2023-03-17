@@ -18,7 +18,8 @@ from profiles.forms.volunteers import VolunteerChangeForm
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
-from voluncheer.settings import AWS_SES_FROM_EMAIL, AWS_SES_DOMAIN
+from voluncheer.settings import AWS_SES_DOMAIN
+from voluncheer.settings import AWS_SES_FROM_EMAIL
 
 
 @method_decorator([login_required], name="dispatch")
