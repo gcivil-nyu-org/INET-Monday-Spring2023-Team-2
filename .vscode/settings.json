@@ -12,5 +12,9 @@
   ],
   "flake8.args": [
     "--rcfile=voluncheer/.flake8"
-  ]
+  ],
+  "isort.args": [
+    "--config",
+    "voluncheer/pyproject.toml"
+  ],
 }
