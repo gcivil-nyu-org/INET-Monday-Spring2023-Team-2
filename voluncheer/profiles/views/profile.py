@@ -5,7 +5,6 @@ from django.views.generic import DetailView
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
-
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.core.mail import send_mail, BadHeaderError
@@ -15,10 +14,9 @@ from django.db.models.query_utils import Q
 from django.utils.http import urlsafe_base64_encode
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
-import os
-
 from profiles.forms.volunteers import VolunteerChangeForm
 from profiles.forms.organizations import OrganizationChangeForm
+from voluncheer.settings import AWS_SES_FROM_EMAIL, AWS_SES_DOMAIN
 
 
 @method_decorator([login_required], name="dispatch")
@@ -71,7 +69,7 @@ class ProfileView(DetailView):
                         {
                             "email": associated_user.email,
                             "user": associated_user,
-                            "domain": os.getenv("AWS_SES_DOMAIN"),
+                            "domain": AWS_SES_DOMAIN,
                             "site_name": "VolunCHEER",
                             "uid": urlsafe_base64_encode(
                                 force_bytes(associated_user.pk)
@@ -88,7 +86,7 @@ class ProfileView(DetailView):
                         send_mail(
                             subject,
                             message,
-                            os.getenv("AWS_SES_FROM_EMAIL"),
+                            AWS_SES_FROM_EMAIL,
                             [associated_user.email],
                             fail_silently=False,
                         )

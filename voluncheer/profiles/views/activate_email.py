@@ -3,11 +3,11 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse
-import os
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
+from voluncheer.settings import AWS_SES_DOMAIN, AWS_SES_FROM_EMAIL
 
 
 def activateEmail(request, user, to_email):
@@ -18,7 +18,7 @@ def activateEmail(request, user, to_email):
         {
             "email": user.email,
             "user": user,
-            "domain": os.getenv("AWS_SES_DOMAIN"),  # noqa E501
+            "domain": AWS_SES_DOMAIN,  # noqa E501
             "site_name": "VolunCHEER",
             "uid": urlsafe_base64_encode(force_bytes(user.pk)),
             "token": default_token_generator.make_token(user),
@@ -29,7 +29,7 @@ def activateEmail(request, user, to_email):
         send_mail(
             subject,
             message,
-            os.getenv("AWS_SES_FROM_EMAIL"),
+            AWS_SES_FROM_EMAIL,
             [to_email],
             fail_silently=False,  # noqa E501
         )  # noqa E501
