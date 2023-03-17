@@ -1,24 +1,25 @@
+import os
+
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import BadHeaderError
+from django.core.mail import send_mail
+from django.db.models.query_utils import Q
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 from django.views.generic import DetailView
 
+from profiles.forms.organizations import OrganizationChangeForm
+from profiles.forms.volunteers import VolunteerChangeForm
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
-
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.core.mail import send_mail, BadHeaderError
-from django.contrib.auth.forms import PasswordResetForm
-from django.template.loader import render_to_string
-from django.db.models.query_utils import Q
-from django.utils.http import urlsafe_base64_encode
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.encoding import force_bytes
-import os
-
-from profiles.forms.volunteers import VolunteerChangeForm
-from profiles.forms.organizations import OrganizationChangeForm
 
 
 @method_decorator([login_required], name="dispatch")

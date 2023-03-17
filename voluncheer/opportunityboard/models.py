@@ -1,6 +1,6 @@
 from django.db import models
-from profiles.models import Organization
 
+from profiles.models import Organization
 
 CATEGORIES = {
     ("community", "Community"),

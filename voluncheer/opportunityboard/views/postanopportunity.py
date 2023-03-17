@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
+from django.shortcuts import render
 
 from opportunityboard.forms.postanopportunity import PostAnOpportunityForm
 

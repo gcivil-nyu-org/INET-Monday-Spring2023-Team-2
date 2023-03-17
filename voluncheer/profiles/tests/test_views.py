@@ -1,11 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
 
-# from profiles.models import Organization
-# from profiles.models import User
-# from profiles.models import UserType
-# from profiles.models import Volunteer
-
 
 class SignupViewTest(TestCase):
     """Test cases for Signup view"""
