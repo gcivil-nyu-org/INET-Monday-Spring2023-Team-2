@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 
-from opportunityboard.models import Opportunity
+from opportunityboard.models import Opportunity, Category, Subcategory, Subsubcategory
 from profiles.models import Organization
 
 
@@ -27,8 +27,10 @@ class PostAnOpportunityForm(forms.ModelForm):
     class Meta:
         model = Opportunity
         fields = (
-            "category",
             "title",
+            "category",
+            "subcategory",
+            "subsubcategory",
             "description",
             "date",
             "duration",
@@ -36,6 +38,20 @@ class PostAnOpportunityForm(forms.ModelForm):
             "address_2",
             "is_published",
         )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["subcategory"].queryset = Category.objects.none()
+        self.fields["subsubcategory"].queryset = Category.objects.none()
+
+        if "category" in self.data:
+            try:
+                parent_id = int(self.data.get("category"))
+                self.fields["subcategory"].queryset = Subcategory.objects.filter(
+                    parent_id=parent_id
+                ).order_by("name")
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty Category queryset
 
     def save(self, commit=True):
         user = self.instance
@@ -45,6 +61,8 @@ class PostAnOpportunityForm(forms.ModelForm):
             opportunity.pubdate = timezone.now()
             opportunity.organization = organization
             opportunity.category = self.cleaned_data.get("category")
+            opportunity.subcategory = self.cleaned_data.get("subcategory")
+            opportunity.subsubcategory = self.cleaned_data.get("subsubcategory")
             opportunity.title = self.cleaned_data.get("title")
             opportunity.description = self.cleaned_data.get("description")
             opportunity.date = self.cleaned_data.get("date")

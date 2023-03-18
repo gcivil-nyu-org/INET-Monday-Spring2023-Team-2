@@ -2,13 +2,59 @@ from django.db import models
 
 from profiles.models import Organization
 
-CATEGORIES = {
-    ("community", "Community"),
-    ("animals", "Animal"),
-    ("environment", "Environment"),
-    ("healthcare", "Healthcare"),
-    ("sports", "Sports"),
-}
+# CATEGORIES = {
+#     ("community", "Community"),
+#     ("animals", "Animal"),
+#     ("environment", "Environment"),
+#     ("healthcare", "Healthcare"),
+#     ("sports", "Sports"),
+# }
+
+
+class Category(models.Model):
+    """A category of an opportunity"""
+
+    class Meta:
+        verbose_name_plural = "categories"
+
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class Subcategory(models.Model):
+    """A subcategory of an opportunity"""
+
+    class Meta:
+        verbose_name_plural = "subcategories"
+
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+        full_path = [self.name]
+        parent = self.parent
+        full_path.append(parent.name)
+        return " -> ".join(full_path[::-1])
+
+
+class Subsubcategory(models.Model):
+    """A sub-subcategory of an opportunity"""
+
+    class Meta:
+        verbose_name_plural = "subsubcategories"
+
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey(Subcategory, on_delete=models.CASCADE)
+
+    def __str__(self):
+        full_path = [self.name]
+        parent = self.parent
+        grandparent = parent.parent
+        full_path.append(parent.name)
+        full_path.append(grandparent.name)
+        return " -> ".join(full_path[::-1])
 
 
 class Opportunity(models.Model):
@@ -30,9 +76,16 @@ class Opportunity(models.Model):
         staffing: the requested number of volunteers for the opportunity.
     """
 
+    class Meta:
+        verbose_name_plural = "opportunities"
+
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     pubdate = models.DateTimeField(null=True, blank=True)
-    category = models.CharField(max_length=20, choices=CATEGORIES)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)
+    subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, blank=True, null=True)
+    subsubcategory = models.ForeignKey(
+        Subsubcategory, on_delete=models.SET_NULL, blank=True, null=True
+    )
     title = models.CharField(max_length=255)
     description = models.TextField()
     date = models.DateTimeField()
