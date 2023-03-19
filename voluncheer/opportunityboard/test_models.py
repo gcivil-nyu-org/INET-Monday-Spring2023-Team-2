@@ -2,6 +2,7 @@ import datetime
 
 from django.test import TestCase
 
+from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from profiles.models import Organization
 from profiles.models import User
@@ -25,10 +26,12 @@ class OpportunityTest(TestCase):
     def test_opportunity_details(self):
         """Test basic opportunity details"""
 
+        category = Category.objects.create(name="Environment")
+
         description = (
             "Please help us support our community at this week's" "Cloud City soup kitchen"
         )
-        two_hours = datetime.timedelta(days=0, hours=2)
+        end = "12:00:00"
         a_date = datetime.datetime(
             year=2023,
             month=3,
@@ -39,11 +42,11 @@ class OpportunityTest(TestCase):
 
         soup = Opportunity.objects.create(
             organization=self.jedi,
-            category="community",
+            category=category,
             title="Cloud City Soup Kitchen",
             description=description,
             date=a_date,
-            end=two_hours,
+            end=end,
             address_1="200 Calrissian Av.",
             address_2="NY",
             longitude=12.34,
@@ -53,11 +56,11 @@ class OpportunityTest(TestCase):
         )
 
         self.assertEqual(soup.organization.name, "Jedi Council")
-        self.assertEqual(soup.category, "community")
+        self.assertEqual(soup.category, category)
         self.assertEqual(soup.title, "Cloud City Soup Kitchen")
         self.assertEqual(soup.description, description)
         self.assertEqual(soup.date, a_date)
-        self.assertEqual(soup.end, two_hours)
+        self.assertEqual(soup.end, end)
         self.assertEqual(soup.address_1, "200 Calrissian Av.")
         self.assertEqual(soup.address_2, "NY")
         self.assertEqual(soup.longitude, 12.34)
