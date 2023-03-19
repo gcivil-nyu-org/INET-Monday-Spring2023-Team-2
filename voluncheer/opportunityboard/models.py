@@ -2,14 +2,6 @@ from django.db import models
 
 from profiles.models import Organization
 
-# CATEGORIES = {
-#     ("community", "Community"),
-#     ("animals", "Animal"),
-#     ("environment", "Environment"),
-#     ("healthcare", "Healthcare"),
-#     ("sports", "Sports"),
-# }
-
 
 class Category(models.Model):
     """A category of an opportunity"""
