@@ -2,7 +2,8 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 
 from opportunityboard.forms.postanopportunity import PostAnOpportunityForm
-from opportunityboard.models import Subcategory, Subsubcategory
+from opportunityboard.models import Subcategory
+from opportunityboard.models import Subsubcategory
 
 
 def post_an_opportunity(request):

@@ -1,6 +1,9 @@
 from django import forms
 from django.utils import timezone
-from opportunityboard.models import Opportunity, Subcategory, Subsubcategory
+
+from opportunityboard.models import Opportunity
+from opportunityboard.models import Subcategory
+from opportunityboard.models import Subsubcategory
 from profiles.models import Organization
 
 
