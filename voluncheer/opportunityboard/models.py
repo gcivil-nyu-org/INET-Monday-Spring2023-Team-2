@@ -60,7 +60,7 @@ class Opportunity(models.Model):
         title: the name of the opportunity.
         description: a description of the opportunity.
         date: the date and start time of the opportunity.
-        end: the end time of the opportunity, in hours and seconds.
+        end: the end time of the opportunity.
         address_1: the location of the opportunity.
         address_2: reserved for an additional address field.
         longitude: used for mapping the opportunity. *allowed to be blank for now
