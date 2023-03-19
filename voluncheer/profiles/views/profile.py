@@ -19,7 +19,7 @@ from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
 from voluncheer.settings import AWS_SES_DOMAIN
-from voluncheer.settings import AWS_SES_FROM_EMAIL
+from voluncheer.settings import DEFAULT_FROM_EMAIL
 
 
 @method_decorator([login_required], name="dispatch")
@@ -78,10 +78,11 @@ class ProfileView(DetailView):
                         },
                     )
                     try:
+                        print()
                         send_mail(
                             subject,
                             message,
-                            AWS_SES_FROM_EMAIL,
+                            DEFAULT_FROM_EMAIL,
                             [associated_user.email],
                             fail_silently=False,
                         )

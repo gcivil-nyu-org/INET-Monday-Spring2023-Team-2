@@ -12,7 +12,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.http import urlsafe_base64_encode
 
 from voluncheer.settings import AWS_SES_DOMAIN
-from voluncheer.settings import AWS_SES_FROM_EMAIL
+from voluncheer.settings import DEFAULT_FROM_EMAIL
 
 
 def activateEmail(request, user, to_email):
@@ -34,7 +34,7 @@ def activateEmail(request, user, to_email):
         send_mail(
             subject,
             message,
-            AWS_SES_FROM_EMAIL,
+            DEFAULT_FROM_EMAIL,
             [to_email],
             fail_silently=False,  # noqa E501
         )  # noqa E501
