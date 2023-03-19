@@ -43,7 +43,7 @@ class OpportunityTest(TestCase):
             title="Cloud City Soup Kitchen",
             description=description,
             date=a_date,
-            duration=two_hours,
+            end=two_hours,
             address_1="200 Calrissian Av.",
             address_2="NY",
             longitude=12.34,
@@ -57,7 +57,7 @@ class OpportunityTest(TestCase):
         self.assertEqual(soup.title, "Cloud City Soup Kitchen")
         self.assertEqual(soup.description, description)
         self.assertEqual(soup.date, a_date)
-        self.assertEqual(soup.duration, two_hours)
+        self.assertEqual(soup.end, two_hours)
         self.assertEqual(soup.address_1, "200 Calrissian Av.")
         self.assertEqual(soup.address_2, "NY")
         self.assertEqual(soup.longitude, 12.34)

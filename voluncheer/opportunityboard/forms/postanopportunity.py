@@ -16,7 +16,7 @@ class PostAnOpportunityForm(forms.ModelForm):
             }
         ),
     )
-    duration = forms.DurationField(
+    end = forms.TimeField(
         widget=forms.TimeInput(
             attrs={
                 "type": "time",
@@ -26,28 +26,41 @@ class PostAnOpportunityForm(forms.ModelForm):
 
     class Meta:
         model = Opportunity
+
         fields = (
             "title",
             "category",
             "subcategory",
             "subsubcategory",
             "description",
+            "staffing",
             "date",
-            "duration",
+            "end",
             "address_1",
             "address_2",
             "is_published",
         )
 
+        labels = {"subcategory": "Subcategory 1", "subsubcategory": "Subcategory 2"}
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["subcategory"].queryset = Category.objects.none()
-        self.fields["subsubcategory"].queryset = Category.objects.none()
+        self.fields["subcategory"].queryset = Subcategory.objects.none()
+        self.fields["subsubcategory"].queryset = Subsubcategory.objects.none()
 
         if "category" in self.data:
             try:
                 parent_id = int(self.data.get("category"))
                 self.fields["subcategory"].queryset = Subcategory.objects.filter(
+                    parent_id=parent_id
+                ).order_by("name")
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty Category queryset
+
+        if "subcategory" in self.data:
+            try:
+                parent_id = int(self.data.get("subcategory"))
+                self.fields["subsubcategory"].queryset = Subsubcategory.objects.filter(
                     parent_id=parent_id
                 ).order_by("name")
             except (ValueError, TypeError):
@@ -65,9 +78,11 @@ class PostAnOpportunityForm(forms.ModelForm):
             opportunity.subsubcategory = self.cleaned_data.get("subsubcategory")
             opportunity.title = self.cleaned_data.get("title")
             opportunity.description = self.cleaned_data.get("description")
+            opportunity.staffing = self.cleaned_data.get("staffing")
             opportunity.date = self.cleaned_data.get("date")
-            opportunity.duration = self.cleaned_data.get("duration")
+            opportunity.end = self.cleaned_data.get("end")
             opportunity.address_1 = self.cleaned_data.get("address_1")
             opportunity.address_2 = self.cleaned_data.get("address_2")
             opportunity.is_published = self.cleaned_data.get("is_published")
+            print(opportunity)
             opportunity.save()

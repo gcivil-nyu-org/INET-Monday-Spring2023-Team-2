@@ -68,7 +68,7 @@ class Opportunity(models.Model):
         title: the name of the opportunity.
         description: a description of the opportunity.
         date: the date and start time of the opportunity.
-        duration: the length of the opportunity, in hours and seconds.
+        end: the end time of the opportunity, in hours and seconds.
         address_1: the location of the opportunity.
         address_2: reserved for an additional address field.
         longitude: used for mapping the opportunity. *allowed to be blank for now
@@ -89,12 +89,12 @@ class Opportunity(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     date = models.DateTimeField()
-    duration = models.DurationField()
+    end = models.TimeField()
     address_1 = models.CharField(max_length=255)
     address_2 = models.CharField(null=True, blank=True, max_length=255)
     longitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
     latitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
-    staffing = models.IntegerField()
+    staffing = models.PositiveIntegerField()
     is_published = models.BooleanField(default=False)
 
     def __str__(self):
