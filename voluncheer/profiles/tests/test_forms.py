@@ -2,14 +2,14 @@ from datetime import datetime
 
 from django.test import TestCase
 
-from profiles.models import Organization
-from profiles.models import Volunteer
-from profiles.models import User
 from profiles.forms.organizations import OrganizationChangeForm
 from profiles.forms.organizations import OrganizationCreationForm
-from profiles.forms.volunteers import VolunteerCreationForm
 from profiles.forms.volunteers import VolunteerChangeForm
+from profiles.forms.volunteers import VolunteerCreationForm
+from profiles.models import Organization
+from profiles.models import User
 from profiles.models import UserType
+from profiles.models import Volunteer
 
 
 class OrganizationCreationFormTest(TestCase):

@@ -1,6 +1,6 @@
 from django.db import models
-from profiles.models import Organization
 
+from profiles.models import Organization
 
 CATEGORIES = {
     ("community", "Community"),
@@ -39,12 +39,8 @@ class Opportunity(models.Model):
     duration = models.DurationField()
     address_1 = models.CharField(max_length=255)
     address_2 = models.CharField(null=True, blank=True, max_length=255)
-    longitude = models.DecimalField(
-        null=True, blank=True, max_digits=9, decimal_places=6
-    )
-    latitude = models.DecimalField(
-        null=True, blank=True, max_digits=9, decimal_places=6
-    )
+    longitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
+    latitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
     staffing = models.IntegerField()
     is_published = models.BooleanField(default=False)
 
