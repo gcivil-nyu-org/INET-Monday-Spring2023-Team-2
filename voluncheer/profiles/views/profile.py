@@ -16,7 +16,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from profiles.forms.volunteers import VolunteerChangeForm
 from profiles.forms.organizations import OrganizationChangeForm
-from voluncheer.settings import AWS_SES_FROM_EMAIL, AWS_SES_DOMAIN
+from voluncheer.settings import AWS_SES_DOMAIN
+from voluncheer.settings import DEFAULT_FROM_EMAIL
 
 
 @method_decorator([login_required], name="dispatch")
@@ -83,10 +84,11 @@ class ProfileView(DetailView):
                         },
                     )
                     try:
+                        print()
                         send_mail(
                             subject,
                             message,
-                            AWS_SES_FROM_EMAIL,
+                            DEFAULT_FROM_EMAIL,
                             [associated_user.email],
                             fail_silently=False,
                         )
