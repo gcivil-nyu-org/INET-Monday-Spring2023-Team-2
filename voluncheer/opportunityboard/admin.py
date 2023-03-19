@@ -1,9 +1,5 @@
 from django.contrib import admin
-
-from opportunityboard.models import Opportunity
-from opportunityboard.models import Category
-from opportunityboard.models import Subcategory
-from opportunityboard.models import Subsubcategory
+from opportunityboard.models import Category, Opportunity, Subcategory, Subsubcategory
 
 admin.site.register(Opportunity)
 admin.site.register(Category)
