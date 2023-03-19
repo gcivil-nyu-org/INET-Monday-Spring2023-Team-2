@@ -1,7 +1,7 @@
 from django import forms
 from django.utils import timezone
 
-from opportunityboard.models import Opportunity, Category, Subcategory, Subsubcategory
+from opportunityboard.models import Opportunity, Subcategory, Subsubcategory
 from profiles.models import Organization
 
 
@@ -55,7 +55,7 @@ class PostAnOpportunityForm(forms.ModelForm):
                     parent_id=parent_id
                 ).order_by("name")
             except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty Category queryset
+                pass
 
         if "subcategory" in self.data:
             try:
@@ -64,7 +64,7 @@ class PostAnOpportunityForm(forms.ModelForm):
                     parent_id=parent_id
                 ).order_by("name")
             except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty Category queryset
+                pass
 
     def save(self, commit=True):
         user = self.instance
