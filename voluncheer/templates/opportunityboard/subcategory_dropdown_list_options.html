@@ -2,3 +2,6 @@
 {% for subcategory in subcategories %}
     <option value="{{ subcategory.pk }}">{{ subcategory.name }}</option>
 {% endfor %}
+{% for subsubcategory in subsubcategories %}
+    <option value="{{ subsubcategory.pk }}">{{ subsubcategory.name }}</option>
+{% endfor %}
