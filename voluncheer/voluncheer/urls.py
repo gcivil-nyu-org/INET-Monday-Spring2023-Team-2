@@ -13,10 +13,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path("blog/", include("blog.urls"))
 """
-from django.conf.urls.static import static
+from django.conf.urls import url
 from django.contrib import admin
 from django.urls import include
 from django.urls import path
+from django.views.static import serve
 
 from profiles.views.home import SignUpView
 from profiles.views.organizations import OrganizationSignUpView
@@ -24,6 +25,7 @@ from profiles.views.volunteers import VolunteerSignUpView
 from voluncheer import settings
 
 urlpatterns = [
+    url(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
     path("__debug__/", include("debug_toolbar.urls")),
     path("admin/", admin.site.urls),
     path("", include("profiles.urls")),
@@ -43,4 +45,11 @@ urlpatterns = [
     # path("chat/", include("chatroom.urls")),
     path("opportunityboard/", include("opportunityboard.urls")),
     path("map/", include("map.urls")),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if not settings.DEBUG:
+    urlpatterns.extend(
+        [
+            url(r"^static/(?P<path>.*)$", serve, {"document_root": settings.STATIC_ROOT}),
+        ]
+    )

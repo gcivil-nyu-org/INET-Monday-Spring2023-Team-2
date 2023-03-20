@@ -136,18 +136,6 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATIC_URL = "/static/"
-# The following lines should be added while test locally.
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "static"),
-# ]
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -187,3 +175,18 @@ if DEBUG:
     )
 elif SECRET_KEY == "insecure":
     raise RuntimeError("the secret key cannot be 'insecure' in the production environment")
+
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.1/howto/static-files/
+
+if DEBUG:
+    STATIC_URL = "/static/"
+    MEDIA_URL = "/media/"
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+else:
+    STATIC_URL = "/static/"
+    MEDIA_URL = "/media/"
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
