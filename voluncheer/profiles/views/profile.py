@@ -1,5 +1,3 @@
-import os
-
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
@@ -20,6 +18,8 @@ from profiles.forms.volunteers import VolunteerChangeForm
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
+from voluncheer.settings import AWS_SES_DOMAIN
+from voluncheer.settings import DEFAULT_FROM_EMAIL
 
 
 @method_decorator([login_required], name="dispatch")
@@ -70,9 +70,7 @@ class ProfileView(DetailView):
                         {
                             "email": associated_user.email,
                             "user": associated_user,
-                            "domain": "voluncheer-develop.us-east-1.elasticbeanstalk.com"  # noqa E501
-                            if os.getenv("IS_PRODUCTION")
-                            else "127.0.0.1:8000",  # noqa E501
+                            "domain": AWS_SES_DOMAIN,
                             "site_name": "VolunCHEER",
                             "uid": urlsafe_base64_encode(force_bytes(associated_user.pk)),
                             "token": default_token_generator.make_token(associated_user),
@@ -80,10 +78,11 @@ class ProfileView(DetailView):
                         },
                     )
                     try:
+                        print()
                         send_mail(
                             subject,
                             message,
-                            "noreply.voluncheer@gmail.com",
+                            DEFAULT_FROM_EMAIL,
                             [associated_user.email],
                             fail_silently=False,
                         )

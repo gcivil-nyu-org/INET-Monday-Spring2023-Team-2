@@ -48,10 +48,6 @@
                         Website:
                         <a href="https://{{ organization.website }}"><input type="text" value="{{ organization.website }}" contenteditable="false"></a>
                         </tr>
-                        <tr>
-                        Photo:
-                        <input type="image" value="{{ organization.photo }}" contenteditable="false">
-                        </tr>
                     </div>
                     <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
                         {% csrf_token %}
@@ -66,8 +62,12 @@
             {% csrf_token %}
                 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
                 {% for opportunity in opportunity_lists %}
+                    {% if opportunity.is_published %}
                     <article>
-					    <a href="#"><img src="{% static opportunity.opportunity_image %}" alt="" class="vol-position-image" width="275px"/></a>
+                        <a href="{% url 'update_an_opportunity' opportunity.pk %}"><i id="opportunity-edit-{{opportunity.pk}}" class="fa fa-pen fa-xs edit"></i></a>
+                        {% if opportunity.photo %}
+					    <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
+                        {% endif %}
 					    <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
                         <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
                         <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
@@ -77,6 +77,30 @@
                         <div class="url"><a href="#" class="readmore">Connect</a></div>
                         <hr align="center">
 				    </article>
+                    {% endif %}
+                {% endfor %}
+        </div>
+
+        <h2>SAVED OPPORTUNITIES</h2>
+        <div class="card">
+            {% csrf_token %}
+                {% for opportunity in opportunity_lists %}
+                    {% if not opportunity.is_published %}
+                    <article>
+                        <a href="{% url 'update_an_opportunity' opportunity.pk %}"><i id="opportunity-edit-{{opportunity.pk}}" class="fa fa-pen fa-xs edit"></i></a>
+					    {% if opportunity.photo %}
+					    <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
+                        {% endif %}
+					    <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
+                        <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                        <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
+                        <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
+                        <p class="vol-position-disciption-h2">Duration: {{ opportunity.duration }}</p>
+                        <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
+                        <div class="url"><a href="#" class="readmore">Connect</a></div>
+                        <hr align="center">
+				    </article>
+                    {% endif %}
                 {% endfor %}
         </div>
     </div>
@@ -136,10 +160,6 @@
                         <tr>
                         Date of birth:
                         <input type="text" value="{{ volunteer.date_of_birth }}" contenteditable="false">
-                        </tr>
-                        <tr>
-                        Photo:
-                        <input type="image" value="{{volunteer.photo }}" contenteditable="false">
                         </tr>
                     </div>
                     <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">

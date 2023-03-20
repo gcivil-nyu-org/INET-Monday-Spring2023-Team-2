@@ -1,5 +1,3 @@
-import os
-
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
@@ -13,6 +11,9 @@ from django.utils.encoding import force_str
 from django.utils.http import urlsafe_base64_decode
 from django.utils.http import urlsafe_base64_encode
 
+from voluncheer.settings import AWS_SES_DOMAIN
+from voluncheer.settings import DEFAULT_FROM_EMAIL
+
 
 def activateEmail(request, user, to_email):
     """Creates activation link and sends email to user"""
@@ -22,9 +23,7 @@ def activateEmail(request, user, to_email):
         {
             "email": user.email,
             "user": user,
-            "domain": "voluncheer-main.us-east-1.elasticbeanstalk.com"  # noqa E501
-            if os.getenv("IS_PRODUCTION")
-            else "127.0.0.1:8000",  # noqa E501
+            "domain": AWS_SES_DOMAIN,  # noqa E501
             "site_name": "VolunCHEER",
             "uid": urlsafe_base64_encode(force_bytes(user.pk)),
             "token": default_token_generator.make_token(user),
@@ -35,7 +34,7 @@ def activateEmail(request, user, to_email):
         send_mail(
             subject,
             message,
-            "admin@admin.com",
+            DEFAULT_FROM_EMAIL,
             [to_email],
             fail_silently=False,  # noqa E501
         )  # noqa E501

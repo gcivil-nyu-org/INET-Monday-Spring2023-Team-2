@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory

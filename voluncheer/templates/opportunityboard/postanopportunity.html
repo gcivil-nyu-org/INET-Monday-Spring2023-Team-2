@@ -5,7 +5,7 @@
     <!-- Sidenav -->
     <div class="sidenav">
         <div class="profile">
-            <img src="{% static organization.organization_image %}" alt="" width="100" height="100"/>
+            <img src="{{organization.photo.url}}" alt="profile pic" width="100" height="100"/>
             <div class="name">
                 {{ organization.name }}
             </div>
@@ -28,8 +28,10 @@
         <h2>OPPORTUNITY DETAILS</h2>
         <div class="card">
             <div class="card-body">
-                <form method="post" class="edit-form" 
+                <form method="post" 
+                class="edit-form" 
                 id="opportunity_form" 
+                enctype="multipart/form-data"
                 data-subcat-url="{% url 'ajax_load_subcategories' %}" 
                 data-subsubcat-url="{% url 'ajax_load_subsubcategories' %}" 
                 action="{% url 'post_an_opportunity' %}">
