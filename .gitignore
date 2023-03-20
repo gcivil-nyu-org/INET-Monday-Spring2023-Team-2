@@ -10,3 +10,4 @@ voluncheer/db.sqlite3
 .env
 static/images/
 blackAndFlake8.sh
+voluncheer/media/*
