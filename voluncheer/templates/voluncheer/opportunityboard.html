@@ -138,16 +138,20 @@
                 {% csrf_token %}
                 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
                 {% for opportunity in opportunity_lists %}
+                  {% if opportunity.is_published %}
                     <article>
-					    <a href="#"><img src="{% static opportunity.opportunity_image %}" alt="" class="vol-position-image" width="275px"/></a>
-					    <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
+                    {% if opportunity.photo %}
+					          <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
+                    {% endif %}
+					          <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
                         <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
                         <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
                         <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
                         <p class="vol-position-disciption-h2">Duration: {{ opportunity.duration }}</p>
                         <p>{{ opportunity.description }}</p>
                         <a href="#" class="readmore">Connect</a>
-				    </article>
+				            </article>
+                  {% endif %}
                 {% endfor %}
                 <article id="sponsors">
 					<h1>Sponsors</h1>

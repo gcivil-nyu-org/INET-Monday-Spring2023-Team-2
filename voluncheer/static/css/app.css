@@ -85,6 +85,11 @@ body {
     position: fixed;
     top: 0px;
     width: 30%;
+    font-family: Zenkaku, sans-serif;
+}
+
+.container {
+    font-family: Zenkaku, sans-serif;
 }
 
 .profile {
