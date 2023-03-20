@@ -1,0 +1,17 @@
+name: Check Python Format and Lint
+description: Validates Python Format and Lint meets Black, Flake8, and isort standards
+runs:
+  using: composite
+  steps:
+    - name: Check Python Format with Black
+      shell: bash
+      working-directory: voluncheer
+      run: black --check .
+    - name: Lint Python with Flake8
+      shell: bash
+      working-directory: voluncheer
+      run: flake8 .
+    - name: Format Python Imports with isort
+      shell: bash
+      working-directory: voluncheer
+      run: isort . --check-only --diff

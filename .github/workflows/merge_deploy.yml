@@ -1,0 +1,39 @@
+name: Continuous Deployment
+run-name: ${{ github.workflow }} run for ${{ github.actor }} in ${{ github.ref_name }}
+
+on:
+  push:
+    branches: [develop, main]
+
+defaults:
+  run:
+    shell: bash
+    working-directory: voluncheer
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.actor }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  test-and-deploy:
+    name: Test and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code Locally
+        uses: actions/checkout@v3
+      - name: Prepare Environment
+        uses: ./.github/actions/prepare
+      - name: Format and Lint Python
+        uses: ./.github/actions/format
+      - name: Test Python
+        uses: ./.github/actions/test
+      - name: Deploy to AWS
+        # Only deploy when a PR on develop and/or main has been merged.
+        if: ${{ success() }}
+        uses: ./.github/actions/deploy
+        with:
+          app-name: voluncheer

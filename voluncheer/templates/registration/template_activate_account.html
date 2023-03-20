@@ -1,0 +1,11 @@
+
+{% load crispy_forms_tags %} 
+{% block content %}
+
+{% autoescape off %}  
+Greetings, {{ user }},  
+Kindly click below given link to confirm your registration, 
+{{ protocol }}://{{ domain }}{% url 'activate' uidb64=uid token=token %}  
+{% endautoescape %}  
+
+{% endblock %}

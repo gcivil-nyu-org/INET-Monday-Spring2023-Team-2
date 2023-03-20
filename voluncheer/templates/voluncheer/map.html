@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Simple Map</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/map.css' %}">
+    <script type="module" src="{% static 'js/map.js' %}"></script>
+  </head>
+  <body>
+  <div class="container">
+    <img src="{% static 'images/voluncheer_logo.png' %}" alt="logo" class="logo title" height="80px">
+    <div id="map"></div>
+    <p class="text-center top_spac"> Copyright &copy 2023 VolunCheer, org.  All Rights Reserved.</p>
+  </div>
+
+    <!--
+     The `defer` attribute causes the callback to execute after the full HTML
+     document has been parsed. For non-blocking uses, avoiding race conditions,
+     and consistent behavior across browsers, consider loading using Promises
+     with https://www.npmjs.com/package/@googlemaps/js-api-loader.
+    -->
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDXECAEeD8c8tqT_zI7OBSXmFrVHK4Fs8&callback=initMap&v=weekly"
+      defer
+    ></script>
+  </body>
+</html>

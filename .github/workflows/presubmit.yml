@@ -1,0 +1,31 @@
+name: Continuous Integration
+run-name: ${{ github.workflow }} run for ${{ github.actor }} in ${{ github.ref_name }}
+
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 2 * * *"
+
+defaults:
+  run:
+    shell: bash
+    working-directory: voluncheer
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.actor }}-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  format-lint-and-test:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code Locally
+        uses: actions/checkout@v3
+      - name: Prepare Environment
+        uses: ./.github/actions/prepare
+      - name: Format and Lint Python
+        uses: ./.github/actions/format
+      - name: Test Python
+        uses: ./.github/actions/test

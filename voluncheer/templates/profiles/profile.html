@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  {% if user.is_organization %}
+    <!-- Sidenav -->
+    <div class="sidenav">
+        <div class="profile">
+            {% if organization.photo %}
+                <img src="{{organization.photo.url}}" alt="profile pic" width="100" height="100"/>
+                <hr align="center">
+            {% endif %}
+            <div class="name">
+                {{ organization.name }}
+            </div>
+            <div class="email">
+                {{ user.email }}
+            </div>
+            <hr align="center">
+            <div class="self-description">
+                <p>{{ organization.description }}</p>
+            </div>
+        </div>
+        <div class="sidenav-url">
+            <div class="url">
+                <a href="{% url 'post_an_opportunity' %}" class="active">POST AN OPPORTUNITY</a>
+                <hr align="center">
+            </div>
+            <div class="url">
+                <a href="#settings">IMPACT</a>
+                <hr align="center">
+            </div>
+        </div>
+    </div>
+    <!-- End -->
+
+    <!-- Main -->
+    <div class="main">
+        <h2>ABOUT US</h2>
+        <div class="card">
+            <div class="card-body">
+                <i class="fa fa-pen fa-xs edit" onclick="EditProfile()"></i>
+                    <div class="edit-form" id="edit-form-view">
+                        <tr>
+                        Name:
+                        <input type="text" value="{{ organization.name }}" contenteditable="false">
+                        </tr>
+                        <tr>
+                        Website:
+                        <a href="https://{{ organization.website }}"><input type="text" value="{{ organization.website }}" contenteditable="false"></a>
+                        </tr>
+                    </div>
+                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
+                        {% csrf_token %}
+                        {{ user_form }}
+                        <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>
+                    </form>
+            </div>
+        </div>
+
+        <h2>POSTED OPPORTUNITIES</h2>
+        <div class="card">
+            {% csrf_token %}
+                {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+                {% for opportunity in opportunity_lists %}
+                    {% if opportunity.is_published %}
+                    <article>
+                        <a href="{% url 'update_an_opportunity' opportunity.pk %}"><i id="opportunity-edit-{{opportunity.pk}}" class="fa fa-pen fa-xs edit"></i></a>
+                        {% if opportunity.photo %}
+					    <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
+                        {% endif %}
+					    <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
+                        <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                        <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
+                        <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
+                        <p class="vol-position-disciption-h2">Duration: {{ opportunity.duration }}</p>
+                        <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
+                        <div class="url"><a href="#" class="readmore">Connect</a></div>
+                        <hr align="center">
+				    </article>
+                    {% endif %}
+                {% endfor %}
+        </div>
+
+        <h2>SAVED OPPORTUNITIES</h2>
+        <div class="card">
+            {% csrf_token %}
+                {% for opportunity in opportunity_lists %}
+                    {% if not opportunity.is_published %}
+                    <article>
+                        <a href="{% url 'update_an_opportunity' opportunity.pk %}"><i id="opportunity-edit-{{opportunity.pk}}" class="fa fa-pen fa-xs edit"></i></a>
+					    {% if opportunity.photo %}
+					    <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
+                        {% endif %}
+					    <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
+                        <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                        <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
+                        <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
+                        <p class="vol-position-disciption-h2">Duration: {{ opportunity.duration }}</p>
+                        <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
+                        <div class="url"><a href="#" class="readmore">Connect</a></div>
+                        <hr align="center">
+				    </article>
+                    {% endif %}
+                {% endfor %}
+        </div>
+    </div>
+    <!-- End -->
+
+  </div>
+
+
+
+  {% elif user.is_volunteer %}
+  </div>
+    <!-- Side Nav -->
+    <div class="sidenav">
+        <div class="profile">
+            {% if volunteer.photo %}
+                <img src="{{volunteer.photo.url}}" alt="profile pic" width="100" height="100"/>
+                <hr align="center">
+            {% endif %}
+            <div class="name">
+                {{ volunteer.first_name }}, {{ volunteer.last_name }}
+            </div>
+            <div class="email">
+                {{ user.email }}
+            </div>
+            <hr align="center">
+            <div class="self-description">
+                <p>{{ volunteer.description }}</p>
+            </div>
+        </div>
+
+        <div class="sidenav-url">
+            <div class="url">
+                <a href="#profile" class="active">PROFILE</a>
+                <hr align="center">
+            </div>
+            <div class="url">
+                <a href="#settings">SETTINGS</a>
+                <hr align="center">
+            </div>
+        </div>
+    </div>
+    <!-- Main -->
+    <div class="main">
+        <h2>ABOUT ME</h2>
+        <div class="card">
+            <div class="card-body">
+                <i class="fa fa-pen fa-xs edit" onclick="EditProfile()"></i>
+                    <div class="edit-form" id="edit-form-view">
+                        <tr>
+                        First name:
+                        <input type="text" value="{{ volunteer.first_name }}" contenteditable="false">
+                        </tr>
+                        <tr>
+                        Last name:
+                        <input type="text" value="{{ volunteer.last_name }}" contenteditable="false">
+                        </tr>
+                        <tr>
+                        Date of birth:
+                        <input type="text" value="{{ volunteer.date_of_birth }}" contenteditable="false">
+                        </tr>
+                    </div>
+                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
+                        {% csrf_token %}
+                        {{ user_form }}
+                        <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>
+                    </form>
+            </div>
+        </div>
+
+        <h2>MY BADGES</h2>
+        <div class="card">
+            <div class="profile-badge">
+                {% csrf_token %}
+                {% for badge in badge_urls %}
+                <span class="fa-stack fa-sm">
+                    <img src="../../static/{{ badge }}" alt="" width="78px" height="78px"/>
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- End -->
+  {% endif %}
+{% endblock %}
