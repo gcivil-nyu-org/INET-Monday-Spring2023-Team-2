@@ -97,7 +97,7 @@ class PostAnOpportunityForm(forms.ModelForm):
             opportunity.title = self.cleaned_data.get("title")
             opportunity.description = self.cleaned_data.get("description")
             opportunity.date = self.cleaned_data.get("date")
-            opportunity.duration = self.cleaned_data.get("duration")
+            opportunity.end = self.cleaned_data.get("end")
             opportunity.address_1 = self.cleaned_data.get("address_1")
             opportunity.address_2 = self.cleaned_data.get("address_2")
             opportunity.is_published = self.cleaned_data.get("is_published")
