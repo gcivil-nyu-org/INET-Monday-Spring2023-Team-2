@@ -22,7 +22,6 @@ class OrganizationSignUpView(CreateView):
     def form_valid(self, form):
         """Saves the new user and logs them in."""
         user = form.save(commit=False)
-        user.is_active = True
         user.save()
         organization_profile = Organization.objects.create(
             user=user,

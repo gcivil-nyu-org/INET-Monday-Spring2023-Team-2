@@ -41,8 +41,9 @@ class Opportunity(models.Model):
     address_2 = models.CharField(null=True, blank=True, max_length=255)
     longitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
     latitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
-    staffing = models.IntegerField()
+    staffing = models.IntegerField(null=True, blank=True)
     is_published = models.BooleanField(default=False)
+    photo = models.ImageField(upload_to="images/", blank=True, null=True)
 
     def __str__(self):
         return self.title

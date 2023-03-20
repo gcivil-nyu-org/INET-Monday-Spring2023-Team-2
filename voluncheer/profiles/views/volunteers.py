@@ -24,7 +24,6 @@ class VolunteerSignUpView(CreateView):
     def form_valid(self, form):
         """Saves the new user and logs them in."""
         user = form.save(commit=False)
-        user.is_active = True
         user.save()
         volunteer_profile = Volunteer.objects.create(
             user=user,
