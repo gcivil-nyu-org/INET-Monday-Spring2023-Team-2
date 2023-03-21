@@ -21,21 +21,17 @@ class EnvironmentTest(unittest.TestCase):
     def test_type(self):
         """Tests environment types and type properties are mutually exclusive."""
         with self.subTest("development"):
-            development = environment._Environment(
-                type=environment._Type.DEVELOPMENT, secret_key="other"
-            )
+            development = environment._Environment(type=environment._Type.DEVELOPMENT)
             self.assertTrue(development.is_development)
             self.assertFalse(development.is_production)
             self.assertFalse(development.is_local)
         with self.subTest("production"):
-            production = environment._Environment(
-                type=environment._Type.PRODUCTION, secret_key="other"
-            )
+            production = environment._Environment(type=environment._Type.PRODUCTION)
             self.assertTrue(production.is_production)
             self.assertFalse(production.is_development)
             self.assertFalse(production.is_local)
         with self.subTest("local"):
-            local = environment._Environment(type=environment._Type.LOCAL, secret_key="other")
+            local = environment._Environment(type=environment._Type.LOCAL)
             self.assertTrue(local.is_local)
             self.assertFalse(local.is_development)
             self.assertFalse(local.is_production)
