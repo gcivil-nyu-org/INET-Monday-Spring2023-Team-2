@@ -162,10 +162,11 @@ if not environment.is_local:
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SES_SECRET_ACCESS_KEY")
     AWS_SES_REGION_NAME = os.getenv("AWS_SES_REGION_NAME")
     AWS_SES_REGION_ENDPOINT = os.getenv("AWS_SES_REGION_ENDPOINT")
-    AWS_SES_DOMAIN = os.getenv("AWS_SES_DOMAIN")
-    DEFAULT_FROM_EMAIL = os.getenv("AWS_SES_FROM_EMAIL")
 else:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+AWS_SES_DOMAIN = os.getenv("AWS_SES_DOMAIN")
+DEFAULT_FROM_EMAIL = os.getenv("AWS_SES_FROM_EMAIL")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = not environment.is_production
