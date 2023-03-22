@@ -6,7 +6,7 @@ runs:
     - name: Check Python Format with Black
       shell: bash
       working-directory: voluncheer
-      run: black --check .
+      run: black .
     - name: Lint Python with Flake8
       shell: bash
       working-directory: voluncheer

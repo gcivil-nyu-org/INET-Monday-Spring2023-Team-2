@@ -69,3 +69,6 @@ class PostAnOpportunityForm(forms.ModelForm):
             opportunity.is_published = self.cleaned_data.get("is_published")
             opportunity.photo = self.cleaned_data.get("photo")
             opportunity.save()
+
+    def delete(self, opportunity_id):
+        Opportunity.objects.filter(pk=opportunity_id).delete()

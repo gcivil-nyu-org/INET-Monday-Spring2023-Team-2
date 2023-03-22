@@ -1,8 +1,9 @@
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.shortcuts import render
 
 from opportunityboard.forms.postanopportunity import PostAnOpportunityForm
 from profiles.models import Organization
+from opportunityboard.models import Opportunity
 
 
 def post_an_opportunity(request):
@@ -36,15 +37,19 @@ def update_an_opportunity(request, opportunity_id):
         return redirect("home")
     if user.is_organization:
         organization_profile = Organization.objects.get(pk=user)
+    obj = get_object_or_404(Opportunity, pk=opportunity_id)
     if request.method == "POST":
-        form = PostAnOpportunityForm(request.POST, request.FILES, instance=request.user)
+        form = PostAnOpportunityForm(request.POST, request.FILES, instance=obj)
         if form.is_valid():
-            form.update(opportunity_id)
+            if "delete" in request.POST:
+                form.delete(opportunity_id)
+            else:
+                form.update(opportunity_id)
         else:
             print(form.errors.as_data())
         return redirect("home")
     else:
-        opportunity_form = PostAnOpportunityForm(instance=request.user)
+        opportunity_form = PostAnOpportunityForm(instance=obj)
         return render(
             request,
             "opportunityboard/updateanopportunity.html",
