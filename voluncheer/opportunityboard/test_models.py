@@ -122,17 +122,13 @@ class OpportunityTest(TestCase):
         self.assertEqual(str(category), expected_category_name)
 
     def test_subcategory_object_name_is_full_path(self):
-        """Tests Subcategory __str__ method returns full path"""
+        """Tests Subcategory __str__ method returns name"""
         subcategory = Subcategory.objects.get(id=1)
-        expected_subcategory_name = "{0} -> {1}".format(subcategory.parent.name, subcategory.name)
+        expected_subcategory_name = f"{subcategory.name}"
         self.assertEqual(str(subcategory), expected_subcategory_name)
 
     def test_subsubcategory_object_name_is_full_path(self):
-        """Tests Subsubcategory __str__ method returns full path"""
+        """Tests Subsubcategory __str__ method returns name"""
         subsubcategory = Subsubcategory.objects.get(id=1)
-        expected_subsubcategory_name = "{0} -> {1} -> {2}".format(
-            subsubcategory.parent.parent.name,
-            subsubcategory.parent.name,
-            subsubcategory.name,
-        )
+        expected_subsubcategory_name = f"{subsubcategory.name}"
         self.assertEqual(str(subsubcategory), expected_subsubcategory_name)

@@ -48,6 +48,7 @@ class PostAnOpportunityFormTest(TestCase):
     def test_validation(self):
         """Test Post An Opportunity validation"""
         data = {
+            "organization": self.user,
             "category": self.healthcare,
             "title": "Sith Surfing",
             "description": "Let's surfing",
@@ -58,7 +59,7 @@ class PostAnOpportunityFormTest(TestCase):
             "address_2": "Down st",
             "is_published": False,
         }
-        form = PostAnOpportunityForm(data=data, instance=self.user)
+        form = PostAnOpportunityForm(data=data)
         self.assertEqual(self.user.opportunity_set.all().count(), 1)
         self.assertFalse(form.save())
         self.assertEqual(self.user.opportunity_set.all().count(), 2)

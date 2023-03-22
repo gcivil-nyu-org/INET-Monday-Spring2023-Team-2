@@ -25,10 +25,7 @@ class Subcategory(models.Model):
     parent = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
-        full_path = [self.name]
-        parent = self.parent
-        full_path.append(parent.name)
-        return " -> ".join(full_path[::-1])
+        return self.name
 
 
 class Subsubcategory(models.Model):
@@ -41,12 +38,7 @@ class Subsubcategory(models.Model):
     parent = models.ForeignKey(Subcategory, on_delete=models.CASCADE)
 
     def __str__(self):
-        full_path = [self.name]
-        parent = self.parent
-        grandparent = parent.parent
-        full_path.append(parent.name)
-        full_path.append(grandparent.name)
-        return " -> ".join(full_path[::-1])
+        return self.name
 
 
 class Opportunity(models.Model):
