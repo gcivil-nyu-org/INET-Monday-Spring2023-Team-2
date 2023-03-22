@@ -7,7 +7,6 @@ from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
 from profiles.models import Organization
-from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
 

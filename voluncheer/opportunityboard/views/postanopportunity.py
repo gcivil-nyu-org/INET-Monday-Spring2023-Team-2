@@ -71,7 +71,7 @@ def load_subcategories(request):
     category_id = request.GET.get("category")
     if category_id:
         subcategories = Subcategory.objects.filter(parent=category_id).order_by("name")
-        subsubcategories = Subsubcategory.objects.none()
+        subsubcategories = Subsubcategory.objects.none()  # noqa: F841
     else:  # drop-down changed to empty field
         subcategories = {}
     return render(

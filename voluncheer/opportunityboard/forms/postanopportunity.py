@@ -4,7 +4,6 @@ from django.utils import timezone
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
-from profiles.models import Organization
 
 
 class PostAnOpportunityForm(forms.ModelForm):
@@ -87,7 +86,6 @@ class PostAnOpportunityForm(forms.ModelForm):
                 pass
 
     def save(self, commit=True):
-        user = self.instance
         if self.is_valid():
             opportunity = Opportunity()
             opportunity.pubdate = timezone.now()
