@@ -1,9 +1,10 @@
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from django.shortcuts import render
 
 from opportunityboard.forms.postanopportunity import PostAnOpportunityForm
-from profiles.models import Organization
 from opportunityboard.models import Opportunity
+from profiles.models import Organization
 
 
 def post_an_opportunity(request):
