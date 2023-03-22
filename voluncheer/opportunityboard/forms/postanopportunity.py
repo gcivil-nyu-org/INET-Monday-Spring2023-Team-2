@@ -107,11 +107,13 @@ class PostAnOpportunityForm(forms.ModelForm):
     def update(self, opportunity_id):
         opportunity = Opportunity.objects.get(pk=opportunity_id)
         if self.is_valid():
+            opportunity.organization = self.cleaned_data.get("organization")
             opportunity.category = self.cleaned_data.get("category")
             opportunity.subcategory = self.cleaned_data.get("subcategory")
             opportunity.subsubcategory = self.cleaned_data.get("subsubcategory")
             opportunity.title = self.cleaned_data.get("title")
             opportunity.description = self.cleaned_data.get("description")
+            opportunity.staffing = self.cleaned_data.get("staffing")
             opportunity.date = self.cleaned_data.get("date")
             opportunity.end = self.cleaned_data.get("end")
             opportunity.address_1 = self.cleaned_data.get("address_1")

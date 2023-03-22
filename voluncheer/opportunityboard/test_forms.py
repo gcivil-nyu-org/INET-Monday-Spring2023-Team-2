@@ -73,6 +73,7 @@ class PostAnOpportunityFormTest(TestCase):
         self.assertEqual(posted_opportunity.category.name, "sports")
         self.assertEqual(posted_opportunity.description, "Face your destiny.")
         data = {
+            "organization": posted_opportunity.organization,
             "category": self.animals,
             "title": "Jedi Train",
             "description": "Face your destiny.",
@@ -83,7 +84,7 @@ class PostAnOpportunityFormTest(TestCase):
             "address_2": "Mean st",
             "is_published": True,
         }
-        form = PostAnOpportunityForm(data=data, instance=self.user)
+        form = PostAnOpportunityForm(data=data)
         self.assertEqual(self.user.opportunity_set.all().count(), 1)
         self.assertFalse(form.update(1))
         posted_opportunity = Opportunity.objects.get(pk=1)
