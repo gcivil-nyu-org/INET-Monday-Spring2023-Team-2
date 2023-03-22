@@ -44,9 +44,10 @@
                 <script>
 
                 $("#id_category").change(function () {
+                    var categoryId = $(this).val(); 
 
+                    //Update subcategory...
                     var url = $("#opportunity_form").attr("data-subcat-url");  
-                    var categoryId = $(this).val();  
                     $.ajax({                      
                       url: url,                    
                       data: {
@@ -54,17 +55,27 @@
                       },
                       success: function (data) {   
                         $("#id_subcategory").html(data);
-                        $("#id_subsubcategory").html(data);
-
                       }
                     });
-              
+
+                    //...then update subsubcategory
+                    url = $("#opportunity_form").attr("data-subsubcat-url");
+                    $.ajax({                      
+                      url: url,                    
+                      data: {
+                        'category': categoryId       
+                      },
+                      success: function (data) {   
+                        $("#id_subsubcategory").html(data);
+                      }
+                    });
                   });
 
                 $("#id_subcategory").change(function () {
-
+                    var subcategoryId = $(this).val();
+                    
+                    //Update subcategory only
                     var url = $("#opportunity_form").attr("data-subsubcat-url");  
-                    var subcategoryId = $(this).val();  
                     $.ajax({                       
                       url: url,                    
                       data: {
@@ -74,7 +85,6 @@
                         $("#id_subsubcategory").html(data);  
                       }
                     });
-              
                   });
                 </script>
             </div>
