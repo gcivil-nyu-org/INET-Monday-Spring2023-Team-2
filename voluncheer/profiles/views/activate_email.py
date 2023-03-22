@@ -23,7 +23,7 @@ def activateEmail(request, user, to_email):
         {
             "email": user.email,
             "user": user,
-            "domain": AWS_SES_DOMAIN,  # noqa E501
+            "domain": AWS_SES_DOMAIN,
             "site_name": "VolunCHEER",
             "uid": urlsafe_base64_encode(force_bytes(user.pk)),
             "token": default_token_generator.make_token(user),
@@ -36,12 +36,15 @@ def activateEmail(request, user, to_email):
             message,
             DEFAULT_FROM_EMAIL,
             [to_email],
-            fail_silently=False,  # noqa E501
-        )  # noqa E501
+            fail_silently=False,
+        )
         messages.success(
             request,
-            f"Dear <b>{user}</b>, please go to your email <b>{to_email}</b> inbox and click on \
-        the received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.",  # noqa E501
+            (
+                f"Dear <b>{user}</b>, please go to your email <b>{to_email}</b> inbox and click on "
+                "the received activation link to confirm and complete the registration. "
+                "<b>Note:</b> Check your spam folder."
+            ),
         )
     except BadHeaderError:
         return HttpResponse("Invalid header found.")
@@ -61,7 +64,7 @@ def activate(request, uidb64, token):
         user.save()
         messages.success(
             request,
-            "Thank you for your email confirmation. Now you can login your account.",  # noqa E501
+            "Thank you for your email confirmation. Now you can login your account.",
         )
         return redirect("login")
     else:

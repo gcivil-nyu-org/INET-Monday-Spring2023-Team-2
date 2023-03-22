@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+from voluncheer.environment import environment
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -153,19 +155,21 @@ ACCOUNT_USERNAME_REQUIRED = False
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# Backend Email (testing)
-# if os.getenv("IS_PRODUCTION"):
-EMAIL_BACKEND = "django_ses.SESBackend"
-AWS_ACCESS_KEY_ID = os.getenv("AWS_SES_ACCESS_KEY")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SES_SECRET_ACCESS_KEY")
-AWS_SES_REGION_NAME = os.getenv("AWS_SES_REGION_NAME")
-AWS_SES_REGION_ENDPOINT = os.getenv("AWS_SES_REGION_ENDPOINT")
+# Backend Email
+if not environment.is_local:
+    EMAIL_BACKEND = "django_ses.SESBackend"
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_SES_ACCESS_KEY")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SES_SECRET_ACCESS_KEY")
+    AWS_SES_REGION_NAME = os.getenv("AWS_SES_REGION_NAME")
+    AWS_SES_REGION_ENDPOINT = os.getenv("AWS_SES_REGION_ENDPOINT")
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 AWS_SES_DOMAIN = os.getenv("AWS_SES_DOMAIN")
 DEFAULT_FROM_EMAIL = os.getenv("AWS_SES_FROM_EMAIL")
-# else:
-#     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("IS_PRODUCTION") != "true"
+DEBUG = not environment.is_production
 
 if DEBUG:
     INSTALLED_APPS.append("debug_toolbar")
@@ -173,14 +177,13 @@ if DEBUG:
     TEMPLATES[0].get("OPTIONS", {}).get("context_processors", []).append(
         "django.template.context_processors.debug"
     )
-elif SECRET_KEY == "insecure":
-    raise RuntimeError("the secret key cannot be 'insecure' in the production environment")
 
+if not environment.is_local and SECRET_KEY == "insecure":
+    raise RuntimeError("the secret key cannot be 'insecure' in the production environment")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-if DEBUG:
+if environment.is_local:
     STATIC_URL = "/static/"
     MEDIA_URL = "/media/"
     STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
