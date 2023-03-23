@@ -6,7 +6,7 @@ runs:
     - name: Check Python Format with Black
       shell: bash
       working-directory: voluncheer
-      run: black .
+      run: black --check .
     - name: Lint Python with Flake8
       shell: bash
       working-directory: voluncheer
@@ -14,4 +14,4 @@ runs:
     - name: Format Python Imports with isort
       shell: bash
       working-directory: voluncheer
-      run: isort . --diff
+      run: isort . --check --diff
