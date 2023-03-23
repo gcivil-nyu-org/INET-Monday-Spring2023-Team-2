@@ -17,3 +17,9 @@ runs:
       shell: bash
       working-directory: voluncheer
       run: pip install -r requirements.txt
+    - name: Database Migrations
+      shell: bash
+      working-directory: voluncheer
+      run: |
+        python manage.py makemigrations
+        python manage.py migrate

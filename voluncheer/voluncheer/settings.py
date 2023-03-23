@@ -94,13 +94,24 @@ WSGI_APPLICATION = "voluncheer.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+if environment.is_local:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        },
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB"),
+            "USER": os.getenv("POSTGRES_USER"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+            "HOST": os.getenv("POSTGRES_HOST"),
+            "PORT": os.getenv("POSTGRES_PORT"),
+        },
+    }
 
 
 # Password validation
@@ -156,7 +167,7 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Backend Email
-if not environment.is_local:
+if environment.is_development or environment.is_production:
     EMAIL_BACKEND = "django_ses.SESBackend"
     AWS_ACCESS_KEY_ID = os.getenv("AWS_SES_ACCESS_KEY")
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SES_SECRET_ACCESS_KEY")
@@ -179,9 +190,6 @@ if DEBUG:
     TEMPLATES[0].get("OPTIONS", {}).get("context_processors", []).append(
         "django.template.context_processors.debug"
     )
-
-if not environment.is_local and SECRET_KEY == "insecure":
-    raise RuntimeError("the secret key cannot be 'insecure' in the production environment")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/

@@ -40,7 +40,7 @@ def post_an_opportunity(request):
 
 def update_an_opportunity(request, opportunity_id):
     """Get opportunity update POST and call save function on ChangeForms."""
-    opportunity_to_update = get_object_or_404(Opportunity, id=opportunity_id)
+    opportunity_to_update = get_object_or_404(Opportunity, pk=opportunity_id)
     user = request.user
     if user.is_anonymous:
         return redirect("home")
@@ -49,7 +49,10 @@ def update_an_opportunity(request, opportunity_id):
     if request.method == "POST":
         form = PostAnOpportunityForm(request.POST, request.FILES)
         if form.is_valid():
-            form.update(opportunity_id)
+            if "delete" in request.POST:
+                form.delete(opportunity_id)
+            else:
+                form.update(opportunity_id)
         else:
             print(form.errors.as_data())
         return redirect("home")

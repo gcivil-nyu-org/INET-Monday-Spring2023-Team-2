@@ -7,6 +7,7 @@ import os
 
 @enum.unique
 class _Type(enum.Enum):
+    CONTINUOUS_INTEGRATION = "continuous_integration"
     LOCAL = "local"
     DEVELOPMENT = "development"
     PRODUCTION = "production"

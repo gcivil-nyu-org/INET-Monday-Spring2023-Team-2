@@ -1,3 +1,4 @@
+import os
 import unittest
 
 from voluncheer import environment
@@ -5,6 +6,16 @@ from voluncheer import environment
 
 class EnvironmentTest(unittest.TestCase):
     """Tests the various environment combinations."""
+
+    def setUp(self):
+        self.current_env = os.getenv("ENVIRONMENT_TYPE")
+        if self.current_env is not None:
+            del os.environ["ENVIRONMENT_TYPE"]
+
+            def reset_environment():
+                os.environ["ENVIRONMENT_TYPE"] = self.current_env
+
+            self.addCleanup(reset_environment)
 
     def test_default_environment(self):
         """Tests the default environment initializes correctly."""
