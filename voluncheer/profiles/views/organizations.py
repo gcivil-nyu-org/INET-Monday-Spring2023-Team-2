@@ -2,7 +2,6 @@ from django.shortcuts import redirect
 from django.views.generic import CreateView
 
 from profiles.forms.organizations import OrganizationCreationForm
-from profiles.models import Organization
 from profiles.models import User
 from profiles.views.activate_email import activateEmail
 
@@ -21,13 +20,7 @@ class OrganizationSignUpView(CreateView):
 
     def form_valid(self, form):
         """Saves the new user and logs them in."""
-        user = form.save(commit=False)
-        user.save()
-        organization_profile = Organization.objects.create(
-            user=user,
-            name=form.cleaned_data.get("name"),
-        )
-        organization_profile.save()
+        user = form.save()
         user.is_active = False
         user.save()
         activateEmail(self.request, user, form.cleaned_data.get("email"))

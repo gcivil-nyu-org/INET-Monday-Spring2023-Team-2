@@ -45,7 +45,7 @@ class PasswordResetTest(TestCase):
         response = self.client.post(reverse("password_reset"), {"email": self.test_user.email})
         response = self.client.get(
             reverse("password_reset_confirm", args=[self.uidb64, self.token])
-        )  # noqa E501S
+        )
         self.assertEqual(response.status_code, 302)
         # extract the URL to which the user was redirected
         redirect_url = response.url

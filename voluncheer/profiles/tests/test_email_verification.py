@@ -27,16 +27,12 @@ class activateEmailTest(TestCase):
 
     def test_user_inactive(self):
         """Assert User is inactive after sign up"""
-        self.response = self.client.post(
-            reverse("organization_signup"), data=self.form1.data
-        )  # noqa E501
+        self.response = self.client.post(reverse("organization_signup"), data=self.form1.data)
         test_user = User.objects.get(email="test_org@testing.org")
         self.assertFalse(test_user.is_active)
 
     def test_email_sent(self):
-        self.response = self.client.post(
-            reverse("organization_signup"), data=self.form1.data
-        )  # noqa E501
+        self.response = self.client.post(reverse("organization_signup"), data=self.form1.data)
         test_user = User.objects.get(email="test_org@testing.org")
         uidb64 = urlsafe_base64_encode(force_bytes(test_user.pk))
         token = default_token_generator.make_token(test_user)
