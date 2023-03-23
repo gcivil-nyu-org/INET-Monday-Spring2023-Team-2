@@ -14,4 +14,4 @@ runs:
     - name: Format Python Imports with isort
       shell: bash
       working-directory: voluncheer
-      run: isort . --check --diff
+      run: isort . --check-only --diff
