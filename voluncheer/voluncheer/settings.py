@@ -168,6 +168,8 @@ else:
 AWS_SES_DOMAIN = os.getenv("AWS_SES_DOMAIN")
 DEFAULT_FROM_EMAIL = os.getenv("AWS_SES_FROM_EMAIL")
 
+GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = not environment.is_production
 

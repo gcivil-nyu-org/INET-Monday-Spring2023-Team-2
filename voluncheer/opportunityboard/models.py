@@ -2,13 +2,43 @@ from django.db import models
 
 from profiles.models import Organization
 
-CATEGORIES = {
-    ("community", "Community"),
-    ("animals", "Animal"),
-    ("environment", "Environment"),
-    ("healthcare", "Healthcare"),
-    ("sports", "Sports"),
-}
+
+class Category(models.Model):
+    """A category of an opportunity"""
+
+    class Meta:
+        verbose_name_plural = "categories"
+
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class Subcategory(models.Model):
+    """A subcategory of an opportunity"""
+
+    class Meta:
+        verbose_name_plural = "subcategories"
+
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class Subsubcategory(models.Model):
+    """A sub-subcategory of an opportunity"""
+
+    class Meta:
+        verbose_name_plural = "subsubcategories"
+
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey(Subcategory, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 
 class Opportunity(models.Model):
@@ -19,10 +49,12 @@ class Opportunity(models.Model):
         organization: the many-to-one mapping of the organization.
         pubdate: when opportunity was published. *allowed to be blank for now
         category: the type of opportunity
+        subcategory: the type of opportunity
+        subsubcategory: the type of opportunity
         title: the name of the opportunity.
         description: a description of the opportunity.
         date: the date and start time of the opportunity.
-        duration: the length of the opportunity, in hours and seconds.
+        end: the end time of the opportunity.
         address_1: the location of the opportunity.
         address_2: reserved for an additional address field.
         longitude: used for mapping the opportunity. *allowed to be blank for now
@@ -30,18 +62,25 @@ class Opportunity(models.Model):
         staffing: the requested number of volunteers for the opportunity.
     """
 
+    class Meta:
+        verbose_name_plural = "opportunities"
+
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     pubdate = models.DateTimeField(null=True, blank=True)
-    category = models.CharField(max_length=20, choices=CATEGORIES)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, blank=True, null=True)
+    subsubcategory = models.ForeignKey(
+        Subsubcategory, on_delete=models.SET_NULL, blank=True, null=True
+    )
     title = models.CharField(max_length=255)
     description = models.TextField()
     date = models.DateTimeField()
-    duration = models.DurationField()
+    end = models.TimeField()
     address_1 = models.CharField(max_length=255)
     address_2 = models.CharField(null=True, blank=True, max_length=255)
     longitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
     latitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
-    staffing = models.IntegerField(null=True, blank=True)
+    staffing = models.PositiveIntegerField(null=True, blank=True)
     is_published = models.BooleanField(default=False)
     photo = models.ImageField(upload_to="images/", blank=True, null=True)
 
