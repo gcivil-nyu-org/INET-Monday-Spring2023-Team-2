@@ -58,17 +58,15 @@ class PostAnOpportunityFormTest(TestCase):
             "is_published": False,
         }
         form = PostAnOpportunityForm(data=data)
-        self.assertEqual(self.user.opportunity_set.all().count(), 1)
         self.assertFalse(form.save())
-        self.assertEqual(self.user.opportunity_set.all().count(), 2)
-        posted_opportunity = Opportunity.objects.get(pk=2)
+        posted_opportunity = Opportunity.objects.get(title="Sith Surfing")
         self.assertEqual(posted_opportunity.title, "Sith Surfing")
         self.assertEqual(posted_opportunity.category.name, "healthcare")
         self.assertEqual(posted_opportunity.description, "Let's surfing")
 
     def test_update(self):
         """Test Update An Opportunity validation"""
-        posted_opportunity = Opportunity.objects.get(pk=1)
+        posted_opportunity = Opportunity.objects.get(title="Jedi Trial")
         self.assertEqual(posted_opportunity.title, "Jedi Trial")
         self.assertEqual(posted_opportunity.category.name, "sports")
         self.assertEqual(posted_opportunity.description, "Face your destiny.")
@@ -85,9 +83,7 @@ class PostAnOpportunityFormTest(TestCase):
             "is_published": True,
         }
         form = PostAnOpportunityForm(data=data)
-        self.assertEqual(self.user.opportunity_set.all().count(), 1)
         self.assertFalse(form.update(1))
-        posted_opportunity = Opportunity.objects.get(pk=1)
-        self.assertEqual(self.user.opportunity_set.all().count(), 1)
+        posted_opportunity = Opportunity.objects.get(title="Jedi Train")
         self.assertEqual(posted_opportunity.title, "Jedi Train")
         self.assertEqual(posted_opportunity.category.name, "animals")

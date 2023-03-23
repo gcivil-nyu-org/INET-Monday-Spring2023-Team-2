@@ -17,7 +17,7 @@ class OpportunityTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         """See base class."""
-        cls.jedi = Organization.objects.create(
+        cls.org = Organization.objects.create(
             user=User.objects.create(
                 email="jedi@jedi.com",
                 password="peace_and_justice_for_the_galaxy",
@@ -26,12 +26,12 @@ class OpportunityTest(TestCase):
             name="Jedi Council",
         )
 
-        cls.environment = Category.objects.create(name="Environment")
+        cls.category = Category.objects.create(name="Environment")
 
-        cls.conservation = Subcategory.objects.create(name="Conservation", parent=cls.environment)
+        cls.subcategory = Subcategory.objects.create(name="Conservation", parent=cls.category)
 
-        cls.reforestation = Subsubcategory.objects.create(
-            name="Reforestation", parent=cls.conservation
+        cls.subsubcategory = Subsubcategory.objects.create(
+            name="Reforestation", parent=cls.subcategory
         )
 
         description = (
@@ -47,10 +47,10 @@ class OpportunityTest(TestCase):
         )
 
         cls.soup = Opportunity.objects.create(
-            organization=cls.jedi,
-            category=cls.environment,
-            subcategory=cls.conservation,
-            subsubcategory=cls.reforestation,
+            organization=cls.org,
+            category=cls.category,
+            subcategory=cls.subcategory,
+            subsubcategory=cls.subsubcategory,
             title="Cloud City Soup Kitchen",
             description=description,
             date=a_date,
@@ -94,41 +94,41 @@ class OpportunityTest(TestCase):
 
     def test_category_details(self):
         """Test basic category details"""
-        category = self.environment
+        category = self.category
         self.assertEqual(category.name, "Environment")
 
     def test_subcategory_details(self):
         """Test basic subcategory details"""
-        subcategory = self.conservation
+        subcategory = self.subcategory
         self.assertEqual(subcategory.name, "Conservation")
         self.assertEqual(subcategory.parent.name, "Environment")
 
     def test_subsubcategory_details(self):
         """Test basic subsubcategory details"""
-        subsubcategory = self.reforestation
+        subsubcategory = self.subsubcategory
         self.assertEqual(subsubcategory.name, "Reforestation")
         self.assertEqual(subsubcategory.parent.name, "Conservation")
 
     def test_opportunity_object_name_is_title(self):
         """Tests Opportunity __str__ method returns title"""
-        opportunity = Opportunity.objects.get(id=1)
+        opportunity = Opportunity.objects.get(title="Cloud City Soup Kitchen")
         expected_opportunity_name = f"{opportunity.title}"
         self.assertEqual(str(opportunity), expected_opportunity_name)
 
     def test_category_object_name_is_name(self):
         """Tests Category __str__ method returns name"""
-        category = Category.objects.get(id=1)
+        category = Category.objects.get(name="Environment")
         expected_category_name = f"{category.name}"
         self.assertEqual(str(category), expected_category_name)
 
     def test_subcategory_object_name_is_full_path(self):
         """Tests Subcategory __str__ method returns name"""
-        subcategory = Subcategory.objects.get(id=1)
+        subcategory = Subcategory.objects.get(name="Conservation")
         expected_subcategory_name = f"{subcategory.name}"
         self.assertEqual(str(subcategory), expected_subcategory_name)
 
     def test_subsubcategory_object_name_is_full_path(self):
         """Tests Subsubcategory __str__ method returns name"""
-        subsubcategory = Subsubcategory.objects.get(id=1)
+        subsubcategory = Subsubcategory.objects.get(name="Reforestation")
         expected_subsubcategory_name = f"{subsubcategory.name}"
         self.assertEqual(str(subsubcategory), expected_subsubcategory_name)

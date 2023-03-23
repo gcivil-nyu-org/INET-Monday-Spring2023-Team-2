@@ -82,7 +82,7 @@ class PostAnOpportunityForm(forms.ModelForm):
                 self.fields[
                     "subsubcategory"
                 ].queryset = self.instance.subcategory.subsubcategory_set.order_by("name")
-            except (ValueError, TypeError):
+            except (ValueError, TypeError, AttributeError):
                 pass
 
     def save(self, commit=True):

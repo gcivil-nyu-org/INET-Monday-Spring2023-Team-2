@@ -49,6 +49,8 @@ class Opportunity(models.Model):
         organization: the many-to-one mapping of the organization.
         pubdate: when opportunity was published. *allowed to be blank for now
         category: the type of opportunity
+        subcategory: the type of opportunity
+        subsubcategory: the type of opportunity
         title: the name of the opportunity.
         description: a description of the opportunity.
         date: the date and start time of the opportunity.
@@ -65,7 +67,7 @@ class Opportunity(models.Model):
 
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     pubdate = models.DateTimeField(null=True, blank=True)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, blank=True, null=True)
     subsubcategory = models.ForeignKey(
         Subsubcategory, on_delete=models.SET_NULL, blank=True, null=True
@@ -78,7 +80,7 @@ class Opportunity(models.Model):
     address_2 = models.CharField(null=True, blank=True, max_length=255)
     longitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
     latitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
-    staffing = models.PositiveIntegerField()
+    staffing = models.PositiveIntegerField(null=True, blank=True)
     is_published = models.BooleanField(default=False)
     photo = models.ImageField(upload_to="images/", blank=True, null=True)
 

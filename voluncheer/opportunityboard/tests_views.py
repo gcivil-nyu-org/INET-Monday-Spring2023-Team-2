@@ -17,8 +17,8 @@ class OpportunityboardTestCase(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        """See base class."""
-        cls.jedi = Organization.objects.create(
+        """Creating an opportunity for test_update_an_opportunity_page_loads"""
+        cls.org = Organization.objects.create(
             user=User.objects.create(
                 email="jedi@jedi.com",
                 password="peace_and_justice_for_the_galaxy",
@@ -26,15 +26,11 @@ class OpportunityboardTestCase(TestCase):
             ),
             name="Jedi Council",
         )
-
-        cls.environment = Category.objects.create(name="Environment")
-
-        cls.conservation = Subcategory.objects.create(name="Conservation", parent=cls.environment)
-
-        cls.reforestation = Subsubcategory.objects.create(
-            name="Reforestation", parent=cls.conservation
+        cls.category = Category.objects.create(name="Environment")
+        cls.subcategory = Subcategory.objects.create(name="Conservation", parent=cls.category)
+        cls.subsubcategory = Subsubcategory.objects.create(
+            name="Reforestation", parent=cls.subcategory
         )
-
         description = (
             "Please help us support our community at this week's" "Cloud City soup kitchen"
         )
@@ -46,12 +42,11 @@ class OpportunityboardTestCase(TestCase):
             hour=18,
             minute=0,
         )
-
         cls.soup = Opportunity.objects.create(
-            organization=cls.jedi,
-            category=cls.environment,
-            subcategory=cls.conservation,
-            subsubcategory=cls.reforestation,
+            organization=cls.org,
+            category=cls.category,
+            subcategory=cls.subcategory,
+            subsubcategory=cls.subsubcategory,
             title="Cloud City Soup Kitchen",
             description=description,
             date=a_date,
