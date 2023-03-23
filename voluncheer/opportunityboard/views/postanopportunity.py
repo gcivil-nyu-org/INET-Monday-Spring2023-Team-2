@@ -5,7 +5,6 @@ from django.shortcuts import render
 from opportunityboard.forms.postanopportunity import PostAnOpportunityForm
 from opportunityboard.models import Opportunity
 from profiles.models import Organization
-from opportunityboard.models import Opportunity
 
 
 def post_an_opportunity(request):
