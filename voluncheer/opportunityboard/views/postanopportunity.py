@@ -49,7 +49,10 @@ def update_an_opportunity(request, opportunity_id):
     if request.method == "POST":
         form = PostAnOpportunityForm(request.POST, request.FILES)
         if form.is_valid():
-            form.update(opportunity_id)
+            if "delete" in request.POST:
+                form.delete(opportunity_id)
+            else:
+                form.update(opportunity_id)
         else:
             print(form.errors.as_data())
         return redirect("home")
