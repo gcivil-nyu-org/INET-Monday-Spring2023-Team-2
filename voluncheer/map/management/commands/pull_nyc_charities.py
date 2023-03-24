@@ -1,8 +1,9 @@
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
 from django.db import transaction
-from map.models import NYCharities
 import requests
+
+from map.models import NYCharities
 
 
 class Command(BaseCommand):
