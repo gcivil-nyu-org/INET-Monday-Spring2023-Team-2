@@ -65,7 +65,7 @@ class Opportunity(models.Model):
     class Meta:
         verbose_name_plural = "opportunities"
 
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True)
     pubdate = models.DateTimeField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, blank=True, null=True)
