@@ -10,6 +10,7 @@ from profiles.models import User
 
 class PasswordResetTest(TestCase):
     def setUp(self):
+        super().setUp()
         self.user = User.objects.create_user(
             email="testuser@example.com",
             password="password",

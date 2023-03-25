@@ -41,6 +41,10 @@ class Subsubcategory(models.Model):
         return self.name
 
 
+def _opportunity_photo_path(instance, filename):
+    return f"opportunities/{instance.organization.user.id}/{filename}"
+
+
 class Opportunity(models.Model):
     """
     The Opportunity type.
@@ -82,7 +86,7 @@ class Opportunity(models.Model):
     latitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
     staffing = models.PositiveIntegerField(null=True, blank=True)
     is_published = models.BooleanField(default=False)
-    photo = models.ImageField(upload_to="images/", blank=True, null=True)
+    photo = models.ImageField(upload_to=_opportunity_photo_path, blank=True, null=True)
 
     def __str__(self):
         return self.title

@@ -22,6 +22,10 @@ class _Environment:
     )
 
     @property
+    def is_aws(self) -> bool:
+        return self.is_development or self.is_production
+
+    @property
     def is_production(self) -> bool:
         return self.type == _Type.PRODUCTION
 
