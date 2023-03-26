@@ -11,8 +11,8 @@ class NYCharities(models.Model):
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=2)
     type = models.CharField(max_length=255)
-    latitude = models.FloatField(default=0.0)
-    longitude = models.FloatField(default=0.0)
+    latitude = models.DecimalField(default=0.0)
+    longitude = models.DecimalField(default=0.0)
 
     def __str__(self):
         return self.name
