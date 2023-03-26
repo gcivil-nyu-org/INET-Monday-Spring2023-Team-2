@@ -19,9 +19,6 @@ from django.urls import path
 from django.urls import re_path
 from django.views.static import serve
 
-from profiles.views.home import SignUpView
-from profiles.views.organizations import OrganizationSignUpView
-from profiles.views.volunteers import VolunteerSignUpView
 from voluncheer import settings
 
 urlpatterns = [
