@@ -1,7 +1,6 @@
-from django.utils import timezone
-
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
