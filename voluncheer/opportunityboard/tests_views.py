@@ -33,15 +33,15 @@ class OpportunityboardTestCase(TestCase):
             "Please help us support our community at this week's" "Cloud City soup kitchen"
         )
         end = "12:00:00"
-        cls.date = timezone.now()
-        cls.soup = Opportunity.objects.create(
-            organization=cls.org,
-            category=cls.category,
-            subcategory=cls.subcategory,
-            subsubcategory=cls.subsubcategory,
+        self.date = timezone.now()
+        self.soup = Opportunity.objects.create(
+            organization=self.org,
+            category=self.category,
+            subcategory=self.subcategory,
+            subsubcategory=self.subsubcategory,
             title="Cloud City Soup Kitchen",
             description=description,
-            date=cls.date,
+            date=self.date,
             end=end,
             address_1="200 Calrissian Av.",
             address_2="NY",

@@ -22,7 +22,6 @@ from voluncheer import settings
 from voluncheer.environment import environment
 
 urlpatterns = [
-    re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
     path("", include("profiles.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("admin/", admin.site.urls),
