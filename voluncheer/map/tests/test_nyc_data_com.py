@@ -2,6 +2,7 @@ from unittest.mock import patch
 
 from django.core.management import call_command
 from django.test import TestCase
+import requests
 
 from map.models import NYCharities
 
@@ -36,7 +37,7 @@ class TestNYCharitiesCommandTest(TestCase):
             },
         ]
 
-    @patch("map.management.commands.pull_nyc_charities.requests.get")
+    @patch.object(requests, "get")
     def test_command(self, mock_get):
         mock_get.return_value.json.return_value = self.test_data
         mock_get.return_value.status_code = 200

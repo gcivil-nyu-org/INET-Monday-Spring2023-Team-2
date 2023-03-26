@@ -18,14 +18,11 @@ class Command(BaseCommand):
         if response.status_code != 200:
             raise CommandError("Could not pull data from NYC Open Data")
 
-        # Clear NYCharities table before inserting new data
-        NYCharities.objects.all().delete()
-
         data = response.json()
         for row in data:
             # Create a new NYCharities object for each item in the dataset
             try:
-                nycharity = NYCharities(
+                nycharity, created = NYCharities.objects.get_or_create(
                     name=row["organization_city_agency"],
                     street=row["street_address_mailing_address"],
                     city=row["city"],
@@ -34,6 +31,7 @@ class Command(BaseCommand):
                     latitude=row["latitude"],
                     longitude=row["longitude"],
                 )
-                nycharity.save()
+                if not created:
+                    nycharity.save()
             except KeyError:
                 pass
