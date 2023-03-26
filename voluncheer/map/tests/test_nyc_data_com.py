@@ -1,5 +1,6 @@
 from unittest.mock import patch
 
+from decimal import Decimal
 from django.core.management import call_command
 from django.test import TestCase
 import requests
@@ -48,5 +49,5 @@ class TestNYCharitiesCommandTest(TestCase):
         self.assertEqual(len(charities), 2)
         self.assertEqual(charities[0].name, "Test Charity 1")
         self.assertEqual(charities[1].name, "Test Charity 2")
-        self.assertEqual(charities[0].latitude, 40.1234)
-        self.assertEqual(charities[0].longitude, -73.5678)
+        self.assertEqual(charities[0].latitude, Decimal("40.1234"))
+        self.assertEqual(charities[0].longitude, Decimal("-73.5678"))
