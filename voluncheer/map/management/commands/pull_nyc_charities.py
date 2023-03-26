@@ -24,14 +24,22 @@ class Command(BaseCommand):
             try:
                 nycharity, created = NYCharities.objects.get_or_create(
                     name=row["organization_city_agency"],
-                    street=row["street_address_mailing_address"],
-                    city=row["city"],
-                    state=row["state"],
                     type=row["organization_type"],
-                    latitude=row["latitude"],
-                    longitude=row["longitude"],
+                    bin_num=row["bin"],
+                    defaults={
+                        "street": row["street_address_mailing_address"],
+                        "city": row["city"],
+                        "state": row["state"],
+                        "latitude": row["latitude"],
+                        "longitude": row["longitude"],
+                    },
                 )
                 if not created:
+                    nycharity.street = row["street_address_mailing_address"]
+                    nycharity.state = row["state"]
+                    nycharity.city = row["city"]
+                    nycharity.latitude = row["latitude"]
+                    nycharity.longitude = row["longitude"]
                     nycharity.save()
             except KeyError:
                 pass
