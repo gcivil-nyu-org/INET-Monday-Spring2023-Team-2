@@ -1,6 +1,6 @@
+from decimal import Decimal
 from unittest.mock import patch
 
-from decimal import Decimal
 from django.core.management import call_command
 from django.test import TestCase
 import requests
