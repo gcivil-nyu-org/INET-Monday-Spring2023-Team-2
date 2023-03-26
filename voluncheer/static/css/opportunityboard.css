@@ -1049,11 +1049,11 @@ legend {
 }
 
 .s007 form .inner-form .advance-search .row.second {
-  margin-bottom: 46px;
+  margin-bottom: 20px;
 }
 
 .s007 form .inner-form .advance-search .row.third {
-  margin-bottom: 0;
+  margin-bottom: 20px;
 }
 
 .s007 form .inner-form .advance-search .input-field {
@@ -1197,4 +1197,93 @@ legend {
     width: 100%;
     margin-bottom: 20px;
   }
+}
+
+/* The sub nested-dropdowns */
+.nested-dropdowns {
+  width: calc(33.3333% - 30px);
+}
+
+.nested-dropdowns ul {
+  display: none;
+  z-index: 1;
+  position: absolute;
+  width: calc(33.3333% - 30px);
+  min-width: 200px;
+  border: 0;
+  background: #fff;
+  margin-top: 2px;
+  border-radius: 4px;
+  box-shadow: 0px 8px 20px 0px rgb(0 0 0 / 15%);
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  top: 100%;
+  margin-top: -1px;
+  padding-left: 20px;
+}
+.nested-dropdowns li {
+  list-style: none;
+  color: #555;
+  position: relative;
+  display: block;
+  width: 100%;
+  background-color: #FFFFFF;
+  padding: 20px 20px 20px 0px;
+  margin-top: 2px;
+}
+
+/* Change background color of list item when being hovered */
+.nested-dropdowns li:hover {
+  color: #57b846;
+}
+
+/* Show the direct sub nested-dropdowns when hovering the list item */
+.nested-dropdowns li:hover > ul {
+  display: initial;
+}
+
+.nested-dropdowns .select-box {
+  background: transparent;
+  border-radius: 0;
+  border: 0;
+  border-bottom: 2px solid #ccc;
+  height: 100%;
+  color: #555;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 0;
+  padding-right: 30px;
+  font-size: 14px;
+  height: 40px;
+}
+
+.nested-dropdowns input {
+  margin-right: 5px;
+}
+
+.slidecontainer {
+  display:inline-block;
+  width: 50%;
+}
+input.form-control-range {
+  width: 75%;
+  margin-right: 5px;
+}
+
+input#date-range {
+  width: 100%;
+  background: transparent;
+  border-radius: 0;
+  border: 0;
+  border-bottom: 2px solid #ccc;
+  height: 100%;
+  color: #555;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  font-size: 14px;
 }
