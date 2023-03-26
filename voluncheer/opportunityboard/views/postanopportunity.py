@@ -26,7 +26,11 @@ def post_an_opportunity(request):
         if form.is_valid():
             form.save()
         else:
-            print(form.errors.as_data())
+            return render(
+                request,
+                "opportunityboard/postanopportunity.html",
+                {"opportunity_form": form},
+            )
         return redirect("home")
 
     else:
@@ -54,7 +58,11 @@ def update_an_opportunity(request, opportunity_id):
             else:
                 form.save()
         else:
-            print(form.errors.as_data())
+            return render(
+                request,
+                "opportunityboard/postanopportunity.html",
+                {"opportunity_form": form},
+            )
         return redirect("home")
     else:
         opportunity_form = PostAnOpportunityForm(instance=opportunity_to_update)

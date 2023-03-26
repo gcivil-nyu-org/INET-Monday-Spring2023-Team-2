@@ -1,5 +1,5 @@
 from django import forms
-from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
@@ -25,6 +25,16 @@ class PostAnOpportunityForm(forms.ModelForm):
         ),
     )
 
+    end_date = forms.DateField(
+        input_formats=["%d/%m/%Y"],
+        widget=forms.DateInput(
+            attrs={
+                "type": "date",
+            }
+        ),
+        required=False,
+    )
+
     class Meta:
         model = Opportunity
 
@@ -41,7 +51,6 @@ class PostAnOpportunityForm(forms.ModelForm):
             "is_recurring",
             "recurrence",
             "end_date",
-            "occurences",
             "address_1",
             "address_2",
             "is_published",
@@ -101,3 +110,12 @@ class PostAnOpportunityForm(forms.ModelForm):
 
     def delete(self, opportunity_id):
         Opportunity.objects.filter(pk=opportunity_id).delete()
+
+    def clean(self):
+        super(PostAnOpportunityForm, self).clean()
+        is_recurring = self.cleaned_data.get("is_recurring")
+        recurrence = self.cleaned_data.get("recurrence")
+
+        if is_recurring and not recurrence:
+            raise ValidationError("Must enter recurrence if opportunity is recurring")
+        return self.cleaned_data
