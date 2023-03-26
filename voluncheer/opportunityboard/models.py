@@ -2,8 +2,6 @@ from django.db import models
 
 from profiles.models import Organization
 
-FREQUENCIES = [("weekly", "Weekly")]
-
 
 class Category(models.Model):
     """A category of an opportunity"""
@@ -70,6 +68,8 @@ class Opportunity(models.Model):
         latitude: used for mapping the opportunity. *allowed to be blank for now
         staffing: the requested number of volunteers for the opportunity.
     """
+
+    FREQUENCIES = [("weekly", "Weekly")]
 
     class Meta:
         verbose_name_plural = "opportunities"

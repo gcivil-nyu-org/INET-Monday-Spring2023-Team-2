@@ -1,3 +1,5 @@
+import datetime
+
 from django.test import TestCase
 from django.utils import timezone
 
@@ -26,9 +28,7 @@ class OpportunityTest(TestCase):
         )
 
         cls.category = Category.objects.create(name="Environment")
-
         cls.subcategory = Subcategory.objects.create(name="Conservation", parent=cls.category)
-
         cls.subsubcategory = Subsubcategory.objects.create(
             name="Reforestation", parent=cls.subcategory
         )
@@ -38,6 +38,8 @@ class OpportunityTest(TestCase):
         )
         end = "12:00:00"
         cls.date = timezone.now()
+        delta = datetime.timedelta(days=30)
+        cls.end_date = cls.date + delta
 
         cls.soup = Opportunity.objects.create(
             organization=cls.org,
@@ -54,6 +56,9 @@ class OpportunityTest(TestCase):
             latitude=56.78,
             staffing=9,
             is_published=False,
+            is_recurring=True,
+            recurrence="weekly",
+            end_date=cls.end_date,
         )
 
     def test_opportunity_details(self):
@@ -75,6 +80,9 @@ class OpportunityTest(TestCase):
         self.assertEqual(self.soup.latitude, 56.78)
         self.assertEqual(self.soup.staffing, 9)
         self.assertFalse(self.soup.is_published)
+        self.assertTrue(self.soup.is_recurring)
+        self.assertEqual(self.soup.recurrence, "weekly")
+        self.assertEqual(self.soup.end_date, self.end_date)
 
     def test_category_details(self):
         """Test basic category details"""
