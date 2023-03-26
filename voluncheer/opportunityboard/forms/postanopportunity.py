@@ -38,15 +38,25 @@ class PostAnOpportunityForm(forms.ModelForm):
             "staffing",
             "date",
             "end",
+            "is_recurring",
+            "recurrence",
+            "end_date",
+            "occurences",
             "address_1",
             "address_2",
             "is_published",
             "photo",
         )
 
-        labels = {"subcategory": "Subcategory 1", "subsubcategory": "Subcategory 2"}
+        labels = {
+            "subcategory": "Subcategory 1",
+            "subsubcategory": "Subcategory 2",
+            "is_recurring": "Recurring opportunity?",
+        }
 
-        widgets = {"organization": forms.HiddenInput()}
+        widgets = {
+            "organization": forms.HiddenInput(),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -85,42 +95,9 @@ class PostAnOpportunityForm(forms.ModelForm):
             except (ValueError, TypeError, AttributeError):
                 pass
 
-    def save(self, commit=True):
+    def save(self, *args, **kwargs):
         if self.is_valid():
-            opportunity = Opportunity()
-            opportunity.pubdate = timezone.now()
-            opportunity.organization = self.cleaned_data.get("organization")
-            opportunity.category = self.cleaned_data.get("category")
-            opportunity.subcategory = self.cleaned_data.get("subcategory")
-            opportunity.subsubcategory = self.cleaned_data.get("subsubcategory")
-            opportunity.title = self.cleaned_data.get("title")
-            opportunity.description = self.cleaned_data.get("description")
-            opportunity.staffing = self.cleaned_data.get("staffing")
-            opportunity.date = self.cleaned_data.get("date")
-            opportunity.end = self.cleaned_data.get("end")
-            opportunity.address_1 = self.cleaned_data.get("address_1")
-            opportunity.address_2 = self.cleaned_data.get("address_2")
-            opportunity.is_published = self.cleaned_data.get("is_published")
-            opportunity.photo = self.cleaned_data.get("photo")
-            opportunity.save()
-
-    def update(self, opportunity_id):
-        opportunity = Opportunity.objects.get(pk=opportunity_id)
-        if self.is_valid():
-            opportunity.organization = self.cleaned_data.get("organization")
-            opportunity.category = self.cleaned_data.get("category")
-            opportunity.subcategory = self.cleaned_data.get("subcategory")
-            opportunity.subsubcategory = self.cleaned_data.get("subsubcategory")
-            opportunity.title = self.cleaned_data.get("title")
-            opportunity.description = self.cleaned_data.get("description")
-            opportunity.staffing = self.cleaned_data.get("staffing")
-            opportunity.date = self.cleaned_data.get("date")
-            opportunity.end = self.cleaned_data.get("end")
-            opportunity.address_1 = self.cleaned_data.get("address_1")
-            opportunity.address_2 = self.cleaned_data.get("address_2")
-            opportunity.is_published = self.cleaned_data.get("is_published")
-            opportunity.photo = self.cleaned_data.get("photo")
-            opportunity.save()
+            super().save(*args, **kwargs)
 
     def delete(self, opportunity_id):
         Opportunity.objects.filter(pk=opportunity_id).delete()

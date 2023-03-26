@@ -82,8 +82,8 @@ class PostAnOpportunityFormTest(TestCase):
             "address_2": "Mean st",
             "is_published": True,
         }
-        form = PostAnOpportunityForm(data=data)
-        self.assertFalse(form.update(1))
+        form = PostAnOpportunityForm(data=data, instance=posted_opportunity)
+        self.assertFalse(form.save())
         posted_opportunity = Opportunity.objects.get(title="Jedi Train")
         self.assertEqual(posted_opportunity.title, "Jedi Train")
         self.assertEqual(posted_opportunity.category.name, "animals")
