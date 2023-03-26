@@ -1,4 +1,4 @@
-import datetime
+from django.utils import timezone
 
 from django.test import TestCase
 from django.urls import reverse
@@ -35,13 +35,7 @@ class OpportunityboardTestCase(TestCase):
             "Please help us support our community at this week's" "Cloud City soup kitchen"
         )
         end = "12:00:00"
-        a_date = datetime.datetime(
-            year=2023,
-            month=3,
-            day=9,
-            hour=18,
-            minute=0,
-        )
+        cls.date = timezone.now()
         cls.soup = Opportunity.objects.create(
             organization=cls.org,
             category=cls.category,
@@ -49,7 +43,7 @@ class OpportunityboardTestCase(TestCase):
             subsubcategory=cls.subsubcategory,
             title="Cloud City Soup Kitchen",
             description=description,
-            date=a_date,
+            date=cls.date,
             end=end,
             address_1="200 Calrissian Av.",
             address_2="NY",

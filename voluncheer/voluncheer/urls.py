@@ -26,25 +26,12 @@ from voluncheer import settings
 
 urlpatterns = [
     re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
-    path("__debug__/", include("debug_toolbar.urls")),
-    path("admin/", admin.site.urls),
     path("", include("profiles.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
-    path("accounts/signup/", SignUpView.as_view(), name="signup"),
-    path(
-        "accounts/signup/organization/",
-        OrganizationSignUpView.as_view(),
-        name="organization_signup",
-    ),
-    path(
-        "accounts/signup/volunteer/",
-        VolunteerSignUpView.as_view(),
-        name="volunteer_signup",
-    ),
-    # Unimplemented urls.
-    # path("chat/", include("chatroom.urls")),
-    path("opportunityboard/", include("opportunityboard.urls")),
+    path("admin/", admin.site.urls),
+    path("__debug__/", include("debug_toolbar.urls")),
     path("map/", include("map.urls")),
+    path("opportunityboard/", include("opportunityboard.urls")),
 ]
 
 if not settings.DEBUG:

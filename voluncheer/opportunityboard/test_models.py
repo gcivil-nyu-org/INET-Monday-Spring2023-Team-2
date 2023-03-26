@@ -1,4 +1,4 @@
-import datetime
+from django.utils import timezone
 
 from django.test import TestCase
 
@@ -38,13 +38,7 @@ class OpportunityTest(TestCase):
             "Please help us support our community at this week's" "Cloud City soup kitchen"
         )
         end = "12:00:00"
-        a_date = datetime.datetime(
-            year=2023,
-            month=3,
-            day=9,
-            hour=18,
-            minute=0,
-        )
+        cls.date = timezone.now()
 
         cls.soup = Opportunity.objects.create(
             organization=cls.org,
@@ -53,7 +47,7 @@ class OpportunityTest(TestCase):
             subsubcategory=cls.subsubcategory,
             title="Cloud City Soup Kitchen",
             description=description,
-            date=a_date,
+            date=cls.date,
             end=end,
             address_1="200 Calrissian Av.",
             address_2="NY",
@@ -74,16 +68,7 @@ class OpportunityTest(TestCase):
             self.soup.description,
             "Please help us support our community at this week's" "Cloud City soup kitchen",
         )
-        self.assertEqual(
-            self.soup.date,
-            datetime.datetime(
-                year=2023,
-                month=3,
-                day=9,
-                hour=18,
-                minute=0,
-            ),
-        )
+        self.assertEqual(self.soup.date, self.date)
         self.assertEqual(self.soup.end, "12:00:00")
         self.assertEqual(self.soup.address_1, "200 Calrissian Av.")
         self.assertEqual(self.soup.address_2, "NY")
