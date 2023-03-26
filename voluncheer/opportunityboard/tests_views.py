@@ -1,12 +1,14 @@
 import datetime
 
 from django.test import TestCase
+from django.test.client import RequestFactory
 from django.urls import reverse
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
+from opportunityboard.views.search import filter_search
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
@@ -15,10 +17,9 @@ from profiles.models import UserType
 class OpportunityboardTestCase(TestCase):
     """Test cases for Opportunityboard view"""
 
-    @classmethod
-    def setUpTestData(cls):
+    def setUp(self):
         """Creating an opportunity for test_update_an_opportunity_page_loads"""
-        cls.org = Organization.objects.create(
+        self.org = Organization.objects.create(
             user=User.objects.create(
                 email="jedi@jedi.com",
                 password="peace_and_justice_for_the_galaxy",
@@ -26,10 +27,10 @@ class OpportunityboardTestCase(TestCase):
             ),
             name="Jedi Council",
         )
-        cls.category = Category.objects.create(name="Environment")
-        cls.subcategory = Subcategory.objects.create(name="Conservation", parent=cls.category)
-        cls.subsubcategory = Subsubcategory.objects.create(
-            name="Reforestation", parent=cls.subcategory
+        self.category = Category.objects.create(name="Environment")
+        self.subcategory = Subcategory.objects.create(name="Conservation", parent=self.category)
+        self.subsubcategory = Subsubcategory.objects.create(
+            name="Reforestation", parent=self.subcategory
         )
         description = (
             "Please help us support our community at this week's" "Cloud City soup kitchen"
@@ -42,11 +43,11 @@ class OpportunityboardTestCase(TestCase):
             hour=18,
             minute=0,
         )
-        cls.soup = Opportunity.objects.create(
-            organization=cls.org,
-            category=cls.category,
-            subcategory=cls.subcategory,
-            subsubcategory=cls.subsubcategory,
+        self.soup = Opportunity.objects.create(
+            organization=self.org,
+            category=self.category,
+            subcategory=self.subcategory,
+            subsubcategory=self.subsubcategory,
             title="Cloud City Soup Kitchen",
             description=description,
             date=a_date,
@@ -76,5 +77,21 @@ class OpportunityboardTestCase(TestCase):
 
     def test_update_an_opportunity_page_loads(self):
         """Tests update_an_opportunity page loads"""
-        response = self.client.get(reverse("update_an_opportunity", args=[1]))
+        response = self.client.get(reverse("update_an_opportunity", args=[self.soup.pk]))
         self.assertIn(response.status_code, [200, 302])
+
+    def test_search(self):
+        """Tests update_an_opportunity page loads"""
+        rf = RequestFactory()
+        post_request = rf.post(
+            "/opportunityboard/search",
+            {
+                "category": "Animals",
+                "duration": "<=2 Hours",
+                "choices-single-defaul": "FUSION",
+                "distance": "2.9",
+                "startdates": "03/23/2023 - 03/23/2023",
+            },
+        )
+        response = filter_search(post_request)
+        self.assertEqual(response.status_code, 200)

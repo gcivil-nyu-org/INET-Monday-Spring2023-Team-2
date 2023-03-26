@@ -7,6 +7,9 @@
         {% load static %}
         <link rel="stylesheet" href="{% static 'css/opportunityboard.css' %}">
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
         <!--[if lt IE 9]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
@@ -20,7 +23,7 @@
 		</header>
         <div id="opportunitysearch">
             <div class="s007">
-              <form>
+              <form id="searchbox" method="post" action="{% url 'filter_search' %}">
                 <div class="inner-form">
                   <div class="basic-search">
                     <div class="input-field">
@@ -37,25 +40,43 @@
                   <div class="advance-search">
                     <span class="desc">Advanced Search</span>
                     <div class="row">
-                      <div class="input-field">
-                        <div class="input-select">
-                          <select data-trigger="" name="choices-single-defaul">
-                              <option placeholder="" value="">ORGANIZATIONS</option>
-                              <option>FOOD FIRST</option>
-                              <option>FLORENCE E. SMITH SENIOR SERVICES</option>
-                              <option>NYC PRIDE</option>
-                              <option>ETC.</option>
-                          </select>
-                        </div>
+                      <div class="nested-dropdowns">
+                        <li class="select-box"><div id="nested-dropdowns-placeholder-category">CATEGORY</div>
+                          {% csrf_token %}
+                          <ul>
+                          {% for category, subcategories in categories.items %}
+                            <li><input class="category" type="checkbox" name="category" value="{{ category }}">{{ category }}
+                              <ul>
+                              {% for subcategory, subsubcategories in subcategories.items %}
+                                <li><input class="category" type="checkbox" name="category" value="{{ subcategory }}">{{ subcategory }}
+                                  <ul>
+                                    {% for subsubcategory in subsubcategories %}
+                                    <li><input class="category" type="checkbox" name="category" value="{{ subsubcategory }}">{{ subsubcategory }}</li>
+                                    {% endfor %}
+                                  </ul>
+                                </li>
+                              {% endfor %}
+                              </ul>
+                            </li>
+                          {% endfor %}
+                          </ul>
+                        </li>
                       </div>
-                      <div class="input-field">
-                        <div class="input-select">
-                          <select data-trigger="" name="choices-single-defaul">
-                            <option placeholder="" value="">WORK HOUR</option>
-                            <option>PART-TIME</option>
-                            <option>FULL-TIME</option>
-                          </select>
-                        </div>
+                      <div class="nested-dropdowns">
+                        <li class="select-box"><div id="nested-dropdowns-placeholder-duration">DURATION</div>
+                          {% csrf_token %}
+                          <ul>
+                          {% for type, durations in durations.items %}
+                            <li>{{ type }}
+                              <ul>
+                              {% for duration in durations %}
+                                <li><input class="duration" type="checkbox" name="duration" value="{{ duration }}">{{ duration }}</li>
+                              {% endfor %}
+                              </ul>
+                            </li>
+                          {% endfor %}
+                          </ul>
+                        </li>
                       </div>
                       <div class="input-field">
                         <div class="input-select">
@@ -68,45 +89,24 @@
                         </div>
                       </div>
                     </div>
-{#                    <div class="row second">#}
-{#                      <div class="input-field">#}
-{#                        <div class="input-select">#}
-{#                          <select data-trigger="" name="choices-single-defaul">#}
-{#                            <option placeholder="" value="">SALE</option>#}
-{#                            <option>SALE</option>#}
-{#                            <option>SUBJECT B</option>#}
-{#                            <option>SUBJECT C</option>#}
-{#                          </select>#}
-{#                        </div>#}
-{#                      </div>#}
-{#                      <div class="input-field">#}
-{#                        <div class="input-select">#}
-{#                          <select data-trigger="" name="choices-single-defaul">#}
-{#                            <option placeholder="" value="">TIME</option>#}
-{#                            <option>THIS WEEK</option>#}
-{#                            <option>SUBJECT B</option>#}
-{#                            <option>SUBJECT C</option>#}
-{#                          </select>#}
-{#                        </div>#}
-{#                      </div>#}
-{#                      <div class="input-field">#}
-{#                        <div class="input-select">#}
-{#                          <select data-trigger="" name="choices-single-defaul">#}
-{#                            <option placeholder="" value="">TYPE</option>#}
-{#                            <option>TYPE</option>#}
-{#                            <option>SUBJECT B</option>#}
-{#                            <option>SUBJECT C</option>#}
-{#                          </select>#}
-{#                        </div>#}
-{#                      </div>#}
-{#                    </div>#}
-{#                    <div class="row third">#}
-                      <div class="input-field">
-                        <button class="btn-search">Search</button>
-                        <button class="btn-delete" id="delete">Delete</button>
+                    <div class="row second">
+                      <div class="slidecontainer">
+                        <label for="formControlRange">Distance (within)</label><br>
+                        <input type="range" name="distance" class="form-control-range" min="0" max="10" step="0.1" value="0" id="formControlRange" onInput="$('#rangeval-distance').html($(this).val())">
+                        <span id="rangeval-distance">0<!-- Default value --></span> miles
+                      </div>
+                      <div class="slidecontainer">
+                        <label for="date-range">Date Range</label><br>
+                        <input type="text" id="date-range" name="startdates">
                       </div>
                     </div>
+                    <div class="row third"></div>
+                    <div class="input-field">
+                      <button type="submit" class="btn-search">Search</button>
+                      <button class="btn-delete" id="delete">Delete</button>
+                    </div>
                   </div>
+                </div>
               </form>
             </div>
         </div>
@@ -168,7 +168,7 @@
 
 
 
-    <script src={% static "js/extention/choices.js" %}></script>
+    <script src="{% static 'js/extention/choices.js' %}"></script>
     <script>
       const customSelects = document.querySelectorAll("select");
       const deleteBtn = document.getElementById('delete')
@@ -204,8 +204,48 @@
         {
           deleteAll[i].click();
         }
+        var isChecked = $("input.category:checked");
+        for (let i = 0; i < isChecked.length; i++) {
+          isChecked[i].checked = false;
+        }
+        document.getElementById("nested-dropdowns-placeholder-category").innerHTML = "CATEGORY";
+        isChecked = $("input.duration:checked");
+        for (let i = 0; i < isChecked.length; i++) {
+          isChecked[i].checked = false;
+        }
+        document.getElementById("nested-dropdowns-placeholder-duration").innerHTML = "DURATION";
+        searchbox
+        document.getElementById("searchbox").reset();
+        document.getElementById("rangeval-distance").innerHTML = "5"
       });
-
+      var limit = 1;
+      $('input.category').on('change', function(evt) {
+        var placeholder = document.getElementById("nested-dropdowns-placeholder-category");
+        var len = $("input.category:checked").length;
+        if(this.checked == false) {
+          placeholder.innerHTML = "CATEGORY";
+          return;
+        }
+        if(len > limit) {
+          this.checked = false;
+        } else {
+          placeholder.innerHTML = this.value;
+        }
+      });
+      $('input.duration').on('change', function(evt) {
+        var placeholder = document.getElementById("nested-dropdowns-placeholder-duration");
+        var len = $("input.duration:checked").length;
+        if(this.checked == false) {
+          placeholder.innerHTML = "DURATION";
+          return;
+        }
+        if(len > limit) {
+          this.checked = false;
+        } else {
+          placeholder.innerHTML = this.value;
+        }
+      });
+      $('input[name="startdates"]').daterangepicker();
     </script>
 		
 {% endblock %}		

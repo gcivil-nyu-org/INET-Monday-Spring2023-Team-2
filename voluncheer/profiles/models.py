@@ -91,6 +91,18 @@ class User(AbstractUser):
         return self.type == UserType.ADMIN
 
 
+def _profile_photo_path(instance, filename):
+    if instance.user.is_organization:
+        prefix = "organizations"
+    elif instance.user.is_volunteer:
+        prefix = "volunteers"
+    elif instance.user.is_admin:
+        prefix = "admins"
+    else:
+        raise ValueError(f"unsupported user type {instance.user.type}")
+    return f"{prefix}/{instance.user.id}/{filename}"
+
+
 class Organization(models.Model):
     """The Organization profile type.
 
@@ -105,9 +117,7 @@ class Organization(models.Model):
         primary_key=True,
     )
     name = models.CharField(max_length=200)
-    photo = models.ImageField(
-        upload_to="images/", default="images/user-0.png", blank=True, null=True
-    )
+    photo = models.ImageField(upload_to=_profile_photo_path, blank=True, null=True)
     website = models.CharField(max_length=200, default="")
     description = models.TextField(help_text="Introduce your organization here.", default="")
 
@@ -136,9 +146,7 @@ class Volunteer(models.Model):
     last_name = models.CharField(max_length=200)
     date_of_birth = models.DateField(blank=True, null=True)
     badges = models.CharField(max_length=1024, default="")
-    photo = models.ImageField(
-        upload_to="images/", default="images/user-0.png", blank=True, null=True
-    )
+    photo = models.ImageField(upload_to=_profile_photo_path, blank=True, null=True)
     description = models.TextField(help_text="Introduce yourself here.", default="")
 
     BADGES = {

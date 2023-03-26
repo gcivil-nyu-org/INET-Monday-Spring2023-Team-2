@@ -7,6 +7,7 @@ import os
 
 @enum.unique
 class _Type(enum.Enum):
+    CONTINUOUS_INTEGRATION = "continuous_integration"
     LOCAL = "local"
     DEVELOPMENT = "development"
     PRODUCTION = "production"
@@ -19,6 +20,10 @@ class _Environment:
     type: _Type = dataclasses.field(
         default_factory=lambda: _Type(os.getenv("ENVIRONMENT_TYPE", _Type.LOCAL.value))
     )
+
+    @property
+    def is_aws(self) -> bool:
+        return self.is_development or self.is_production
 
     @property
     def is_production(self) -> bool:
