@@ -22,7 +22,7 @@ class Command(BaseCommand):
         for row in data:
             # Create a new NYCharities object for each item in the dataset
             try:
-                nycharity, created = NYCharities.objects.get_or_create(
+                nycharity, created = NYCharities.objects.update_or_create(
                     name=row["organization_city_agency"],
                     type=row["organization_type"],
                     bin_num=row["bin"],
@@ -34,12 +34,6 @@ class Command(BaseCommand):
                         "longitude": row["longitude"],
                     },
                 )
-                if not created:
-                    nycharity.street = row["street_address_mailing_address"]
-                    nycharity.state = row["state"]
-                    nycharity.city = row["city"]
-                    nycharity.latitude = row["latitude"]
-                    nycharity.longitude = row["longitude"]
-                    nycharity.save()
+
             except KeyError:
                 pass
