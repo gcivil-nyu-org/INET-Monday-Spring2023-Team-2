@@ -25,10 +25,15 @@ urlpatterns = [
     path("", include("profiles.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("admin/", admin.site.urls),
-    path("__debug__/", include("debug_toolbar.urls")),
     path("map/", include("map.urls")),
     path("opportunityboard/", include("opportunityboard.urls")),
 ]
 
 if not environment.is_aws:
     urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
+
+if settings.DEBUG:
+    debug_path = [
+        path("__debug__/", include("debug_toolbar.urls")),
+    ]
+    urlpatterns.extend(debug_path)
