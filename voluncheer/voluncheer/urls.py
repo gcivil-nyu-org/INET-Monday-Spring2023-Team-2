@@ -13,13 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path("blog/", include("blog.urls"))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include
 from django.urls import path
-from django.urls import re_path
-from django.views.static import serve
 
 from voluncheer import settings
+from voluncheer.environment import environment
 
 urlpatterns = [
     re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
@@ -31,9 +31,5 @@ urlpatterns = [
     path("opportunityboard/", include("opportunityboard.urls")),
 ]
 
-if not settings.DEBUG:
-    urlpatterns.extend(
-        [
-            re_path(r"^static/(?P<path>.*)$", serve, {"document_root": settings.STATIC_ROOT}),
-        ]
-    )
+if not environment.is_aws:
+    urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
