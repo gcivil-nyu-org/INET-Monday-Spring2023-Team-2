@@ -1,12 +1,13 @@
-import datetime
-
 from django.test import TestCase
+from django.test.client import RequestFactory
 from django.urls import reverse
+from django.utils import timezone
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
+from opportunityboard.views.search import filter_search
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
@@ -34,13 +35,7 @@ class OpportunityboardTestCase(TestCase):
             "Please help us support our community at this week's" "Cloud City soup kitchen"
         )
         end = "12:00:00"
-        a_date = datetime.datetime(
-            year=2023,
-            month=3,
-            day=9,
-            hour=18,
-            minute=0,
-        )
+        self.date = timezone.now()
         self.soup = Opportunity.objects.create(
             organization=self.org,
             category=self.category,
@@ -48,7 +43,7 @@ class OpportunityboardTestCase(TestCase):
             subsubcategory=self.subsubcategory,
             title="Cloud City Soup Kitchen",
             description=description,
-            date=a_date,
+            date=self.date,
             end=end,
             address_1="200 Calrissian Av.",
             address_2="NY",
@@ -77,3 +72,19 @@ class OpportunityboardTestCase(TestCase):
         """Tests update_an_opportunity page loads"""
         response = self.client.get(reverse("update_an_opportunity", args=[self.soup.pk]))
         self.assertIn(response.status_code, [200, 302])
+
+    def test_search(self):
+        """Tests update_an_opportunity page loads"""
+        rf = RequestFactory()
+        post_request = rf.post(
+            "/opportunityboard/search",
+            {
+                "category": "Animals",
+                "duration": "<=2 Hours",
+                "choices-single-defaul": "FUSION",
+                "distance": "2.9",
+                "startdates": "03/23/2023 - 03/23/2023",
+            },
+        )
+        response = filter_search(post_request)
+        self.assertEqual(response.status_code, 200)
