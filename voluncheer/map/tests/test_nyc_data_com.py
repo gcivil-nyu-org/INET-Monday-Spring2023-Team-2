@@ -14,6 +14,7 @@ class TestNYCharitiesCommandTest(TestCase):
             {
                 "organization_city_agency": "Test Charity 1",
                 "organization_type": "Environment",
+                "bin": "1234567",
                 "street_address_mailing_address": "123 Tree St",
                 "city": "New York",
                 "state": "NY",
@@ -23,6 +24,7 @@ class TestNYCharitiesCommandTest(TestCase):
             {
                 "organization_city_agency": "Test Charity 2",
                 "organization_type": "Animals",
+                "bin": "12345678",
                 "street_address_mailing_address": "456 Animals St",
                 "city": "New York",
                 "state": "NY",
