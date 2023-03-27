@@ -19,6 +19,7 @@ from profiles.forms.volunteers import VolunteerChangeForm
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
+from opportunityboard.models import Opportunity
 from voluncheer.settings import AWS_SES_DOMAIN
 from voluncheer.settings import DEFAULT_FROM_EMAIL
 
@@ -114,3 +115,13 @@ def profile_update(request):
         raise ValueError("profile_update: user must either a volunteer or an organizaiton.")
     form.save()
     return redirect("profile")
+
+
+def savedevents(request):
+    opportunity_lists = Opportunity.objects.order_by("-pubdate"[:20])
+    opportunity_saved = []
+    return render(
+        request=request,
+        template_name="profiles/savedevents.html",
+        context= {"opportunity_lists":opportunity_lists},)
+        
