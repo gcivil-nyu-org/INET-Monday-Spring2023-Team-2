@@ -26,7 +26,11 @@ def post_an_opportunity(request):
         if form.is_valid():
             form.save()
         else:
-            print(form.errors.as_data())
+            return render(
+                request,
+                "opportunityboard/postanopportunity.html",
+                {"opportunity_form": form},
+            )
         return redirect("home")
 
     else:
@@ -47,14 +51,18 @@ def update_an_opportunity(request, opportunity_id):
     if user.is_organization:
         organization_profile = Organization.objects.get(pk=user)
     if request.method == "POST":
-        form = PostAnOpportunityForm(request.POST, request.FILES)
+        form = PostAnOpportunityForm(request.POST, request.FILES, instance=opportunity_to_update)
         if form.is_valid():
             if "delete" in request.POST:
                 form.delete(opportunity_id)
             else:
-                form.update(opportunity_id)
+                form.save()
         else:
-            print(form.errors.as_data())
+            return render(
+                request,
+                "opportunityboard/postanopportunity.html",
+                {"opportunity_form": form},
+            )
         return redirect("home")
     else:
         opportunity_form = PostAnOpportunityForm(instance=opportunity_to_update)

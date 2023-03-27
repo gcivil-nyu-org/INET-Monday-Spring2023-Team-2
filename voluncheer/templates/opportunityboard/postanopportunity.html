@@ -43,6 +43,29 @@
                 </form>
                 
                 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+                <script>
+                  const recurring_checkbox = document.getElementById("id_is_recurring")
+                  //Set to recurrence and end_date to disabled
+                  if (!recurring_checkbox.checked){
+                    $("#id_recurrence").prop('disabled', true)
+                    $("#id_end_date").prop('disabled', true)
+                  }
+
+                  //On click, enable or disable fields
+                  recurring_checkbox.addEventListener("click", enable_fields)
+
+                  function enable_fields(){
+                    if (recurring_checkbox.checked){
+                      $("#id_recurrence").prop('disabled', false)
+                      $("#id_end_date").prop('disabled', false)
+                    }
+                    else{
+                      $("#id_recurrence").prop('disabled', true)
+                      $("#id_end_date").prop('disabled', true)
+                    }
+                  }
+                </script>
                 <script>
 
                 $("#id_category").change(function () {

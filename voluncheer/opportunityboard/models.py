@@ -59,6 +59,9 @@ class Opportunity(models.Model):
         description: a description of the opportunity.
         date: the date and start time of the opportunity.
         end: the end time of the opportunity.
+        is_recurring: denotes whether the opportunity is recurring.
+        recurrence: the frequency of recurrences.
+        end_date: the date a recurring opportunity ends.
         address_1: the location of the opportunity.
         address_2: reserved for an additional address field.
         longitude: used for mapping the opportunity. *allowed to be blank for now
@@ -66,11 +69,13 @@ class Opportunity(models.Model):
         staffing: the requested number of volunteers for the opportunity.
     """
 
+    FREQUENCIES = [("weekly", "Weekly")]
+
     class Meta:
         verbose_name_plural = "opportunities"
 
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True)
-    pubdate = models.DateTimeField(null=True, blank=True)
+    pubdate = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, blank=True, null=True)
     subsubcategory = models.ForeignKey(
@@ -80,6 +85,9 @@ class Opportunity(models.Model):
     description = models.TextField()
     date = models.DateTimeField()
     end = models.TimeField()
+    is_recurring = models.BooleanField(default=False)
+    recurrence = models.CharField(max_length=6, choices=FREQUENCIES, null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
     address_1 = models.CharField(max_length=255)
     address_2 = models.CharField(null=True, blank=True, max_length=255)
     longitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
