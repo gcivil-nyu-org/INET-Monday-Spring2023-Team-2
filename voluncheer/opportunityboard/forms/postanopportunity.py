@@ -26,7 +26,7 @@ class PostAnOpportunityForm(forms.ModelForm):
     )
 
     end_date = forms.DateField(
-        input_formats=["%d/%m/%Y"],
+        input_formats=["%Y-%m-%d"],
         widget=forms.DateInput(
             attrs={
                 "type": "date",
