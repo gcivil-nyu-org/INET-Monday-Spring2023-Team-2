@@ -1,8 +1,8 @@
-#nuke the existing databse and remigrate everything
 #AKA big red button
-find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
-find . -path "*/migrations/*.pyc"  -delete
-find . -path "*/migrations/*pycache*"  -delete
+#BUT WE SHOULDN'T remove migration files now because that might impact our production database.
+#find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+#find . -path "*/migrations/*.pyc"  -delete
+#find . -path "*/migrations/*pycache*"  -delete
 rm db.sqlite3
 #This might be needed if django error occurs.
 #pip uninstall -y Django
