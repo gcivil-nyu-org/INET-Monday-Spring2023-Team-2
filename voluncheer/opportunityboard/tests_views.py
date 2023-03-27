@@ -8,6 +8,7 @@ from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
 from opportunityboard.views.search import filter_search
+from opportunityboard.views.search import search_by_filters
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
@@ -88,3 +89,35 @@ class OpportunityboardTestCase(TestCase):
         )
         response = filter_search(post_request)
         self.assertEqual(response.status_code, 200)
+
+    def test_search_by_filters(self):
+        filters = {
+            "category": None,
+            "subcategory": None,
+            "subsubcategory": None,
+        }
+        self.assertEqual(search_by_filters(filters).count(), 1)
+        filters = {
+            "category": Category(name="Blah"),
+            "subcategory": None,
+            "subsubcategory": None,
+        }
+        self.assertEqual(search_by_filters(filters).count(), 0)
+        filters = {
+            "category": self.category,
+            "subcategory": None,
+            "subsubcategory": None,
+        }
+        self.assertEqual(search_by_filters(filters).count(), 1)
+        filters = {
+            "category": None,
+            "subcategory": self.subcategory,
+            "subsubcategory": None,
+        }
+        self.assertEqual(search_by_filters(filters).count(), 1)
+        filters = {
+            "category": None,
+            "subcategory": None,
+            "subsubcategory": self.subsubcategory,
+        }
+        self.assertEqual(search_by_filters(filters).count(), 1)
