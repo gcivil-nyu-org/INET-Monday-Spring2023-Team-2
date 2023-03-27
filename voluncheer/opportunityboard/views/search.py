@@ -14,8 +14,9 @@ def filter_search(request):
         filter = parse_search_filter(request.POST)
         logger = logging.getLogger(__name__)
         logger.error(filter)
-
-    opportunity_lists = Opportunity.objects.order_by("-pubdate"[:20])
+        opportunity_lists = search_by_filters(filter)
+    else:
+        opportunity_lists = Opportunity.objects.order_by("-pubdate"[:20])
     cate_output_dict = category_dict_gen()
     durations = {
         "One-day": ["<=2 Hours", "2-4 Hours", "Full Day"],
@@ -36,9 +37,13 @@ def parse_search_filter(post):
     """
     output = {}
     # Category filter
-    category = post.get("category")
-    category = category_is_valid(category)
+    value = post.get("category")
+    category = category_is_valid(value)
     output["category"] = category
+    subcategory = subcategory_is_valid(value)
+    output["subcategory"] = subcategory
+    subsubcategory = subsubcategory_is_valid(value)
+    output["subsubcategory"] = subsubcategory
 
     return output
 
@@ -46,15 +51,38 @@ def parse_search_filter(post):
 def category_is_valid(value):
     """Check if the category is valid
     Input: value[category_name] -> string
-    Return: error(None), target_object
+    Return: None or category
     """
     category = Category.objects.filter(name=value).first()
-    if category is not None:
-        return category
+    return category
+
+
+def subcategory_is_valid(value):
+    """Check if the subcategory is valid"""
     subcategory = Subcategory.objects.filter(name=value).first()
-    if subcategory is not None:
-        return subcategory
+    return subcategory
+
+
+def subsubcategory_is_valid(value):
+    """Check if the subsubcategory is valid"""
     subsubcategory = Subsubcategory.objects.filter(name=value).first()
-    if subsubcategory is not None:
-        return subsubcategory
-    return None
+    return subsubcategory
+
+
+def search_by_filters(filter):
+    """Search by the given filters
+    Input: filter dictionary
+    category(no-filter: None)
+    subcategory(no-filter: None)
+    subsubcategory(no-filter: None)
+    Output: Opportunity list
+    """
+    filtered_opportunity = Opportunity.objects.all()
+    if filter["category"] is not None:
+        filtered_opportunity = filtered_opportunity.filter(category=filter["category"])
+    if filter["subcategory"] is not None:
+        filtered_opportunity = filtered_opportunity.filter(subcategory=filter["subcategory"])
+    if filter["subsubcategory"] is not None:
+        filtered_opportunity = filtered_opportunity.filter(subsubcategory=filter["subsubcategory"])
+
+    return filtered_opportunity
