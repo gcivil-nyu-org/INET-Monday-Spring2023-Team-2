@@ -93,13 +93,13 @@ class UserTest(TestCase):
 
     def test_email_max_length(self):
         """Tests email max length is 254"""
-        user = User.objects.get(id=1)
+        user = User.objects.get(pk=self.luke.pk)
         max_length = user._meta.get_field("email").max_length
         self.assertEqual(max_length, 254)
 
     def test_user_object_name_is_email(self):
         """Tests User __str__ method returns email address"""
-        user = User.objects.get(id=1)
+        user = User.objects.get(pk=self.luke.pk)
         expected_object_name = f"{user.email}"
         self.assertEqual(str(user), expected_object_name)
 

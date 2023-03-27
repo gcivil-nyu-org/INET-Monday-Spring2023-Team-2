@@ -13,43 +13,27 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path("blog/", include("blog.urls"))
 """
-from django.conf.urls import url
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include
 from django.urls import path
-from django.views.static import serve
 
-from profiles.views.home import SignUpView
-from profiles.views.organizations import OrganizationSignUpView
-from profiles.views.volunteers import VolunteerSignUpView
 from voluncheer import settings
+from voluncheer.environment import environment
 
 urlpatterns = [
-    url(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
-    path("__debug__/", include("debug_toolbar.urls")),
-    path("admin/", admin.site.urls),
     path("", include("profiles.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
-    path("accounts/signup/", SignUpView.as_view(), name="signup"),
-    path(
-        "accounts/signup/organization/",
-        OrganizationSignUpView.as_view(),
-        name="organization_signup",
-    ),
-    path(
-        "accounts/signup/volunteer/",
-        VolunteerSignUpView.as_view(),
-        name="volunteer_signup",
-    ),
-    # Unimplemented urls.
-    # path("chat/", include("chatroom.urls")),
-    path("opportunityboard/", include("opportunityboard.urls")),
+    path("admin/", admin.site.urls),
     path("map/", include("map.urls")),
+    path("opportunityboard/", include("opportunityboard.urls")),
 ]
 
-if not settings.DEBUG:
-    urlpatterns.extend(
-        [
-            url(r"^static/(?P<path>.*)$", serve, {"document_root": settings.STATIC_ROOT}),
-        ]
-    )
+if not environment.is_aws:
+    urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT))
+
+if settings.DEBUG:
+    debug_path = [
+        path("__debug__/", include("debug_toolbar.urls")),
+    ]
+    urlpatterns.extend(debug_path)

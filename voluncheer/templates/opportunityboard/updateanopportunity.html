@@ -5,7 +5,9 @@
     <!-- Sidenav -->
     <div class="sidenav">
         <div class="profile">
+          {% if organization.photo %}
             <img src="{{organization.photo.url}}" alt="profile pic" width="100" height="100"/>
+            {% endif %}
             <div class="name">
                 {{ organization.name }}
             </div>
@@ -28,11 +30,88 @@
         <h2>UPDATE OPPORTUNITY DETAILS</h2>
         <div class="card">
             <div class="card-body">
-                <form method="post" enctype="multipart/form-data" class="edit-form" id="" action="{% url 'update_an_opportunity' opportunity_id%}">
+                <form method="post" 
+                class="edit-form" 
+                id="opportunity_edit" 
+                enctype="multipart/form-data" 
+                data-subcat-url="{% url 'ajax_load_subcategories' %}" 
+                data-subsubcat-url="{% url 'ajax_load_subsubcategories' %}" 
+                action="{% url 'update_an_opportunity' opportunity_id%}">
                     {% csrf_token %}
                     {{ opportunity_form.as_p }}
                     <button type="submit" id="edit-form-edit-btn" class="edit-form">Post</button>
+                    <button type="submit" name="delete" id="edit-form-edit-btn" class="edit-form">Delete</button>
                 </form>
+                
+                <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+                <script>
+                  const recurring_checkbox = document.getElementById("id_is_recurring")
+                  //Set to recurrence and end_date to disabled
+                  if (!recurring_checkbox.checked){
+                    $("#id_recurrence").prop('disabled', true)
+                    $("#id_end_date").prop('disabled', true)
+                  }
+
+                  //On click, enable or disable fields
+                  recurring_checkbox.addEventListener("click", enable_fields)
+
+                  function enable_fields(){
+                    if (recurring_checkbox.checked){
+                      $("#id_recurrence").prop('disabled', false)
+                      $("#id_end_date").prop('disabled', false)
+                    }
+                    else{
+                      $("#id_recurrence").prop('disabled', true)
+                      $("#id_end_date").prop('disabled', true)
+                    }
+                  }
+                </script>
+                <script>
+
+                $("#id_category").change(function () {
+                    var categoryId = $(this).val(); 
+
+                    //Update subcategory...
+                    var url = $("#opportunity_edit").attr("data-subcat-url");  
+                    $.ajax({                      
+                      url: url,                    
+                      data: {
+                        'category': categoryId       
+                      },
+                      success: function (data) {   
+                        $("#id_subcategory").html(data);
+                      }
+                    });
+
+                    //...then update subsubcategory
+                    url = $("#opportunity_edit").attr("data-subsubcat-url");
+                    $.ajax({                      
+                      url: url,                    
+                      data: {
+                        'category': categoryId       
+                      },
+                      success: function (data) {   
+                        $("#id_subsubcategory").html(data);
+                      }
+                    });
+                  });
+
+                $("#id_subcategory").change(function () {
+                    var subcategoryId = $(this).val();
+                    
+                    //Update subcategory only
+                    var url = $("#opportunity_edit").attr("data-subsubcat-url");  
+                    $.ajax({                       
+                      url: url,                    
+                      data: {
+                        'subcategory': subcategoryId       
+                      },
+                      success: function (data) {   
+                        $("#id_subsubcategory").html(data);  
+                      }
+                    });
+                  });
+                </script>
             </div>
         </div>
     </div>

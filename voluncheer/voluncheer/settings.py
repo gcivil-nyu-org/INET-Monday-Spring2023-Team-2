@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+from voluncheer.environment import environment
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -51,6 +53,7 @@ INSTALLED_APPS = [
     # External applications
     "crispy_forms",
     "crispy_bootstrap5",
+    "storages",
     # Local applications
     # "chatroom.apps.ChatroomConfig",
     "opportunityboard.apps.OpportunityboardConfig",
@@ -92,14 +95,37 @@ WSGI_APPLICATION = "voluncheer.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+if environment.is_local:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        },
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.getenv("POSTGRES_DB"),
+            "USER": os.getenv("POSTGRES_USER"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+            "HOST": os.getenv("POSTGRES_HOST"),
+            "PORT": os.getenv("POSTGRES_PORT"),
+        },
+    }
 
+# Storage
+# https://django-storages.readthedocs.io/en/latest
+if environment.is_aws:
+    AWS_S3_ACCESS_KEY_ID = os.getenv("AWS_S3_ACCESS_KEY_ID")
+    AWS_S3_SECRET_ACCESS_KEY = os.getenv("AWS_S3_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    MEDIA_URL = f"https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/"
+else:
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -153,19 +179,23 @@ ACCOUNT_USERNAME_REQUIRED = False
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# Backend Email (testing)
-# if os.getenv("IS_PRODUCTION"):
-EMAIL_BACKEND = "django_ses.SESBackend"
-AWS_ACCESS_KEY_ID = os.getenv("AWS_SES_ACCESS_KEY")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SES_SECRET_ACCESS_KEY")
-AWS_SES_REGION_NAME = os.getenv("AWS_SES_REGION_NAME")
-AWS_SES_REGION_ENDPOINT = os.getenv("AWS_SES_REGION_ENDPOINT")
+# Backend Email
+if environment.is_aws:
+    EMAIL_BACKEND = "django_ses.SESBackend"
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_SES_ACCESS_KEY")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SES_SECRET_ACCESS_KEY")
+    AWS_SES_REGION_NAME = os.getenv("AWS_SES_REGION_NAME")
+    AWS_SES_REGION_ENDPOINT = os.getenv("AWS_SES_REGION_ENDPOINT")
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
 AWS_SES_DOMAIN = os.getenv("AWS_SES_DOMAIN")
 DEFAULT_FROM_EMAIL = os.getenv("AWS_SES_FROM_EMAIL")
-# else:
-#     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("IS_PRODUCTION") != "true"
+DEBUG = not environment.is_production
 
 if DEBUG:
     INSTALLED_APPS.append("debug_toolbar")
@@ -173,20 +203,12 @@ if DEBUG:
     TEMPLATES[0].get("OPTIONS", {}).get("context_processors", []).append(
         "django.template.context_processors.debug"
     )
-elif SECRET_KEY == "insecure":
-    raise RuntimeError("the secret key cannot be 'insecure' in the production environment")
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-if DEBUG:
+if environment.is_local:
     STATIC_URL = "/static/"
-    MEDIA_URL = "/media/"
     STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-    MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 else:
     STATIC_URL = "/static/"
-    MEDIA_URL = "/media/"
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
-    MEDIA_ROOT = os.path.join(BASE_DIR, "media")

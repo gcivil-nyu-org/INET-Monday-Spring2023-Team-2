@@ -5,6 +5,7 @@ from django.core.mail import BadHeaderError
 from django.core.mail import send_mail
 from django.db.models.query_utils import Q
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.template.loader import render_to_string
@@ -41,7 +42,7 @@ class ProfileView(DetailView):
         if user.is_organization:
             organization_profile = Organization.objects.get(pk=user)
             kwargs["organization"] = organization_profile
-            kwargs["user_form"] = OrganizationChangeForm(instance=self.request.user)
+            kwargs["user_form"] = OrganizationChangeForm(instance=organization_profile)
             opportunity_lists = organization_profile.opportunity_set.all()
             kwargs["opportunity_lists"] = opportunity_lists
         if user.is_volunteer:
@@ -54,7 +55,8 @@ class ProfileView(DetailView):
                 except KeyError:
                     pass
             kwargs["badge_urls"] = badge_urls
-            kwargs["user_form"] = VolunteerChangeForm(instance=self.request.user)
+            volunteer_profile = Volunteer.objects.get(pk=user)
+            kwargs["user_form"] = VolunteerChangeForm(instance=volunteer_profile)
         return super().get_context_data(**kwargs)
 
     def password_reset_request(request):
@@ -70,7 +72,7 @@ class ProfileView(DetailView):
                         {
                             "email": associated_user.email,
                             "user": associated_user,
-                            "domain": AWS_SES_DOMAIN,
+                            "domain": AWS_SES_DOMAIN if AWS_SES_DOMAIN else "127.0.0.1:8000",
                             "site_name": "VolunCHEER",
                             "uid": urlsafe_base64_encode(force_bytes(associated_user.pk)),
                             "token": default_token_generator.make_token(associated_user),
@@ -99,14 +101,15 @@ class ProfileView(DetailView):
 
 def profile_update(request):
     """Get profile update POST and call save function on ChangeForms."""
+    profile = get_object_or_404(User, pk=request.user.pk)
     if request.user.is_volunteer:
         form = VolunteerChangeForm(
             request.POST,
             request.FILES,
-            instance=request.user,
+            instance=profile,
         )
     elif request.user.is_organization:
-        form = OrganizationChangeForm(request.POST, request.FILES, instance=request.user)
+        form = OrganizationChangeForm(request.POST, request.FILES, instance=profile)
     else:
         raise ValueError("profile_update: user must either a volunteer or an organizaiton.")
     form.save()

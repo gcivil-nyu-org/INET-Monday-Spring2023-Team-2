@@ -1,8 +1,9 @@
 from django import forms
-from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 from opportunityboard.models import Opportunity
-from profiles.models import Organization
+from opportunityboard.models import Subcategory
+from opportunityboard.models import Subsubcategory
 
 
 class PostAnOpportunityForm(forms.ModelForm):
@@ -16,7 +17,7 @@ class PostAnOpportunityForm(forms.ModelForm):
             }
         ),
     )
-    duration = forms.DurationField(
+    end = forms.TimeField(
         widget=forms.TimeInput(
             attrs={
                 "type": "time",
@@ -24,48 +25,97 @@ class PostAnOpportunityForm(forms.ModelForm):
         ),
     )
 
+    end_date = forms.DateField(
+        input_formats=["%Y-%m-%d"],
+        widget=forms.DateInput(
+            attrs={
+                "type": "date",
+            }
+        ),
+        required=False,
+    )
+
     class Meta:
         model = Opportunity
+
         fields = (
-            "category",
+            "organization",
             "title",
+            "category",
+            "subcategory",
+            "subsubcategory",
             "description",
+            "staffing",
             "date",
-            "duration",
+            "end",
+            "is_recurring",
+            "recurrence",
+            "end_date",
             "address_1",
             "address_2",
             "is_published",
             "photo",
         )
 
-    def save(self, commit=True):
-        user = self.instance
-        organization = Organization.objects.get(pk=user)
-        if self.is_valid():
-            opportunity = Opportunity()
-            opportunity.pubdate = timezone.now()
-            opportunity.organization = organization
-            opportunity.category = self.cleaned_data.get("category")
-            opportunity.title = self.cleaned_data.get("title")
-            opportunity.description = self.cleaned_data.get("description")
-            opportunity.date = self.cleaned_data.get("date")
-            opportunity.duration = self.cleaned_data.get("duration")
-            opportunity.address_1 = self.cleaned_data.get("address_1")
-            opportunity.address_2 = self.cleaned_data.get("address_2")
-            opportunity.is_published = self.cleaned_data.get("is_published")
-            opportunity.photo = self.cleaned_data.get("photo")
-            opportunity.save()
+        labels = {
+            "subcategory": "Subcategory 1",
+            "subsubcategory": "Subcategory 2",
+            "is_recurring": "Recurring opportunity?",
+        }
 
-    def update(self, opportunity_id):
-        opportunity = Opportunity.objects.get(pk=opportunity_id)
+        widgets = {
+            "organization": forms.HiddenInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["subcategory"].queryset = Subcategory.objects.none()
+        self.fields["subsubcategory"].queryset = Subsubcategory.objects.none()
+
+        if "category" in self.data:
+            try:
+                parent_id = int(self.data.get("category"))
+                self.fields["subcategory"].queryset = Subcategory.objects.filter(
+                    parent_id=parent_id
+                ).order_by("name")
+            except (ValueError, TypeError):
+                pass
+        elif self.instance.pk:
+            try:
+                self.fields[
+                    "subcategory"
+                ].queryset = self.instance.category.subcategory_set.order_by("name")
+            except (ValueError, TypeError):
+                pass
+
+        if "subcategory" in self.data:
+            try:
+                parent_id = int(self.data.get("subcategory"))
+                self.fields["subsubcategory"].queryset = Subsubcategory.objects.filter(
+                    parent_id=parent_id
+                ).order_by("name")
+            except (ValueError, TypeError):
+                pass
+        elif self.instance.pk:
+            try:
+                self.fields[
+                    "subsubcategory"
+                ].queryset = self.instance.subcategory.subsubcategory_set.order_by("name")
+            except (ValueError, TypeError, AttributeError):
+                pass
+
+    def save(self, *args, **kwargs):
         if self.is_valid():
-            opportunity.category = self.cleaned_data.get("category")
-            opportunity.title = self.cleaned_data.get("title")
-            opportunity.description = self.cleaned_data.get("description")
-            opportunity.date = self.cleaned_data.get("date")
-            opportunity.duration = self.cleaned_data.get("duration")
-            opportunity.address_1 = self.cleaned_data.get("address_1")
-            opportunity.address_2 = self.cleaned_data.get("address_2")
-            opportunity.is_published = self.cleaned_data.get("is_published")
-            opportunity.photo = self.cleaned_data.get("photo")
-            opportunity.save()
+            super().save(*args, **kwargs)
+
+    def delete(self, opportunity_id):
+        Opportunity.objects.filter(pk=opportunity_id).delete()
+
+    def clean(self):
+        super(PostAnOpportunityForm, self).clean()
+        is_recurring = self.cleaned_data.get("is_recurring")
+        recurrence = self.cleaned_data.get("recurrence")
+
+        if is_recurring and not recurrence:
+            raise ValidationError("Must enter recurrence if opportunity is recurring")
+        return self.cleaned_data
