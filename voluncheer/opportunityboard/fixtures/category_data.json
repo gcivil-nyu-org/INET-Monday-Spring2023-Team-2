@@ -1,97 +1,83 @@
 [
     {
       "model":"opportunityboard.category",
-      "pk":1,
       "fields":{
         "name": "Environment"
       }
     },
     {
       "model":"opportunityboard.category",
-      "pk":2,
       "fields":{
         "name": "Animals"
       }
     },
     {
       "model":"opportunityboard.category",
-      "pk":3,
       "fields":{
         "name": "Social"
       }
     },
     {
       "model":"opportunityboard.category",
-      "pk":4,
       "fields":{
         "name": "Healthcare"
       }
     },
     {
       "model":"opportunityboard.category",
-      "pk":5,
       "fields":{
         "name": "Sports"
       }
     },
     { "model":"opportunityboard.subcategory",
-      "pk":1,
       "fields":{
         "name": "Conservation", 
         "parent_id": 1
       }
     },
     { "model":"opportunityboard.subcategory",
-      "pk":2,
       "fields":{
         "name": "Rescue/Care", 
         "parent_id": 2
       }
     },
     { "model":"opportunityboard.subcategory",
-      "pk":3,
       "fields":{
         "name": "Farmwork", 
         "parent_id": 1
       }
     },
     { "model":"opportunityboard.subcategory",
-      "pk":4,
       "fields":{
         "name": "Research", 
         "parent_id": 2
       }
     },
     { "model":"opportunityboard.subcategory",
-      "pk":5,
       "fields":{
         "name": "Education", 
         "parent_id": 3
       }
     },
     { "model":"opportunityboard.subcategory",
-      "pk":6,
       "fields":{
         "name": "Youth", 
         "parent_id": 3
       }
     },
     { "model":"opportunityboard.subcategory",
-      "pk":7,
       "fields":{
         "name": "Community", 
         "parent_id": 3
       }
     },
     { "model":"opportunityboard.subcategory",
-      "pk":8,
       "fields":{
         "name": "Senior Care", 
         "parent_id": 4
       }
     },
     { "model":"opportunityboard.subcategory",
-      "pk":9,
       "fields":{
         "name": "Counseling", 
         "parent_id": 4
@@ -105,14 +91,12 @@
       }
     },
     { "model":"opportunityboard.subcategory",
-      "pk":11,
       "fields":{
         "name": "Sporting Events", 
         "parent_id": 5
       }
     },
     { "model":"opportunityboard.subcategory",
-      "pk":12,
       "fields":{
         "name": "Local Clubs", 
         "parent_id": 5
@@ -120,7 +104,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 1,
       "fields": {
         "name": "Reforestation",
         "parent_id": 1
@@ -128,7 +111,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 2,
       "fields": {
         "name": "National Parks",
         "parent_id": 1
@@ -136,7 +118,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 3,
       "fields": {
         "name": "Cleanup",
         "parent_id": 1
@@ -144,7 +125,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 4,
       "fields": {
         "name": "Invasive Species",
         "parent_id": 1
@@ -152,7 +132,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 7,
       "fields": {
         "name": "Animal Care",
         "parent_id": 3
@@ -160,7 +139,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 8,
       "fields": {
         "name": "Feeding",
         "parent_id": 3
@@ -168,7 +146,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 9,
       "fields": {
         "name": "Repairs",
         "parent_id": 3
@@ -184,7 +161,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 11,
       "fields": {
         "name": "Packing",
         "parent_id": 3
@@ -192,7 +168,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 12,
       "fields": {
         "name": "Shelter",
         "parent_id": 2
@@ -200,7 +175,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 13,
       "fields": {
         "name": "Vet",
         "parent_id": 2
@@ -208,7 +182,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 14,
       "fields": {
         "name": "Sanctuaries",
         "parent_id": 2
@@ -216,7 +189,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 15,
       "fields": {
         "name": "Zoos",
         "parent_id": 2
@@ -224,7 +196,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 16,
       "fields": {
         "name": "Teach",
         "parent_id": 5
@@ -232,7 +203,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 17,
       "fields": {
         "name": "Tutor",
         "parent_id": 5
@@ -240,7 +210,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 18,
       "fields": {
         "name": "Clubs",
         "parent_id": 6
@@ -248,7 +217,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 19,
       "fields": {
         "name": "Schools",
         "parent_id": 6
@@ -264,7 +232,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 21,
       "fields": {
           "name": "Food Drive",
           "parent_id": 7
@@ -272,7 +239,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 22,
       "fields": {
         "name": "Clothing Drive",
         "parent_id": 7
@@ -280,7 +246,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 23,
       "fields": {
       "name": "Shelter",
       "parent_id": 7
@@ -288,7 +253,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 24,
       "fields": {
         "name": "Responders",
         "parent_id": 7
@@ -296,7 +260,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 25,
       "fields": {
         "name": "Soup Kitchen",
         "parent_id": 7
