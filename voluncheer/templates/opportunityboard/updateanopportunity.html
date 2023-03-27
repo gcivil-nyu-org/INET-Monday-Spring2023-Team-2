@@ -5,9 +5,7 @@
     <!-- Sidenav -->
     <div class="sidenav">
         <div class="profile">
-          {% if organization.photo %}
             <img src="{{organization.photo.url}}" alt="profile pic" width="100" height="100"/>
-            {% endif %}
             <div class="name">
                 {{ organization.name }}
             </div>
@@ -28,6 +26,7 @@
     <!-- Main -->
     <div class="main">
         <h2>UPDATE OPPORTUNITY DETAILS</h2>
+        <h2>test</h2>
         <div class="card">
             <div class="card-body">
                 <form method="post" 

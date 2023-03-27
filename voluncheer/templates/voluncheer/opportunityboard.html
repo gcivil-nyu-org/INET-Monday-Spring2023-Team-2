@@ -144,8 +144,9 @@
                 {% csrf_token %}
                 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
                 {% for opportunity in opportunity_lists %}
+                 {% if user.is_volunteer %}
                   {% if opportunity.is_published %}
-                    <article>
+                    <article name="article">
                     {% if opportunity.photo %}
 					          <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
                     {% endif %}
@@ -155,8 +156,11 @@
                         <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
                         <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
                         <p>{{ opportunity.description }}</p>
-                        <a href="#" class="readmore">Connect</a>
-				            </article>
+                        <!-- <a href="{% url 'saved_events' %}" class="readmore">Register</a> -->
+                        <div><button type="submit" id="myButton" value="false" class="readmore" onclick="toggleButton()">Register?</button>
+                        </div>
+                      </article>
+                    {% endif %}
                   {% endif %}
                 {% endfor %}
                 <article id="sponsors">
@@ -175,6 +179,23 @@
 
 
     <script src="{% static 'js/extention/choices.js' %}"></script>
+    <script>
+      function toggleButton() {
+        console.log("response")
+        let opportunity_saved = []
+        const button = document.getElementById("myButton"); // assuming the button has an ID of "myButton"
+        let value = button.value === "false" ? false : true; // toggle the boolean value
+        console.log(value)
+        button.value = value.toString(); // update the button value attribute
+        button.innerHTML = value ? "Register?" : "Registered!"; // update the button name based on the boolean value
+        // opportunity_saved.append(response)
+        console.log(opportunity_saved)
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            alert('Button clicked!');
+        });
+      }
+    </script>
     <script>
       const customSelects = document.querySelectorAll("select");
       const deleteBtn = document.getElementById('delete')
