@@ -40,6 +40,8 @@ class PostAnOpportunityFormTest(TestCase):
             address_2="Mean st",
             is_published=False,
             photo="sith-lord.jpg",
+            is_recurring=True,
+            recurrence="weekly",
         )
         self.opportunity.save()
 
@@ -82,8 +84,28 @@ class PostAnOpportunityFormTest(TestCase):
             "address_2": "Mean st",
             "is_published": True,
         }
-        form = PostAnOpportunityForm(data=data)
-        self.assertFalse(form.update(1))
+        form = PostAnOpportunityForm(data=data, instance=posted_opportunity)
+        self.assertFalse(form.save())
         posted_opportunity = Opportunity.objects.get(title="Jedi Train")
         self.assertEqual(posted_opportunity.title, "Jedi Train")
         self.assertEqual(posted_opportunity.category.name, "animals")
+
+    def test_clean(self):
+        """Test if clean function properly raises errors"""
+        data = {
+            "organization": self.user,
+            "category": self.animals,
+            "title": "Jedi Train",
+            "description": "Face your destiny.",
+            "staffing": "2",
+            "date": timezone.now(),
+            "end": "12:00:00",
+            "address_1": "New York, NY",
+            "address_2": "Mean st",
+            "is_published": True,
+            "is_recurring": True,
+            "recurrence": None,  # Recurrence set to none despite is_recurring = True
+        }
+
+        form = PostAnOpportunityForm(data=data)
+        self.assertFalse(form.is_valid())
