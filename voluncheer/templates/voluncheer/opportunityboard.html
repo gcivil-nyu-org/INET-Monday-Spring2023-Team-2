@@ -150,9 +150,9 @@
                         <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
                         <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
                         <p>{{ opportunity.description }}</p>
-                        <!-- <a href="{% url 'saved_events' %}" class="readmore">Register</a> -->
-                        <div><button type="submit" id="myButton" value="false" class="readmore" onclick="toggleButton()">Register?</button>
-                        </div>
+                        <a href="{% url 'signup_volunteer' opportunity.pk %}" class="readmore">Register</a>
+                        <!-- <div><button type="submit" id="myButton" value="false" class="readmore" onclick="toggleButton()">Register?</button>
+                        </div> -->
                       </article>
                     {% endif %}
                   {% endif %}
