@@ -2,6 +2,7 @@ from django.urls import path
 
 from opportunityboard.views.opportunityboard import opportunityboard
 from opportunityboard.views.opportunityboard import select
+from opportunityboard.views.opportunityboard import signup_volunteer
 from opportunityboard.views.postanopportunity import load_subcategories
 from opportunityboard.views.postanopportunity import load_subsubcategories
 from opportunityboard.views.postanopportunity import post_an_opportunity
@@ -22,4 +23,6 @@ urlpatterns = [
     path("update/<int:opportunity_id>", update_an_opportunity, name="update_an_opportunity"),
     # Filter Search
     path("search", filter_search, name="filter_search"),
+    # Signup for an opportunity
+    path("signup_volunteer/<int:opportunity_id>", signup_volunteer, name="signup_volunteer"),
 ]
