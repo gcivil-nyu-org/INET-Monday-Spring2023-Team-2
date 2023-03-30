@@ -23,7 +23,7 @@
 		</header>
         <div id="opportunitysearch">
             <div class="s007">
-              <form id="searchbox" method="post" action="{% url 'filter_search' %}">
+              <form id="searchbox" method="get" action="{% url 'filter_search' %}">
                 <div class="inner-form">
                   <div class="basic-search">
                     <div class="input-field">
@@ -41,7 +41,10 @@
                     <span class="desc">Advanced Search</span>
                     <div class="row">
                       <div class="nested-dropdowns">
-                        <li class="select-box"><div id="nested-dropdowns-placeholder-category">CATEGORY</div>
+                        <li class="select-box">
+                          <div id="nested-dropdowns-placeholder-category">
+                            {{ category_placeholder }}
+                          </div>
                           {% csrf_token %}
                           <ul>
                           {% for category, subcategories in categories.items %}
@@ -63,7 +66,10 @@
                         </li>
                       </div>
                       <div class="nested-dropdowns">
-                        <li class="select-box"><div id="nested-dropdowns-placeholder-duration">DURATION</div>
+                        <li class="select-box">
+                          <div id="nested-dropdowns-placeholder-duration">
+                            {{ duration_placeholder }}
+                          </div>
                           {% csrf_token %}
                           <ul>
                           {% for type, durations in durations.items %}
