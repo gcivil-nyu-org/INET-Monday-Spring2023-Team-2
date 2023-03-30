@@ -84,7 +84,6 @@
       }
     },
     { "model":"opportunityboard.subcategory",
-      "pk":10,
       "fields":{
         "name": "Hospitals", 
         "parent_id": 4
@@ -153,7 +152,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 10,
       "fields": {
         "name": "Harvest",
         "parent_id": 3
@@ -224,7 +222,6 @@
     },
     {
       "model": "opportunityboard.subsubcategory",
-      "pk": 20,
       "fields": {
         "name": "Camps",
         "parent_id": 6
