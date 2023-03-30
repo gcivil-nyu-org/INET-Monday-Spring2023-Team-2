@@ -118,10 +118,10 @@ def profile_update(request):
 
 
 def savedevents(request):
-    opportunity_lists = Opportunity.objects.order_by("-pubdate"[:20])
-    opportunity_saved = []
+    volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
+    opportunity_selected = volunteer.opportunity_set.all()
     return render(
         request=request,
         template_name="profiles/savedevents.html",
-        context= {"opportunity_lists":opportunity_lists},)
+        context= {"opportunity_selected":opportunity_selected},)
         

@@ -32,7 +32,7 @@
                 <hr align="center">
             </div>
             <div class="url">
-                <a href="{% url 'saved_events' %}" class="active">MY VOLUNCHEERS</a>
+                <a href="{% url 'savedevents' %}" class="active">MY VOLUNCHEERS</a>
                 <hr align="center">
             </div>
         </div>
@@ -42,7 +42,7 @@
         <h2>UPCOMING EVENTS</h2>
             {% csrf_token %}
                 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-                {% for opportunity in opportunity_lists %}
+                {% for opportunity in opportunity_selected %}
                     
                     <article>
                         {% if opportunity.photo %}

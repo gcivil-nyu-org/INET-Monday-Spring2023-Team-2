@@ -1,12 +1,15 @@
 from django.apps import apps
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.http import HttpResponseRedirect
+from opportunityboard.models import Category
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
+from profiles.models import Volunteer
 
 Organization = apps.get_model("profiles", "Organization")
 
@@ -53,14 +56,8 @@ def category_dict_gen():
 
 
 def signup_volunteer(request, opportunity_id):
-
-    # get opportunity
+    volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
     opportunity = Opportunity.objects.get(pk=opportunity_id)
-
-    # add user to opportunity
-
-    # delete these print statements, just for verification
-    print(opportunity_id)
-    print(request.user)
+    opportunity.volunteer.add(volunteer)
 
     return HttpResponseRedirect(reverse("opportunityboard"))

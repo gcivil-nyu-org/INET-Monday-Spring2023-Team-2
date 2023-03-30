@@ -150,18 +150,18 @@
                     {% if opportunity.photo %}
 					          <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
                     {% endif %}
-					          <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
+					              <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
                         <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
                         <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
                         <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
                         <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
                         <p>{{ opportunity.description }}</p>
-                        <a href="{% url 'signup_volunteer' opportunity.pk %}" class="readmore">Register</a>
-                        <!-- <div><button type="submit" id="myButton" value="false" class="readmore" onclick="toggleButton()">Register?</button>
-                        </div> -->
+                        <a href="{% url 'signup_volunteer' opportunity.pk %}">
+                          <button type="button" id="myButton" value="false" class="readmore" onclick="toggleButton()">Register?</button>
+                        </a>
                       </article>
                     {% endif %}
-                  {% endif %}
+                  
                 {% endfor %}
                 <article id="sponsors">
 					<h1>Sponsors</h1>
@@ -181,21 +181,17 @@
     <script src="{% static 'js/extention/choices.js' %}"></script>
     <script>
       function toggleButton() {
-        console.log("response")
-        let opportunity_saved = []
         const button = document.getElementById("myButton"); // assuming the button has an ID of "myButton"
         let value = button.value === "false" ? false : true; // toggle the boolean value
-        console.log(value)
         button.value = value.toString(); // update the button value attribute
         button.innerHTML = value ? "Register?" : "Registered!"; // update the button name based on the boolean value
-        // opportunity_saved.append(response)
-        console.log(opportunity_saved)
         button.addEventListener('click', function(event) {
             event.preventDefault();
-            alert('Button clicked!');
+            alert('You are successfully registered for the event!');
         });
       }
     </script>
+   
     <script>
       const customSelects = document.querySelectorAll("select");
       const deleteBtn = document.getElementById('delete')

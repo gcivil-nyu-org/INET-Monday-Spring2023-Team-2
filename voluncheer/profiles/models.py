@@ -149,7 +149,7 @@ class Volunteer(models.Model):
     badges = models.CharField(max_length=1024, default="")
     photo = models.ImageField(upload_to=_profile_photo_path, blank=True, null=True)
     description = models.TextField(help_text="Introduce yourself here.", default="")
-
+    
     BADGES = {
         "Badge 1": "images/badge-1.png",
         "Badge 2": "images/badge-2.png",

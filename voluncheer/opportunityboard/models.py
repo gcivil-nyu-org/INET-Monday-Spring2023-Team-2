@@ -1,6 +1,7 @@
 from django.db import models
 
 from profiles.models import Organization
+from profiles.models import Volunteer
 
 
 class Category(models.Model):
@@ -67,6 +68,7 @@ class Opportunity(models.Model):
         longitude: used for mapping the opportunity. *allowed to be blank for now
         latitude: used for mapping the opportunity. *allowed to be blank for now
         staffing: the requested number of volunteers for the opportunity.
+        volunteer: the list of registered users to the event.
     """
 
     FREQUENCIES = [("weekly", "Weekly")]
@@ -95,6 +97,7 @@ class Opportunity(models.Model):
     staffing = models.PositiveIntegerField(null=True, blank=True)
     is_published = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=_opportunity_photo_path, blank=True, null=True)
+    volunteer = models.ManyToManyField(Volunteer, null=True, blank=True)
 
     def __str__(self):
         return self.title
