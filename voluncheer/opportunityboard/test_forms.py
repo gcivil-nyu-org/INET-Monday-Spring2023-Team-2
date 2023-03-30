@@ -90,8 +90,10 @@ class PostAnOpportunityFormTest(TestCase):
         self.assertEqual(posted_opportunity.title, "Jedi Train")
         self.assertEqual(posted_opportunity.category.name, "animals")
 
-    def test_clean(self):
-        """Test if clean function properly raises errors"""
+    def test_is_recurring_but_no_recurrence_raises_error(self):
+        """
+        Test if the Opportunity clean function raises an error if is_recurring is true but no recurrence is set
+        """
         data = {
             "organization": self.user,
             "category": self.animals,
