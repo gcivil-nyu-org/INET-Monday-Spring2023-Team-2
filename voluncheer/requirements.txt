@@ -32,4 +32,6 @@ six==1.16.0
 sqlparse==0.4.3
 urllib3==1.26.14
 verify-email==2.4.3
-channels==4.0.0
+channels==3.0.4
+docker==20.10.21
+channels_redis==3.3.1

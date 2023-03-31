@@ -9,8 +9,16 @@ https://docs.djangoproject.com/en/4.1/howto/deployment/asgi/
 
 import os
 
+from channels.routing import ProtocolTypeRouter
+from channels.routing import URLRouter
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "voluncheer.settings")
+import chatroom.routing
 
-application = get_asgi_application()
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "voluncheer.settings")
+application = ProtocolTypeRouter({
+  'http': get_asgi_application(),
+  'websocket': URLRouter(
+      chatroom.routing.websocket_urlpatterns
+    ),
+})

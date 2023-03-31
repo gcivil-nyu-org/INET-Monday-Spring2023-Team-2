@@ -1,6 +1,9 @@
-from django.contrib import admin
-from django.urls import re_path,path, include
-from chatroom.views import chatroom
+from django.urls import path
+
+from chatroom.views import chat_homepage_view
+from chatroom.views import room_view
+
 urlpatterns = [
-    path("", chatroom, name="chatroom"),
+    path("", chat_homepage_view, name="chatroom"),
+    path("<str:room_name>/", room_view, name="chat-room"),
 ]
