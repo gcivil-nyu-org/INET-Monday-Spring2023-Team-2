@@ -43,7 +43,7 @@ if _ALLOWED_HOSTS_CSV:
 
 # Application definition
 INSTALLED_APPS = [
-    'channels',
+    "channels",
     # Django built-ins
     "django.contrib.admin",
     "django.contrib.auth",
@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     "opportunityboard.apps.OpportunityboardConfig",
     "map.apps.MapConfig",
     "profiles.apps.ProfilesConfig",
-    'chatroom.apps.ChatroomConfig',
+    "chatroom.apps.ChatroomConfig",
 ]
 
 
@@ -94,13 +94,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "voluncheer.wsgi.application"
-ASGI_APPLICATION = 'voluncheer.asgi.application'
+ASGI_APPLICATION = "voluncheer.asgi.application"
 
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
         },
     },
 }
