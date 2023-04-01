@@ -97,7 +97,6 @@ class Opportunity(models.Model):
     staffing = models.PositiveIntegerField(null=True, blank=True)
     is_published = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=_opportunity_photo_path, blank=True, null=True)
-    objects = models.Manager
 
     def __str__(self):
         return self.title
