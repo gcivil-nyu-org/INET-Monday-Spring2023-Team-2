@@ -20,6 +20,8 @@ def opportunityboard(request):
         "opportunity_lists": opportunity_lists,
         "categories": cate_output_dict,
         "durations": durations,
+        "category_placeholder": "CATEGORY",
+        "duration_placeholder": "DURATION",
     }
     return render(request, "voluncheer/opportunityboard.html", context)
 
