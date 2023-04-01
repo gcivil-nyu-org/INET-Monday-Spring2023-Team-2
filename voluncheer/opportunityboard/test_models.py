@@ -1,7 +1,6 @@
-import datetime
+import datetime as dt
 
 from django.test import TestCase
-from django.utils import timezone
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
@@ -36,9 +35,9 @@ class OpportunityTest(TestCase):
         description = (
             "Please help us support our community at this week's" "Cloud City soup kitchen"
         )
-        end = "12:00:00"
-        cls.date = timezone.now()
-        delta = datetime.timedelta(days=30)
+        cls.end = dt.time(10, 30, 0)
+        cls.date = dt.datetime(year=2023, month=5, day=8, hour=9)
+        delta = dt.timedelta(days=30)
         cls.end_date = cls.date + delta
 
         cls.soup = Opportunity.objects.create(
@@ -49,7 +48,7 @@ class OpportunityTest(TestCase):
             title="Cloud City Soup Kitchen",
             description=description,
             date=cls.date,
-            end=end,
+            end=cls.end,
             address_1="200 Calrissian Av.",
             address_2="NY",
             longitude=12.34,
@@ -73,7 +72,7 @@ class OpportunityTest(TestCase):
             "Please help us support our community at this week's" "Cloud City soup kitchen",
         )
         self.assertEqual(self.soup.date, self.date)
-        self.assertEqual(self.soup.end, "12:00:00")
+        self.assertEqual(self.soup.end, self.end)
         self.assertEqual(self.soup.address_1, "200 Calrissian Av.")
         self.assertEqual(self.soup.address_2, "NY")
         self.assertEqual(self.soup.longitude, 12.34)
@@ -124,3 +123,8 @@ class OpportunityTest(TestCase):
         subsubcategory = Subsubcategory.objects.get(name="Reforestation")
         expected_subsubcategory_name = f"{subsubcategory.name}"
         self.assertEqual(str(subsubcategory), expected_subsubcategory_name)
+
+    def test_duration_property(self):
+        """Tests that duration method returns correct duration"""
+        expected_duration = dt.timedelta(hours=1, minutes=30)
+        self.assertEqual(self.soup.duration, expected_duration)

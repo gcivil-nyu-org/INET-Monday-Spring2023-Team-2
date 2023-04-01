@@ -1,7 +1,8 @@
+import datetime as dt
+
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.urls import reverse
-from django.utils import timezone
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
@@ -35,9 +36,11 @@ class OpportunityboardTestCase(TestCase):
         description = (
             "Please help us support our community at this week's" "Cloud City soup kitchen"
         )
-        end = "12:00:00"
-        self.date = timezone.now()
-        self.soup = Opportunity.objects.create(
+        self.end = dt.time(10, 30, 0)
+        self.date = dt.datetime(year=2023, month=5, day=8, hour=9)
+        delta = dt.timedelta(days=30)
+        self.end_date = self.date + delta
+        self.opp = Opportunity.objects.create(
             organization=self.org,
             category=self.category,
             subcategory=self.subcategory,
@@ -45,7 +48,7 @@ class OpportunityboardTestCase(TestCase):
             title="Cloud City Soup Kitchen",
             description=description,
             date=self.date,
-            end=end,
+            end=self.end,
             address_1="200 Calrissian Av.",
             address_2="NY",
             longitude=12.34,
@@ -71,7 +74,7 @@ class OpportunityboardTestCase(TestCase):
 
     def test_update_an_opportunity_page_loads(self):
         """Tests update_an_opportunity page loads"""
-        response = self.client.get(reverse("update_an_opportunity", args=[self.soup.pk]))
+        response = self.client.get(reverse("update_an_opportunity", args=[self.opp.pk]))
         self.assertIn(response.status_code, [200, 302])
 
     def test_search(self):
@@ -104,3 +107,83 @@ class OpportunityboardTestCase(TestCase):
         filters.subcategory = None
         filters.subsubcategory = self.subsubcategory
         self.assertEqual(filters.search().count(), 1)
+
+    def test_search_by_duration_lte2hrs(self):
+        """Test that selecting "0-2 Hours" returns opportunities with correct duration"""
+        filters = Filter(duration="0-2 Hours")
+        opp_pk = self.opp.pk
+
+        self.opp.end = dt.time(11, 0, 0)
+        self.opp.save()
+        opp_list = filters.search()
+        self.assertTrue(opp_list.filter(pk=opp_pk).exists())
+
+        self.opp.end = dt.time(11, 1, 0)
+        self.opp.save()
+        opp_list = filters.search()
+        self.assertFalse(opp_list.filter(pk=opp_pk).exists())
+
+    def test_search_by_duration_2to4hrs(self):
+        """Test that selecting "2-4 Hours" returns opportunities with correct duration"""
+        filters = Filter(duration="2-4 Hours")
+        opp_pk = self.opp.pk
+
+        self.opp.end = dt.time(10, 59, 0)
+        self.opp.save()
+        opp_list = filters.search()
+        self.assertFalse(opp_list.filter(pk=opp_pk).exists())
+
+        self.opp.end = dt.time(11, 0, 0)
+        self.opp.save()
+        opp_list = filters.search()
+        self.assertTrue(opp_list.filter(pk=opp_pk).exists())
+
+        self.opp.end = dt.time(13, 0, 0)
+        self.opp.save()
+        opp_list = filters.search()
+        self.assertTrue(opp_list.filter(pk=opp_pk).exists())
+
+        self.opp.end = dt.time(13, 1, 0)
+        self.opp.save()
+        opp_list = filters.search()
+        self.assertFalse(opp_list.filter(pk=opp_pk).exists())
+
+    def test_search_by_duration_4to8hrs(self):
+        """Test that selecting "4-8 Hours" returns opportunities with correct duration"""
+        filters = Filter(duration="4-8 Hours")
+        opp_pk = self.opp.pk
+
+        self.opp.end = dt.time(12, 59, 0)
+        self.opp.save()
+        opp_list = filters.search()
+        self.assertFalse(opp_list.filter(pk=opp_pk).exists())
+
+        self.opp.end = dt.time(13, 0, 0)
+        self.opp.save()
+        opp_list = filters.search()
+        self.assertTrue(opp_list.filter(pk=opp_pk).exists())
+
+        self.opp.end = dt.time(17, 0, 0)
+        self.opp.save()
+        opp_list = filters.search()
+        self.assertTrue(opp_list.filter(pk=opp_pk).exists())
+
+        self.opp.end = dt.time(17, 1, 0)
+        self.opp.save()
+        opp_list = filters.search()
+        self.assertFalse(opp_list.filter(pk=opp_pk).exists())
+
+    def test_search_by_duration_gte8hrs(self):
+        """Test that selecting "8+ Hours" returns opportunities with correct duration"""
+        filters = Filter(duration="8+ Hours")
+        opp_pk = self.opp.pk
+
+        self.opp.end = dt.time(16, 59, 0)
+        self.opp.save()
+        opp_list = filters.search()
+        self.assertFalse(opp_list.filter(pk=opp_pk).exists())
+
+        self.opp.end = dt.time(17, 0, 0)
+        self.opp.save()
+        opp_list = filters.search()
+        self.assertTrue(opp_list.filter(pk=opp_pk).exists())

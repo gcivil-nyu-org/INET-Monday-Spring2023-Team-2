@@ -54,7 +54,7 @@ class PostAnOpportunityFormTest(TestCase):
             "description": "Let's surfing",
             "staffing": "1",
             "date": timezone.now(),
-            "end": "12:00:00",
+            "end": "23:59:59",
             "address_1": "New York, NY",
             "address_2": "Down st",
             "is_published": False,
@@ -79,7 +79,7 @@ class PostAnOpportunityFormTest(TestCase):
             "description": "Face your destiny.",
             "staffing": "2",
             "date": timezone.now(),
-            "end": "12:00:00",
+            "end": "23:59:59",
             "address_1": "New York, NY",
             "address_2": "Mean st",
             "is_published": True,
@@ -92,7 +92,8 @@ class PostAnOpportunityFormTest(TestCase):
 
     def test_is_recurring_but_no_recurrence_raises_error(self):
         """
-        Test if the Opportunity clean function raises an error if is_recurring is true but no recurrence is set
+        Test if the Opportunity clean function raises an error if is_recurring is true but no
+        recurrence is selected.
         """
         data = {
             "organization": self.user,

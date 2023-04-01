@@ -1,3 +1,5 @@
+import datetime as dt
+
 from django.db import models
 
 from profiles.models import Organization
@@ -95,6 +97,18 @@ class Opportunity(models.Model):
     staffing = models.PositiveIntegerField(null=True, blank=True)
     is_published = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=_opportunity_photo_path, blank=True, null=True)
+    objects = models.Manager
 
     def __str__(self):
         return self.title
+
+    @property
+    def duration(self):
+        if self.end_date is None:
+            end_datetime = dt.datetime.combine(self.date.date(), self.end)
+        else:
+            end_datetime = dt.datetime.combine(self.end_date, self.end)
+        start_datetime = self.date.replace(tzinfo=None)  # make start date naive for subtraction
+        duration = end_datetime - start_datetime
+        duration_seconds = dt.timedelta(seconds=duration.seconds)  # remove date
+        return duration_seconds

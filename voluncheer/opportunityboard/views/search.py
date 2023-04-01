@@ -1,3 +1,4 @@
+import datetime as dt
 import logging
 
 from django.shortcuts import render
@@ -65,8 +66,30 @@ class Filter:
             filtered_opportunity = filtered_opportunity.filter(subcategory=self.subcategory)
         if self.subsubcategory is not None:
             filtered_opportunity = filtered_opportunity.filter(subsubcategory=self.subsubcategory)
-
+        if self.duration == "0-2 Hours":
+            filtered_opportunity = filter_by_duration(filtered_opportunity, 0, 2)
+        if self.duration == "2-4 Hours":
+            filtered_opportunity = filter_by_duration(filtered_opportunity, 2, 4)
+        if self.duration == "4-8 Hours":
+            filtered_opportunity = filter_by_duration(filtered_opportunity, 4, 8)
+        if self.duration == "8+ Hours":
+            filtered_opportunity = filter_by_duration(filtered_opportunity, 8, 24)
         return filtered_opportunity
+
+
+def filter_by_duration(queryset, min, max):
+    """
+    Takes Opportunity queryset, as well as a min and a max number of hours
+    Returns Opportunity queryset with durations only between min and max hours
+    """
+    min_duration = dt.timedelta(hours=min)
+    max_duration = dt.timedelta(hours=max)
+    for opportunity in queryset:
+        if opportunity.duration < min_duration:
+            queryset = queryset.exclude(pk=opportunity.pk)
+        elif opportunity.duration > max_duration:
+            queryset = queryset.exclude(pk=opportunity.pk)
+    return queryset
 
 
 def filter_search(request):
@@ -77,7 +100,7 @@ def filter_search(request):
     opportunity_lists = filter.search()
     cate_output_dict = category_dict_gen()
     durations = {
-        "One-day": ["<=2 Hours", "2-4 Hours", "Full Day"],
+        "One-day": ["0-2 Hours", "2-4 Hours", "4-8 Hours", "8+ Hours"],
     }
     context = {
         "opportunity_lists": opportunity_lists,
@@ -95,12 +118,14 @@ def parse_search_filter(post):
     duration(default empty string)
     distance(default 0)
     """
-    # Category filter
+    # Category/Duration filter
     value = post.get("category")
+    selected_duration = post.get("duration")
     filter = Filter(
         category=category_is_valid(value),
         subcategory=subcategory_is_valid(value),
         subsubcategory=subsubcategory_is_valid(value),
+        duration=selected_duration,
     )
     return filter
 
