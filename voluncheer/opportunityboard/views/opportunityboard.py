@@ -28,6 +28,8 @@ def opportunityboard(request):
         "category_placeholder": "CATEGORY",
         "duration_placeholder": "DURATION",
     }
+    if request.user.is_volunteer:
+        context["volunteer"] = Volunteer.objects.get(pk=request.user)
     return render(request, "voluncheer/opportunityboard.html", context)
 
 

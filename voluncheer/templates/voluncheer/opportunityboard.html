@@ -156,7 +156,7 @@
                       <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
                       <p>{{ opportunity.description }}</p>
                       {% if user.is_volunteer %}
-                        {% if user not in opportunity.volunteer.all %}
+                        {% if volunteer not in opportunity.volunteer.all %}
                         <a href="{% url 'signup_volunteer' opportunity.pk %}">
                           <button type="button" id="register-opportunity" value="false" class="readmore" onclick="toggleButton()">Register?</button>
                         </a>
@@ -185,7 +185,7 @@
     <script src="{% static 'js/extention/choices.js' %}"></script>
     <script>
       function toggleButton() {
-        const button = document.getElementById("myButton"); // assuming the button has an ID of "myButton"
+        const button = document.getElementById("register-opportunity");
         var value = button.innerHTML
         if (value == "Register?") {
           alert('You are successfully registered for the event!');
