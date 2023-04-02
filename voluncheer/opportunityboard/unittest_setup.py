@@ -1,5 +1,4 @@
 import datetime as dt
-from zoneinfo import ZoneInfo
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
@@ -40,7 +39,7 @@ def setup_oppboard_tests(test_case):
     )
     description = "Please help us support our community at this week's soup kitchen"
     test_case.end = dt.time(1, 30, 0)
-    test_case.date = dt.datetime(year=2023, month=5, day=8, tzinfo=ZoneInfo("UTC"))
+    test_case.date = dt.datetime(year=2023, month=5, day=8, tzinfo=dt.timezone.utc)
     delta = dt.timedelta(days=30)
     test_case.end_date = test_case.date + delta
     test_case.opp = Opportunity.objects.create(
