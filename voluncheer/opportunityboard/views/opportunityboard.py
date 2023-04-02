@@ -73,12 +73,3 @@ def deregister_volunteer(request, opportunity_id):
         opportunity.staffing += 1
         opportunity.save()
     return HttpResponseRedirect(reverse("opportunityboard"))
-
-
-register = template.Library()
-
-
-@register.simple_tag
-def get_volunteer_from_user(user, attr):
-    obj = getattr(Volunteer.objects.get(pk=user), attr)
-    return obj
