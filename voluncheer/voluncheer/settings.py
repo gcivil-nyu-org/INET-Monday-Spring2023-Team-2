@@ -55,8 +55,8 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "storages",
     "channels",
+    "channels_redis",
     # Local applications
-    # "chatroom.apps.ChatroomConfig",
     "opportunityboard.apps.OpportunityboardConfig",
     "map.apps.MapConfig",
     "profiles.apps.ProfilesConfig",
