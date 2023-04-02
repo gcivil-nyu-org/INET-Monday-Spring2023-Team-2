@@ -19,7 +19,6 @@ from profiles.forms.volunteers import VolunteerChangeForm
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
-from opportunityboard.models import Opportunity
 from voluncheer.settings import AWS_SES_DOMAIN
 from voluncheer.settings import DEFAULT_FROM_EMAIL
 
@@ -117,11 +116,11 @@ def profile_update(request):
     return redirect("profile")
 
 
-def savedevents(request):
+def saved_events(request):
     volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
     opportunity_selected = volunteer.opportunity_set.all()
     return render(
         request=request,
         template_name="profiles/savedevents.html",
-        context= {"opportunity_selected":opportunity_selected},)
-        
+        context={"opportunity_selected": opportunity_selected},
+    )

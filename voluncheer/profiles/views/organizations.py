@@ -21,7 +21,7 @@ class OrganizationSignUpView(CreateView):
     def form_valid(self, form):
         """Saves the new user and logs them in."""
         user = form.save()
-        user.is_active = True
+        user.is_active = False
         user.save()
         activateEmail(self.request, user, form.cleaned_data.get("email"))
         return redirect("login")

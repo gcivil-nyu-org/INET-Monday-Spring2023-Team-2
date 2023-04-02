@@ -32,7 +32,7 @@
                 <hr align="center">
             </div>
             <div class="url">
-                <a href="{% url 'savedevents' %}" class="active">MY VOLUNCHEERS</a>
+                <a href="{% url 'saved_events' %}" class="active">MY VOLUNCHEERS</a>
                 <hr align="center">
             </div>
         </div>
@@ -54,7 +54,7 @@
                         <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
                         <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
                         <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
-                        <div class="url"><a href="#" class="readmore">Not Interested Anymore</a></div>
+                        <div class="url"><a href="{% url 'deregister_volunteer' opportunity.pk %}" class="readmore">Not Interested Anymore</a></div>
                         <hr align="center">
 				    </article>
                     

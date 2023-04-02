@@ -1,9 +1,9 @@
+from django import template
 from django.apps import apps
-from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
 from django.urls import reverse
-from django.http import HttpResponseRedirect
-from opportunityboard.models import Category
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
@@ -58,6 +58,27 @@ def category_dict_gen():
 def signup_volunteer(request, opportunity_id):
     volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
     opportunity = Opportunity.objects.get(pk=opportunity_id)
-    opportunity.volunteer.add(volunteer)
-
+    if opportunity.staffing > 0 and volunteer not in opportunity.volunteer.all():
+        opportunity.volunteer.add(volunteer)
+        opportunity.staffing -= 1
+        opportunity.save()
     return HttpResponseRedirect(reverse("opportunityboard"))
+
+
+def deregister_volunteer(request, opportunity_id):
+    volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
+    opportunity = Opportunity.objects.get(pk=opportunity_id)
+    if volunteer in opportunity.volunteer.all():
+        opportunity.volunteer.remove(volunteer)
+        opportunity.staffing += 1
+        opportunity.save()
+    return HttpResponseRedirect(reverse("opportunityboard"))
+
+
+register = template.Library()
+
+
+@register.simple_tag
+def get_volunteer_from_user(user, attr):
+    obj = getattr(Volunteer.objects.get(pk=user), attr)
+    return obj

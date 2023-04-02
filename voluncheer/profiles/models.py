@@ -142,14 +142,14 @@ class Volunteer(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    
+
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     date_of_birth = models.DateField(blank=True, null=True)
     badges = models.CharField(max_length=1024, default="")
     photo = models.ImageField(upload_to=_profile_photo_path, blank=True, null=True)
     description = models.TextField(help_text="Introduce yourself here.", default="")
-    
+
     BADGES = {
         "Badge 1": "images/badge-1.png",
         "Badge 2": "images/badge-2.png",
