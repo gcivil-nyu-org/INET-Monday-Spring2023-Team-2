@@ -43,7 +43,6 @@ if _ALLOWED_HOSTS_CSV:
 
 # Application definition
 INSTALLED_APPS = [
-    "channels",
     # Django built-ins
     "django.contrib.admin",
     "django.contrib.auth",
@@ -55,6 +54,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "storages",
+    "channels",
     # Local applications
     # "chatroom.apps.ChatroomConfig",
     "opportunityboard.apps.OpportunityboardConfig",
