@@ -7,10 +7,10 @@ from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
+from opportunityboard.views.opportunityboard import deregister_volunteer
+from opportunityboard.views.opportunityboard import signup_volunteer
 from opportunityboard.views.search import Filter
 from opportunityboard.views.search import filter_search
-from opportunityboard.views.opportunityboard import signup_volunteer
-from opportunityboard.views.opportunityboard import deregister_volunteer
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
@@ -167,7 +167,7 @@ class VolunteerSignUpView(TestCase):
         self.soup.refresh_from_db()
         self.assertEqual(self.soup.staffing, 8)
 
-    def test_signup_volunteer(self):
+    def test_deregister_volunteer(self):
         rf = RequestFactory()
         test_request = rf.request()
         test_request.user = self.luke.user

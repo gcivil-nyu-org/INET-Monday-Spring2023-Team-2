@@ -1,4 +1,3 @@
-from django import template
 from django.apps import apps
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -28,7 +27,7 @@ def opportunityboard(request):
         "category_placeholder": "CATEGORY",
         "duration_placeholder": "DURATION",
     }
-    if request.user.is_volunteer:
+    if not request.user.is_anonymous and request.user.is_volunteer:
         context["volunteer"] = Volunteer.objects.get(pk=request.user)
     return render(request, "voluncheer/opportunityboard.html", context)
 
