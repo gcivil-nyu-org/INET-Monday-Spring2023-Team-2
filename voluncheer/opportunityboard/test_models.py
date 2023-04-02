@@ -1,20 +1,14 @@
 import datetime as dt
 
-from django.test import TestCase
-
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
-from opportunityboard.unittest_setup import setup_oppboard_tests
+from opportunityboard.unittest_setup import TestCase
 
 
 class OpportunityTest(TestCase):
     """Test cases for Opportunity model"""
-
-    def setUp(self):
-        """See base class."""
-        setup_oppboard_tests(self)
 
     def test_opportunity_details(self):
         """Test basic opportunity details"""

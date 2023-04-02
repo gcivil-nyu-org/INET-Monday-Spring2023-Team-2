@@ -1,9 +1,7 @@
-from django.test import TestCase
-
 from opportunityboard.forms.postanopportunity import PostAnOpportunityForm
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
-from opportunityboard.unittest_setup import setup_oppboard_tests
+from opportunityboard.unittest_setup import TestCase
 
 
 class PostAnOpportunityFormTest(TestCase):
@@ -11,7 +9,7 @@ class PostAnOpportunityFormTest(TestCase):
 
     def setUp(self):
         """See base class."""
-        setup_oppboard_tests(self)
+        super().setUp()
         self.form = PostAnOpportunityForm()
         self.sports = Category.objects.create(name="sports")
         self.healthcare = Category.objects.create(name="healthcare")

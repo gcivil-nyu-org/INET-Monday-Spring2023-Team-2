@@ -1,21 +1,16 @@
 import datetime as dt
 
-from django.test import TestCase
 from django.test.client import RequestFactory
 from django.urls import reverse
 
 from opportunityboard.models import Category
-from opportunityboard.unittest_setup import setup_oppboard_tests
+from opportunityboard.unittest_setup import TestCase
 from opportunityboard.views.search import Filter
 from opportunityboard.views.search import filter_search
 
 
 class OpportunityboardTestCase(TestCase):
     """Test cases for Opportunityboard view"""
-
-    def setUp(self):
-        """Creating an opportunity for test_update_an_opportunity_page_loads"""
-        setup_oppboard_tests(self)
 
     def test_opportunityboard_page_loads(self):
         """Tests opportunityboard page loads"""
