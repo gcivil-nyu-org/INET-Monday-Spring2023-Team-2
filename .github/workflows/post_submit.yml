@@ -1,5 +1,5 @@
 name: Post-Submit Continuous Integration
-run-name: ${{ github.workflow }} in ${{ github.ref_name }}
+run-name: ${{ github.workflow }} in main
 
 on:
   schedule:

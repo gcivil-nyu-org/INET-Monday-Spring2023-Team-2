@@ -18,6 +18,7 @@ class TestNYCharitiesCommandTest(TestCase):
                 "street_address_mailing_address": "123 Tree St",
                 "city": "New York",
                 "state": "NY",
+                "postcode": "10001",
                 "latitude": "40.1234",
                 "longitude": "-73.5678",
             },
@@ -28,6 +29,7 @@ class TestNYCharitiesCommandTest(TestCase):
                 "street_address_mailing_address": "456 Animals St",
                 "city": "New York",
                 "state": "NY",
+                "postcode": "10002",
                 "latitude": "40.5678",
                 "longitude": "-73.1234",
             },
@@ -37,6 +39,7 @@ class TestNYCharitiesCommandTest(TestCase):
                 "street_address_mailing_address": "456 Test Street",
                 "city": "New York",
                 "state": "NY",
+                "postcode": "10003",
             },
         ]
 
