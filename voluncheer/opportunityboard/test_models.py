@@ -6,82 +6,38 @@ from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
-from profiles.models import Organization
-from profiles.models import User
-from profiles.models import UserType
+from opportunityboard.unittest_setup import setup_oppboard_tests
 
 
 class OpportunityTest(TestCase):
     """Test cases for Opportunity model"""
 
-    @classmethod
-    def setUpTestData(cls):
+    def setUp(self):
         """See base class."""
-        cls.org = Organization.objects.create(
-            user=User.objects.create(
-                email="jedi@jedi.com",
-                password="peace_and_justice_for_the_galaxy",
-                type=UserType.ORGANIZATION,
-            ),
-            name="Jedi Council",
-        )
-
-        cls.category = Category.objects.create(name="Environment")
-        cls.subcategory = Subcategory.objects.create(name="Conservation", parent=cls.category)
-        cls.subsubcategory = Subsubcategory.objects.create(
-            name="Reforestation", parent=cls.subcategory
-        )
-
-        description = (
-            "Please help us support our community at this week's" "Cloud City soup kitchen"
-        )
-        cls.end = dt.time(10, 30, 0)
-        cls.date = dt.datetime(year=2023, month=5, day=8, hour=9)
-        delta = dt.timedelta(days=30)
-        cls.end_date = cls.date + delta
-
-        cls.soup = Opportunity.objects.create(
-            organization=cls.org,
-            category=cls.category,
-            subcategory=cls.subcategory,
-            subsubcategory=cls.subsubcategory,
-            title="Cloud City Soup Kitchen",
-            description=description,
-            date=cls.date,
-            end=cls.end,
-            address_1="200 Calrissian Av.",
-            address_2="NY",
-            longitude=12.34,
-            latitude=56.78,
-            staffing=9,
-            is_published=False,
-            is_recurring=True,
-            recurrence="weekly",
-            end_date=cls.end_date,
-        )
+        setup_oppboard_tests(self)
 
     def test_opportunity_details(self):
         """Test basic opportunity details"""
-        self.assertEqual(self.soup.organization.name, "Jedi Council")
-        self.assertEqual(self.soup.category.name, "Environment")
-        self.assertEqual(self.soup.subcategory.name, "Conservation")
-        self.assertEqual(self.soup.subsubcategory.name, "Reforestation")
-        self.assertEqual(self.soup.title, "Cloud City Soup Kitchen")
+        self.assertEqual(self.opp.organization.name, "Jedi Council")
+        self.assertEqual(self.opp.category.name, "Environment")
+        self.assertEqual(self.opp.subcategory.name, "Conservation")
+        self.assertEqual(self.opp.subsubcategory.name, "Reforestation")
+        self.assertEqual(self.opp.title, "Cloud City Soup Kitchen")
         self.assertEqual(
-            self.soup.description,
-            "Please help us support our community at this week's" "Cloud City soup kitchen",
+            self.opp.description,
+            "Please help us support our community at this week's soup kitchen",
         )
-        self.assertEqual(self.soup.date, self.date)
-        self.assertEqual(self.soup.end, self.end)
-        self.assertEqual(self.soup.address_1, "200 Calrissian Av.")
-        self.assertEqual(self.soup.address_2, "NY")
-        self.assertEqual(self.soup.longitude, 12.34)
-        self.assertEqual(self.soup.latitude, 56.78)
-        self.assertEqual(self.soup.staffing, 9)
-        self.assertFalse(self.soup.is_published)
-        self.assertTrue(self.soup.is_recurring)
-        self.assertEqual(self.soup.recurrence, "weekly")
-        self.assertEqual(self.soup.end_date, self.end_date)
+        self.assertEqual(self.opp.date, self.date)
+        self.assertEqual(self.opp.end, self.end)
+        self.assertEqual(self.opp.address_1, "200 Calrissian Av.")
+        self.assertEqual(self.opp.address_2, "NY")
+        self.assertEqual(self.opp.longitude, 12.34)
+        self.assertEqual(self.opp.latitude, 56.78)
+        self.assertEqual(self.opp.staffing, 9)
+        self.assertFalse(self.opp.is_published)
+        self.assertTrue(self.opp.is_recurring)
+        self.assertEqual(self.opp.recurrence, "weekly")
+        self.assertEqual(self.opp.end_date, self.end_date)
 
     def test_category_details(self):
         """Test basic category details"""
@@ -127,4 +83,4 @@ class OpportunityTest(TestCase):
     def test_duration_property(self):
         """Tests that duration method returns correct duration"""
         expected_duration = dt.timedelta(hours=1, minutes=30)
-        self.assertEqual(self.soup.duration, expected_duration)
+        self.assertEqual(self.opp.duration, expected_duration)

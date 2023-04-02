@@ -66,28 +66,23 @@ class Filter:
             filtered_opportunity = filtered_opportunity.filter(subcategory=self.subcategory)
         if self.subsubcategory is not None:
             filtered_opportunity = filtered_opportunity.filter(subsubcategory=self.subsubcategory)
-        if self.duration == "0-2 Hours":
-            filtered_opportunity = filter_by_duration(filtered_opportunity, 0, 2)
-        if self.duration == "2-4 Hours":
-            filtered_opportunity = filter_by_duration(filtered_opportunity, 2, 4)
-        if self.duration == "4-8 Hours":
-            filtered_opportunity = filter_by_duration(filtered_opportunity, 4, 8)
-        if self.duration == "8+ Hours":
-            filtered_opportunity = filter_by_duration(filtered_opportunity, 8, 24)
+        if self.duration == "2 hours or less":
+            filtered_opportunity = filter_by_duration(filtered_opportunity, 2)
+        if self.duration == "4 hours or less":
+            filtered_opportunity = filter_by_duration(filtered_opportunity, 4)
+        if self.duration == "Full-day":
+            filtered_opportunity = filter_by_duration(filtered_opportunity, 8)
         return filtered_opportunity
 
 
-def filter_by_duration(queryset, min, max):
+def filter_by_duration(queryset, max):
     """
-    Takes Opportunity queryset, as well as a min and a max number of hours
-    Returns Opportunity queryset with durations only between min and max hours
+    Takes Opportunity queryset and a max number of hours.
+    Returns Opportunity queryset with durations less than or equal to the max.
     """
-    min_duration = dt.timedelta(hours=min)
     max_duration = dt.timedelta(hours=max)
     for opportunity in queryset:
-        if opportunity.duration < min_duration:
-            queryset = queryset.exclude(pk=opportunity.pk)
-        elif opportunity.duration > max_duration:
+        if opportunity.duration > max_duration:
             queryset = queryset.exclude(pk=opportunity.pk)
     return queryset
 
@@ -100,7 +95,7 @@ def filter_search(request):
     opportunity_lists = filter.search()
     cate_output_dict = category_dict_gen()
     durations = {
-        "One-day": ["0-2 Hours", "2-4 Hours", "4-8 Hours", "8+ Hours"],
+        "One-day": ["2 hours or less", "4 hours or less", "Full-day"],
     }
     context = {
         "opportunity_lists": opportunity_lists,
