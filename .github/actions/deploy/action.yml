@@ -5,7 +5,7 @@ inputs:
     description: The name of the application to deploy
     required: true
   platform:
-    default: python-3.7
+    default: python-3.9
     description: The platform to deploy the app onto
     required: false
   region:

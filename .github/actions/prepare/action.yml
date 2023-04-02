@@ -2,7 +2,7 @@ name: Prepare Python Environment
 description: Prepares the environment with Python and PyPy dependencies
 inputs:
   python-version:
-    default: "3.7"
+    default: "3.9"
     description: The version of Python to install
     required: false
 runs:
