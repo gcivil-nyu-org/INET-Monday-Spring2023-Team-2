@@ -30,6 +30,7 @@ class Command(BaseCommand):
                         "street": row["street_address_mailing_address"],
                         "city": row["city"],
                         "state": row["state"],
+                        "zip_code": row["postcode"],
                         "latitude": row["latitude"],
                         "longitude": row["longitude"],
                     },

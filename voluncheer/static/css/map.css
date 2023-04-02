@@ -1,3 +1,7 @@
+:root {
+    --heart-color: #d10202;
+}
+
 /*
  * Always set the map height explicitly to define the size of the div element
  * that contains the map.
@@ -16,17 +20,17 @@
  */
 html,
 body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  font-family: Zenkaku, sans-serif;
-  background-color: #fff;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Zenkaku, sans-serif;
+    background-color: #fff;
 }
 
-.container{
-    max-width:1170px;
-    max-height: 600px;
-    margin:auto;
+.container {
+    max-width: 1470px;
+    max-height: 700px;
+    margin: auto;
     height: 100%;
     padding-right: 15px;
     padding-left: 15px;
@@ -40,5 +44,163 @@ body {
 }
 
 .text-center {
-    text-align: center!important;
+    text-align: center !important;
+}
+
+.org {
+    background-color: #4285F4;
+    border-radius: 8px;
+    color: #FFFFFF;
+    font-size: 14px;
+    padding: 10px 15px;
+    position: relative;
+}
+
+.org::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, 0);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #4285F4;
+}
+
+/*
+ * Organization styles in unhighlighted state.
+ */
+.org {
+    align-items: center;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    color: #263238;
+    display: flex;
+    font-size: 14px;
+    gap: 15px;
+    height: 30px;
+    justify-content: center;
+    padding: 4px;
+    position: relative;
+    position: relative;
+    transition: all 0.3s ease-out;
+    width: 30px;
+}
+
+.org::after {
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 9px solid #FFFFFF;
+    content: "";
+    height: 0;
+    left: 50%;
+    position: absolute;
+    top: 95%;
+    transform: translate(-50%, 0);
+    transition: all 0.3s ease-out;
+    width: 0;
+    z-index: 1;
+}
+
+.org .icon {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    color: #FFFFFF;
+}
+
+.org .icon svg {
+    height: 20px;
+    width: auto;
+}
+
+.org .details {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    white-space: pre-wrap;
+}
+
+.org .address {
+    color: #9E9E9E;
+    font-size: 10px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+/*
+ * Organization styles in highlighted state.
+ */
+.org.highlight {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
+    height: 80px;
+    padding: 8px 15px;
+    width: auto;
+}
+
+.org.highlight::after {
+    border-top: 9px solid #FFFFFF;
+}
+
+.org.highlight .details {
+    display: flex;
+}
+
+.org.highlight .icon svg {
+    width: 50px;
+    height: 50px;
+}
+
+/*
+ * Heart icon colors.
+ */
+.org.highlight:has(.fa-heart) .icon {
+    color: var(--heart-color);
+}
+
+.org:not(.highlight):has(.fa-heart) {
+    background-color: var(--heart-color);
+}
+
+.org:not(.highlight):has(.fa-heart)::after {
+    border-top: 9px solid var(--heart-color);
+}
+
+@keyframes drop {
+    0% {
+        transform: translateY(-200px) scaleY(0.9);
+        opacity: 0;
+    }
+
+    5% {
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: translateY(0px) scaleY(1);
+        opacity: 1;
+    }
+
+    65% {
+        transform: translateY(-17px) scaleY(0.9);
+        opacity: 1;
+    }
+
+    75% {
+        transform: translateY(-22px) scaleY(0.9);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(0px) scaleY(1);
+        opacity: 1;
+    }
+}
+
+.drop {
+    animation: drop 0.3s linear forwards var(--delay-time);
 }
