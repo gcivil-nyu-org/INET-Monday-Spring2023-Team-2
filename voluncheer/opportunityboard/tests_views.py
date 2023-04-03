@@ -9,7 +9,6 @@ from opportunityboard.views.opportunityboard import deregister_volunteer
 from opportunityboard.views.opportunityboard import signup_volunteer
 from opportunityboard.views.search import Filter
 from opportunityboard.views.search import filter_search
-from profiles.models import Volunteer
 
 
 class OpportunityboardTestCase(TestCase):
