@@ -6,9 +6,9 @@ from django.urls import reverse
 from opportunityboard.models import Category
 from opportunityboard.unittest_setup import TestCase
 from opportunityboard.views.opportunityboard import deregister_volunteer
+from opportunityboard.views.opportunityboard import opportunityboard
 from opportunityboard.views.opportunityboard import signup_volunteer
 from opportunityboard.views.search import Filter
-from opportunityboard.views.search import filter_search
 
 
 class OpportunityboardTestCase(TestCase):
@@ -16,7 +16,7 @@ class OpportunityboardTestCase(TestCase):
 
     def test_opportunityboard_page_loads(self):
         """Tests opportunityboard page loads"""
-        response = self.client.get(reverse("opportunityboard"))
+        response = self.client.get(reverse("opportunityboard", args=[1]))
         self.assertEqual(response.status_code, 200)
 
     def test_select_page_loads(self):
@@ -37,7 +37,7 @@ class OpportunityboardTestCase(TestCase):
     def test_search(self):
         """Tests update_an_opportunity page loads"""
         rf = RequestFactory()
-        post_request = rf.post(
+        get_request = rf.get(
             "/opportunityboard/search",
             {
                 "category": "Animals",
@@ -47,7 +47,8 @@ class OpportunityboardTestCase(TestCase):
                 "startdates": "03/23/2023 - 03/23/2023",
             },
         )
-        response = filter_search(post_request)
+        get_request.user = self.vol.user
+        response = opportunityboard(get_request, 1)
         self.assertEqual(response.status_code, 200)
 
     def test_search_by_categories(self):

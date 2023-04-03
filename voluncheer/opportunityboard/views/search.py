@@ -1,13 +1,9 @@
 import datetime as dt
-import logging
-
-from django.shortcuts import render
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
-from opportunityboard.views.opportunityboard import category_dict_gen
 
 
 class Filter:
@@ -28,14 +24,19 @@ class Filter:
         self.start_date = start_date
 
     def gen_dict(self):
-        return {
-            "category": self.category,
-            "subcategory": self.subcategory,
-            "subsubcategory": self.subsubcategory,
+        output = {
+            "category": None,
             "duration": self.duration,
             "distance": self.distance,
             "start_date": self.start_date,
         }
+        if self.category is not None:
+            output["category"] = self.category.name
+        if self.subcategory is not None:
+            output["category"] = self.subcategory.name
+        if self.subsubcategory is not None:
+            output["category"] = self.subsubcategory.name
+        return output
 
     def gen_category_placeholder(self):
         if self.category is not None:
@@ -85,26 +86,6 @@ def filter_by_duration(queryset, max):
         if opportunity.duration > max_duration:
             queryset = queryset.exclude(pk=opportunity.pk)
     return queryset
-
-
-def filter_search(request):
-    filter = Filter()
-    filter = parse_search_filter(request.GET)
-    logger = logging.getLogger(__name__)
-    logger.error(filter.gen_dict())
-    opportunity_lists = filter.search()
-    cate_output_dict = category_dict_gen()
-    durations = {
-        "One-day": ["2 hours or less", "4 hours or less", "Full-day"],
-    }
-    context = {
-        "opportunity_lists": opportunity_lists,
-        "categories": cate_output_dict,
-        "durations": durations,
-        "category_placeholder": filter.gen_category_placeholder(),
-        "duration_placeholder": filter.gen_duration_placeholder(),
-    }
-    return render(request, "voluncheer/opportunityboard.html", context)
 
 
 def parse_search_filter(post):
