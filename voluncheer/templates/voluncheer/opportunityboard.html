@@ -23,7 +23,7 @@
 		</header>
         <div id="opportunitysearch">
             <div class="s007">
-              <form id="searchbox" method="get" action="{% url 'filter_search' %}">
+              <form id="searchbox" method="get" action="{% url 'opportunityboard' 1%}">
                 <div class="inner-form">
                   <div class="basic-search">
                     <div class="input-field">
@@ -175,6 +175,17 @@
 {#      django script ends here       #}
 			</section>
 		</div>
+    <div class="pagination">
+      <a method="get" class="page-button" href="#">&laquo;</a>
+      {% for page_number in range_of_pages %}
+      {% if curr_page == page_number %}
+      <a method="get" class="page-button active" href="{% url 'opportunityboard' page_number%}">{{ page_number }}</a>
+      {% else %}
+      <a method="get" class="page-button" href="{% url 'opportunityboard' page_number%}">{{ page_number }}</a>
+      {% endif %}
+      {% endfor %}
+      <a method="get" class="page-button" href="#">&raquo;</a>
+    </div>
 		<footer>
 			<p>Copyright &copy 2023 VolunCheer, org.  All Rights Reserved.</p>
 		</footer>
@@ -272,6 +283,15 @@
         }
       });
       $('input[name="startdates"]').daterangepicker();
+      $(document).ready(function() {
+        var categories = $("input.category");
+        var filter = JSON.parse('{{ filter|escapejs }}');
+        for (let i = 0; i < categories.length; i++) {
+          if (categories[i].value == filter.category) {
+            categories[i].checked = true;
+          }
+        }
+      });
     </script>
 		
 {% endblock %}		

@@ -8,10 +8,9 @@ from opportunityboard.views.postanopportunity import load_subcategories
 from opportunityboard.views.postanopportunity import load_subsubcategories
 from opportunityboard.views.postanopportunity import post_an_opportunity
 from opportunityboard.views.postanopportunity import update_an_opportunity
-from opportunityboard.views.search import filter_search
 
 urlpatterns = [
-    path("", opportunityboard, name="opportunityboard"),
+    path("<int:page_number>", opportunityboard, name="opportunityboard"),
     # Opportunityboard
     path("select", select, name="select"),
     # Post an Opportunity
@@ -23,7 +22,7 @@ urlpatterns = [
     # Update an Opportunity
     path("update/<int:opportunity_id>", update_an_opportunity, name="update_an_opportunity"),
     # Filter Search
-    path("search", filter_search, name="filter_search"),
+    path("search", opportunityboard, name="filter_search"),
     # Volunteer Signup
     path("signup_volunteer/<int:opportunity_id>", signup_volunteer, name="signup_volunteer"),
     # Volunteer Deregister
