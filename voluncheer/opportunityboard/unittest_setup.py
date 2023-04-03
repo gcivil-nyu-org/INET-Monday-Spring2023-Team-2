@@ -9,6 +9,7 @@ from opportunityboard.models import Subsubcategory
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
+from profiles.models import Volunteer
 
 
 class TestCase(test.TestCase):
@@ -23,6 +24,7 @@ class TestCase(test.TestCase):
     Subcategory (subcategory)
     Subsubcategory (subsubcategory)
     Opportunity (opp)
+    Volunteer (vol)
     """
 
     def setUp(self):
@@ -63,4 +65,16 @@ class TestCase(test.TestCase):
             is_recurring=True,
             recurrence="weekly",
             end_date=self.end_date,
+        )
+
+        self.vol = Volunteer.objects.create(
+            user=User.objects.create(
+                email="luke@jedi.com",
+                password="NOOOOOOOOOOOOOOOOOOO",
+                type=UserType.VOLUNTEER,
+            ),
+            first_name="Luke",
+            last_name="Skywalker",
+            date_of_birth="1955-09-25",
+            description="I want to come with you to Alderaan.",
         )

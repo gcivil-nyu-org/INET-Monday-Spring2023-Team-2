@@ -12,11 +12,89 @@ async function initMap() {
     mapId: "8e91118109e26fc7",
   });
 
-  const marker = new AdvancedMarkerView({
-    map: map,
-    position: nyc,
-    title: "NYC",
+  const organizations = JSON.parse(
+    document.getElementById("organizations").textContent
+  );
+
+  const total = organizations.length;
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("drop");
+        observer.unobserve(entry.target);
+      }
+    }
   });
+
+  google.maps.event.addListenerOnce(map, "idle", () => {
+    for (const org of organizations) {
+      const position = {
+        lat: parseFloat(org.latitude),
+        lng: parseFloat(org.longitude),
+      };
+
+      const marker = new AdvancedMarkerView({
+        map,
+        content: buildContent(org),
+        position: position,
+        title: org.name,
+      });
+      const element = marker.content;
+
+      ["focus", "pointerenter"].forEach((event) => {
+        element.addEventListener(event, () => {
+          highlight(marker, org);
+        });
+      });
+      ["blur", "pointerleave"].forEach((event) => {
+        element.addEventListener(event, () => {
+          unhighlight(marker, org);
+        });
+      });
+      marker.addListener("click", (event) => {
+        unhighlight(marker, org);
+      });
+
+      element.style.opacity = "0";
+      element.addEventListener("animationend", (event) => {
+        element.classList.remove("drop");
+        element.style.opacity = "1";
+      });
+
+      const time = 1 + Math.random();
+
+      element.style.setProperty("--delay-time", time + "s");
+      observer.observe(element);
+    }
+  });
+}
+
+function highlight(marker, org) {
+  marker.content.classList.add("highlight");
+  marker.element.style.zIndex = 1;
+}
+
+function unhighlight(marker, org) {
+  marker.content.classList.remove("highlight");
+  marker.element.style.zIndex = "";
+}
+
+function buildContent(org) {
+  const content = document.createElement("div");
+
+  content.classList.add("org");
+  content.innerHTML = `
+    <div class="icon">
+        <i aria-hidden="true" class="fa fa-icon fa-heart" title="${org.name}"></i>
+        <span class="fa-sr-only">${org.name}</span>
+    </div>
+    <div class="details">
+        <div class="name">${org.name}</div>
+        <div class="address">${org.address}</div>
+        <div class="type">${org.type}</div>
+    </div>
+    `;
+  return content;
 }
 
 initMap();

@@ -5,8 +5,11 @@ from django.urls import reverse
 
 from opportunityboard.models import Category
 from opportunityboard.unittest_setup import TestCase
+from opportunityboard.views.opportunityboard import deregister_volunteer
+from opportunityboard.views.opportunityboard import signup_volunteer
 from opportunityboard.views.search import Filter
 from opportunityboard.views.search import filter_search
+from profiles.models import Volunteer
 
 
 class OpportunityboardTestCase(TestCase):
@@ -113,3 +116,32 @@ class OpportunityboardTestCase(TestCase):
             self.opp.save()
             opp_list = filters.search()
             self.assertFalse(opp_list.filter(pk=opp_pk).exists())
+
+
+class VolunteerSignUpView(TestCase):
+    """This is the test case for Volunteer signup and other volunteer centric behaviors"""
+
+    def setUp(self):
+        super().setUp()
+
+    def test_signup_volunteer(self):
+        rf = RequestFactory()
+        test_request = rf.request()
+        test_request.user = self.vol.user
+        signup_volunteer(test_request, self.opp.pk)
+        self.opp.refresh_from_db()
+        self.assertEqual(self.opp.staffing, 8)
+
+    def test_deregister_volunteer(self):
+        rf = RequestFactory()
+        test_request = rf.request()
+        test_request.user = self.vol.user
+        deregister_volunteer(test_request, self.opp.pk)
+        self.opp.refresh_from_db()
+        self.assertEqual(self.opp.staffing, 9)
+        signup_volunteer(test_request, self.opp.pk)
+        self.opp.refresh_from_db()
+        self.assertEqual(self.opp.staffing, 8)
+        deregister_volunteer(test_request, self.opp.pk)
+        self.opp.refresh_from_db()
+        self.assertEqual(self.opp.staffing, 9)
