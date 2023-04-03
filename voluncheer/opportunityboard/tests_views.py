@@ -7,11 +7,14 @@ from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
+from opportunityboard.views.opportunityboard import deregister_volunteer
+from opportunityboard.views.opportunityboard import signup_volunteer
 from opportunityboard.views.search import Filter
 from opportunityboard.views.search import filter_search
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
+from profiles.models import Volunteer
 
 
 class OpportunityboardTestCase(TestCase):
@@ -51,7 +54,7 @@ class OpportunityboardTestCase(TestCase):
             longitude=12.34,
             latitude=56.78,
             staffing=9,
-            is_published=False,
+            is_published=True,
         )
 
     def test_opportunityboard_page_loads(self):
@@ -104,3 +107,77 @@ class OpportunityboardTestCase(TestCase):
         filters.subcategory = None
         filters.subsubcategory = self.subsubcategory
         self.assertEqual(filters.search().count(), 1)
+
+
+class VolunteerSignUpView(TestCase):
+    """This is the test case for Volunteer signup and other volunteer centric behaviors"""
+
+    def setUp(self):
+        super().setUp()
+        self.luke = Volunteer.objects.create(
+            user=User.objects.create(
+                email="luke@jedi.com",
+                password="NOOOOOOOOOOOOOOOOOOO",
+                type=UserType.VOLUNTEER,
+            ),
+            first_name="Luke",
+            last_name="Skywalker",
+            date_of_birth="1955-09-25",
+            description="I want to come with you to Alderaan.",
+        )
+        self.org = Organization.objects.create(
+            user=User.objects.create(
+                email="jedi@jedi.com",
+                password="peace_and_justice_for_the_galaxy",
+                type=UserType.ORGANIZATION,
+            ),
+            name="Jedi Council",
+        )
+        self.category = Category.objects.create(name="Environment")
+        self.subcategory = Subcategory.objects.create(name="Conservation", parent=self.category)
+        self.subsubcategory = Subsubcategory.objects.create(
+            name="Reforestation", parent=self.subcategory
+        )
+        description = (
+            "Please help us support our community at this week's" "Cloud City soup kitchen"
+        )
+        end = "12:00:00"
+        self.date = timezone.now()
+        self.soup = Opportunity.objects.create(
+            organization=self.org,
+            category=self.category,
+            subcategory=self.subcategory,
+            subsubcategory=self.subsubcategory,
+            title="Cloud City Soup Kitchen",
+            description=description,
+            date=self.date,
+            end=end,
+            address_1="200 Calrissian Av.",
+            address_2="NY",
+            longitude=12.34,
+            latitude=56.78,
+            staffing=9,
+            is_published=True,
+        )
+
+    def test_signup_volunteer(self):
+        rf = RequestFactory()
+        test_request = rf.request()
+        test_request.user = self.luke.user
+        signup_volunteer(test_request, self.soup.pk)
+        self.soup.refresh_from_db()
+        self.assertEqual(self.soup.staffing, 8)
+
+    def test_deregister_volunteer(self):
+        rf = RequestFactory()
+        test_request = rf.request()
+        test_request.user = self.luke.user
+        deregister_volunteer(test_request, self.soup.pk)
+        self.soup.refresh_from_db()
+        self.assertEqual(self.soup.staffing, 9)
+        signup_volunteer(test_request, self.soup.pk)
+        self.soup.refresh_from_db()
+        self.assertEqual(self.soup.staffing, 8)
+        deregister_volunteer(test_request, self.soup.pk)
+        self.soup.refresh_from_db()
+        self.assertEqual(self.soup.staffing, 9)

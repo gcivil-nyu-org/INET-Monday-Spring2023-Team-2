@@ -142,6 +142,7 @@ class Volunteer(models.Model):
         on_delete=models.CASCADE,
         primary_key=True,
     )
+
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     date_of_birth = models.DateField(blank=True, null=True)
