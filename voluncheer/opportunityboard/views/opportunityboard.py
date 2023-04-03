@@ -1,14 +1,10 @@
 from django.apps import apps
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.shortcuts import render
-from django.urls import reverse
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
-from profiles.models import Volunteer
 
 Organization = apps.get_model("profiles", "Organization")
 
@@ -27,8 +23,6 @@ def opportunityboard(request):
         "category_placeholder": "CATEGORY",
         "duration_placeholder": "DURATION",
     }
-    if not request.user.is_anonymous and request.user.is_volunteer:
-        context["volunteer"] = Volunteer.objects.get(pk=request.user)
     return render(request, "voluncheer/opportunityboard.html", context)
 
 
@@ -54,23 +48,3 @@ def category_dict_gen():
             cate_dict[subcategory.name] = subsublist
         cate_output_dict[category.name] = cate_dict
     return cate_output_dict
-
-
-def signup_volunteer(request, opportunity_id):
-    volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
-    opportunity = Opportunity.objects.get(pk=opportunity_id)
-    if opportunity.staffing > 0 and volunteer not in opportunity.volunteers.all():
-        opportunity.volunteers.add(volunteer)
-        opportunity.staffing -= 1
-        opportunity.save()
-    return HttpResponseRedirect(reverse("opportunityboard"))
-
-
-def deregister_volunteer(request, opportunity_id):
-    volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
-    opportunity = Opportunity.objects.get(pk=opportunity_id)
-    if volunteer in opportunity.volunteers.all():
-        opportunity.volunteers.remove(volunteer)
-        opportunity.staffing += 1
-        opportunity.save()
-    return HttpResponseRedirect(reverse("opportunityboard"))

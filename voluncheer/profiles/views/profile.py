@@ -114,13 +114,3 @@ def profile_update(request):
         raise ValueError("profile_update: user must either a volunteer or an organizaiton.")
     form.save()
     return redirect("profile")
-
-
-def saved_events(request):
-    volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
-    opportunity_selected = volunteer.opportunity_set.all()
-    return render(
-        request=request,
-        template_name="profiles/savedevents.html",
-        context={"opportunity_selected": opportunity_selected},
-    )
