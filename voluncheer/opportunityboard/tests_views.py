@@ -1,61 +1,18 @@
-from django.test import TestCase
+import datetime as dt
+
 from django.test.client import RequestFactory
 from django.urls import reverse
-from django.utils import timezone
 
 from opportunityboard.models import Category
-from opportunityboard.models import Opportunity
-from opportunityboard.models import Subcategory
-from opportunityboard.models import Subsubcategory
+from opportunityboard.unittest_setup import TestCase
 from opportunityboard.views.opportunityboard import deregister_volunteer
 from opportunityboard.views.opportunityboard import signup_volunteer
 from opportunityboard.views.search import Filter
 from opportunityboard.views.search import filter_search
-from profiles.models import Organization
-from profiles.models import User
-from profiles.models import UserType
-from profiles.models import Volunteer
 
 
 class OpportunityboardTestCase(TestCase):
     """Test cases for Opportunityboard view"""
-
-    def setUp(self):
-        """Creating an opportunity for test_update_an_opportunity_page_loads"""
-        self.org = Organization.objects.create(
-            user=User.objects.create(
-                email="jedi@jedi.com",
-                password="peace_and_justice_for_the_galaxy",
-                type=UserType.ORGANIZATION,
-            ),
-            name="Jedi Council",
-        )
-        self.category = Category.objects.create(name="Environment")
-        self.subcategory = Subcategory.objects.create(name="Conservation", parent=self.category)
-        self.subsubcategory = Subsubcategory.objects.create(
-            name="Reforestation", parent=self.subcategory
-        )
-        description = (
-            "Please help us support our community at this week's" "Cloud City soup kitchen"
-        )
-        end = "12:00:00"
-        self.date = timezone.now()
-        self.soup = Opportunity.objects.create(
-            organization=self.org,
-            category=self.category,
-            subcategory=self.subcategory,
-            subsubcategory=self.subsubcategory,
-            title="Cloud City Soup Kitchen",
-            description=description,
-            date=self.date,
-            end=end,
-            address_1="200 Calrissian Av.",
-            address_2="NY",
-            longitude=12.34,
-            latitude=56.78,
-            staffing=9,
-            is_published=True,
-        )
 
     def test_opportunityboard_page_loads(self):
         """Tests opportunityboard page loads"""
@@ -74,7 +31,7 @@ class OpportunityboardTestCase(TestCase):
 
     def test_update_an_opportunity_page_loads(self):
         """Tests update_an_opportunity page loads"""
-        response = self.client.get(reverse("update_an_opportunity", args=[self.soup.pk]))
+        response = self.client.get(reverse("update_an_opportunity", args=[self.opp.pk]))
         self.assertIn(response.status_code, [200, 302])
 
     def test_search(self):
@@ -108,76 +65,82 @@ class OpportunityboardTestCase(TestCase):
         filters.subsubcategory = self.subsubcategory
         self.assertEqual(filters.search().count(), 1)
 
+    def test_search_by_duration_lte2hrs(self):
+        """Test that selecting "2 hours or less" returns opportunities with correct duration"""
+        filters = Filter(duration="2 hours or less")
+        opp_pk = self.opp.pk
+
+        with self.subTest("two hours"):
+            self.opp.end = dt.time(2, 0, 0)
+            self.opp.save()
+            opp_list = filters.search()
+            self.assertTrue(opp_list.filter(pk=opp_pk).exists())
+
+        with self.subTest("over two hours"):
+            self.opp.end = dt.time(2, 1, 0)
+            self.opp.save()
+            opp_list = filters.search()
+            self.assertFalse(opp_list.filter(pk=opp_pk).exists())
+
+    def test_search_by_duration_lte4hrs(self):
+        """Test that selecting "4 hours or less" returns opportunities with correct duration"""
+        filters = Filter(duration="4 hours or less")
+        opp_pk = self.opp.pk
+
+        with self.subTest("four hours"):
+            self.opp.end = dt.time(4, 0, 0)
+            self.opp.save()
+            opp_list = filters.search()
+            self.assertTrue(opp_list.filter(pk=opp_pk).exists())
+
+        with self.subTest("over four hours"):
+            self.opp.end = dt.time(4, 1, 0)
+            self.opp.save()
+            opp_list = filters.search()
+            self.assertFalse(opp_list.filter(pk=opp_pk).exists())
+
+    def test_search_by_duration_lte8hrs(self):
+        """Test that selecting "Full-day" returns opportunities with correct duration"""
+        filters = Filter(duration="Full-day")
+        opp_pk = self.opp.pk
+
+        with self.subTest("eight hours"):
+            self.opp.end = dt.time(8, 0, 0)
+            self.opp.save()
+            opp_list = filters.search()
+            self.assertTrue(opp_list.filter(pk=opp_pk).exists())
+
+        with self.subTest("over eight hours"):
+            self.opp.end = dt.time(8, 1, 0)
+            self.opp.save()
+            opp_list = filters.search()
+            self.assertFalse(opp_list.filter(pk=opp_pk).exists())
+
 
 class VolunteerSignUpView(TestCase):
     """This is the test case for Volunteer signup and other volunteer centric behaviors"""
 
     def setUp(self):
         super().setUp()
-        self.luke = Volunteer.objects.create(
-            user=User.objects.create(
-                email="luke@jedi.com",
-                password="NOOOOOOOOOOOOOOOOOOO",
-                type=UserType.VOLUNTEER,
-            ),
-            first_name="Luke",
-            last_name="Skywalker",
-            date_of_birth="1955-09-25",
-            description="I want to come with you to Alderaan.",
-        )
-        self.org = Organization.objects.create(
-            user=User.objects.create(
-                email="jedi@jedi.com",
-                password="peace_and_justice_for_the_galaxy",
-                type=UserType.ORGANIZATION,
-            ),
-            name="Jedi Council",
-        )
-        self.category = Category.objects.create(name="Environment")
-        self.subcategory = Subcategory.objects.create(name="Conservation", parent=self.category)
-        self.subsubcategory = Subsubcategory.objects.create(
-            name="Reforestation", parent=self.subcategory
-        )
-        description = (
-            "Please help us support our community at this week's" "Cloud City soup kitchen"
-        )
-        end = "12:00:00"
-        self.date = timezone.now()
-        self.soup = Opportunity.objects.create(
-            organization=self.org,
-            category=self.category,
-            subcategory=self.subcategory,
-            subsubcategory=self.subsubcategory,
-            title="Cloud City Soup Kitchen",
-            description=description,
-            date=self.date,
-            end=end,
-            address_1="200 Calrissian Av.",
-            address_2="NY",
-            longitude=12.34,
-            latitude=56.78,
-            staffing=9,
-            is_published=True,
-        )
 
     def test_signup_volunteer(self):
         rf = RequestFactory()
         test_request = rf.request()
-        test_request.user = self.luke.user
-        signup_volunteer(test_request, self.soup.pk)
-        self.soup.refresh_from_db()
-        self.assertEqual(self.soup.staffing, 8)
+        test_request.user = self.vol.user
+        signup_volunteer(test_request, self.opp.pk)
+        self.opp.refresh_from_db()
+        self.assertEqual(self.opp.staffing, 8)
 
     def test_deregister_volunteer(self):
         rf = RequestFactory()
         test_request = rf.request()
-        test_request.user = self.luke.user
-        deregister_volunteer(test_request, self.soup.pk)
-        self.soup.refresh_from_db()
-        self.assertEqual(self.soup.staffing, 9)
-        signup_volunteer(test_request, self.soup.pk)
-        self.soup.refresh_from_db()
-        self.assertEqual(self.soup.staffing, 8)
-        deregister_volunteer(test_request, self.soup.pk)
-        self.soup.refresh_from_db()
-        self.assertEqual(self.soup.staffing, 9)
+        test_request.user = self.vol.user
+        deregister_volunteer(test_request, self.opp.pk)
+        self.opp.refresh_from_db()
+        self.assertEqual(self.opp.staffing, 9)
+        signup_volunteer(test_request, self.opp.pk)
+        self.opp.refresh_from_db()
+        self.assertEqual(self.opp.staffing, 8)
+        deregister_volunteer(test_request, self.opp.pk)
+        self.opp.refresh_from_db()
+        self.assertEqual(self.opp.staffing, 9)
