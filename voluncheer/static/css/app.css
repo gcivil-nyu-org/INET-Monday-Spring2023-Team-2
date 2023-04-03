@@ -285,4 +285,30 @@ td {
     margin-top: 10px;
 }
 
+.pagination {
+    display: inline-block;
+    box-shadow: 0 -1px 2px #aaa;
+    background: white;
+    justify-content: center;
+    display: flex;
+    margin-top: 20px;
+    width: 60%;
+    margin-left: 20%;
+    font-weight: bold;
+}
+  
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+  
+.pagination a.active {
+    background-color: #57b846;
+    color: white;
+}
+  
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
 /* End */

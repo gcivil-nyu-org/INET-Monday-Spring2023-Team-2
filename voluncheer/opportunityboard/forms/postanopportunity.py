@@ -118,4 +118,12 @@ class PostAnOpportunityForm(forms.ModelForm):
 
         if is_recurring and not recurrence:
             raise ValidationError("Must enter recurrence if opportunity is recurring")
+
+        date = self.cleaned_data.get("date")
+        start_time = date.time()
+        end_time = self.cleaned_data.get("end")
+
+        if start_time >= end_time:
+            raise ValidationError("End time must be after start time")
+
         return self.cleaned_data

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% if user.is_volunteer %}
+  </div>
+    <!-- Side Nav -->
+    <div class="sidenav">
+        <div class="profile">
+            {% if volunteer.photo %}
+                <img src="{{volunteer.photo.url}}" alt="profile pic" width="100" height="100"/>
+                <hr align="center">
+            {% endif %}
+            <div class="name">
+                {{ volunteer.first_name }}, {{ volunteer.last_name }}
+            </div>
+            <div class="email">
+                {{ user.email }}
+            </div>
+            <hr align="center">
+            <div class="self-description">
+                <p>{{ volunteer.description }}</p>
+            </div>
+        </div>
+
+        <div class="sidenav-url">
+            <div class="url">
+                <a href="#profile" >PROFILE</a>
+                <hr align="center">
+            </div>
+            <div class="url">
+                <a href="#settings">SETTINGS</a>
+                <hr align="center">
+            </div>
+            <div class="url">
+                <a href="{% url 'saved_events' %}" class="active">MY VOLUNCHEERS</a>
+                <hr align="center">
+            </div>
+        </div>
+    </div>
+    <!-- Main -->
+    <div class="main">
+        <h2>UPCOMING EVENTS</h2>
+            {% csrf_token %}
+                {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+                {% for opportunity in opportunity_selected %}
+                    
+                    <article>
+                        {% if opportunity.photo %}
+					    <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
+                        {% endif %}
+					    <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
+                        <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                        <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
+                        <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
+                        <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
+                        <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
+                        <div class="url"><a href="{% url 'deregister_volunteer' opportunity.pk %}" class="readmore">Not Interested Anymore</a></div>
+                        <hr align="center">
+				    </article>
+                    
+                {% endfor %}
+        
+        
+    </div>
+    <!-- End -->
+  {% endif %}
+{% endblock %}

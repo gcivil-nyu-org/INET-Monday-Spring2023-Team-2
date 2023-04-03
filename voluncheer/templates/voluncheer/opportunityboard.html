@@ -23,7 +23,7 @@
 		</header>
         <div id="opportunitysearch">
             <div class="s007">
-              <form id="searchbox" method="get" action="{% url 'filter_search' %}">
+              <form id="searchbox" method="get" action="{% url 'opportunityboard' 1%}">
                 <div class="inner-form">
                   <div class="basic-search">
                     <div class="input-field">
@@ -144,20 +144,28 @@
                 {% csrf_token %}
                 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
                 {% for opportunity in opportunity_lists %}
-                  {% if opportunity.is_published %}
-                    <article>
+                  {% if opportunity.is_published and opportunity.staffing > 0 %}
+                    <article name="article">
                     {% if opportunity.photo %}
-					          <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
+                    <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
                     {% endif %}
-					          <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
-                        <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
-                        <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
-                        <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
-                        <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
-                        <p>{{ opportunity.description }}</p>
-                        <a href="#" class="readmore">Connect</a>
-				            </article>
-                  {% endif %}
+                      <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
+                      <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                      <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
+                      <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
+                      <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
+                      <p>{{ opportunity.description }}</p>
+                      {% if user.is_volunteer %}
+                        {% if volunteer not in opportunity.volunteers.all %}
+                        <a href="{% url 'signup_volunteer' opportunity.pk %}">
+                          <button type="button" id="register-opportunity" value="false" class="readmore" onclick="toggleButton()">Register?</button>
+                        </a>
+                        {% else %}
+                        <button type="button" id="register-opportunity" value="false" class="readmore" onclick="toggleButton()">Registered!</button>
+                        {% endif %}
+                      {% endif %}
+                    </article>
+                    {% endif %}
                 {% endfor %}
                 <article id="sponsors">
 					<h1>Sponsors</h1>
@@ -167,6 +175,17 @@
 {#      django script ends here       #}
 			</section>
 		</div>
+    <div class="pagination">
+      <a method="get" class="page-button" href="#">&laquo;</a>
+      {% for page_number in range_of_pages %}
+      {% if curr_page == page_number %}
+      <a method="get" class="page-button active" href="{% url 'opportunityboard' page_number%}">{{ page_number }}</a>
+      {% else %}
+      <a method="get" class="page-button" href="{% url 'opportunityboard' page_number%}">{{ page_number }}</a>
+      {% endif %}
+      {% endfor %}
+      <a method="get" class="page-button" href="#">&raquo;</a>
+    </div>
 		<footer>
 			<p>Copyright &copy 2023 VolunCheer, org.  All Rights Reserved.</p>
 		</footer>
@@ -175,6 +194,18 @@
 
 
     <script src="{% static 'js/extention/choices.js' %}"></script>
+    <script>
+      function toggleButton() {
+        const button = document.getElementById("register-opportunity");
+        var value = button.innerHTML
+        if (value == "Register?") {
+          alert('You are successfully registered for the event!');
+        } else {
+          alert('You already registered this event!');
+        }
+      };
+    </script>
+   
     <script>
       const customSelects = document.querySelectorAll("select");
       const deleteBtn = document.getElementById('delete')
@@ -252,6 +283,15 @@
         }
       });
       $('input[name="startdates"]').daterangepicker();
+      $(document).ready(function() {
+        var categories = $("input.category");
+        var filter = JSON.parse('{{ filter|escapejs }}');
+        for (let i = 0; i < categories.length; i++) {
+          if (categories[i].value == filter.category) {
+            categories[i].checked = true;
+          }
+        }
+      });
     </script>
 		
 {% endblock %}		
