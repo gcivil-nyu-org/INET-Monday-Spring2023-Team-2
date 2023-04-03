@@ -113,6 +113,7 @@ class VolunteerSignUpView(TestCase):
     """This is the test case for Volunteer signup and other volunteer centric behaviors"""
 
     def setUp(self):
+        super().setUp()
         self.luke = Volunteer.objects.create(
             user=User.objects.create(
                 email="luke@jedi.com",

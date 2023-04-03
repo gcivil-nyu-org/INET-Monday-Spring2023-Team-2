@@ -59,8 +59,8 @@ def category_dict_gen():
 def signup_volunteer(request, opportunity_id):
     volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
     opportunity = Opportunity.objects.get(pk=opportunity_id)
-    if opportunity.staffing > 0 and volunteer not in opportunity.volunteer.all():
-        opportunity.volunteer.add(volunteer)
+    if opportunity.staffing > 0 and volunteer not in opportunity.volunteers.all():
+        opportunity.volunteers.add(volunteer)
         opportunity.staffing -= 1
         opportunity.save()
     return HttpResponseRedirect(reverse("opportunityboard"))
@@ -69,8 +69,8 @@ def signup_volunteer(request, opportunity_id):
 def deregister_volunteer(request, opportunity_id):
     volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
     opportunity = Opportunity.objects.get(pk=opportunity_id)
-    if volunteer in opportunity.volunteer.all():
-        opportunity.volunteer.remove(volunteer)
+    if volunteer in opportunity.volunteers.all():
+        opportunity.volunteers.remove(volunteer)
         opportunity.staffing += 1
         opportunity.save()
     return HttpResponseRedirect(reverse("opportunityboard"))
