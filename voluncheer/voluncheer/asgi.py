@@ -12,12 +12,12 @@ from channels.routing import ProtocolTypeRouter
 from channels.routing import URLRouter
 from django.core.asgi import get_asgi_application
 
-import chatroom.routing
+from chatroom import routing
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "voluncheer.settings")
 application = ProtocolTypeRouter(
     {
         "http": get_asgi_application(),
-        "websocket": URLRouter(chatroom.routing.websocket_urlpatterns),
+        "websocket": URLRouter(routing.websocket_urlpatterns),
     }
 )
