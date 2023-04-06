@@ -1,5 +1,7 @@
+import datetime
+
 from django.test import TestCase
-from django.utils import timezone
+import freezegun
 
 from chatroom.models import Message
 from chatroom.models import Room
@@ -31,10 +33,11 @@ class ChatroomTest(TestCase):
         cls.room.signed_up_users.add(cls.user2)
         cls.room.online.add(cls.user2)
         cls.room.online.add(cls.user1)
-        cls.time = timezone.now()
-        cls.message = Message.objects.create(
-            user=cls.user3, room=cls.room, content="testcontent", timestamp=cls.time
-        )
+        cls.time = datetime.datetime(year=2023, month=5, day=8, tzinfo=datetime.timezone.utc)
+        with freezegun.freeze_time(cls.time):
+            cls.message = Message.objects.create(
+                user=cls.user3, room=cls.room, content="testcontent", timestamp=cls.time
+            )
 
     def test_private(self):
         self.assertFalse(self.room.private)
