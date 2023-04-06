@@ -96,14 +96,39 @@ TEMPLATES = [
 WSGI_APPLICATION = "voluncheer.wsgi.application"
 ASGI_APPLICATION = "voluncheer.asgi.application"
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+redis_prod_url = "redis://chatroom-redis-cluster-prod.byxkua.ng.0001.use1.cache.amazonaws.com:6379"
+redis_dev_url = "redis://chatroom-redis-cluster-dev-001.byxkua.0001.use1.cache.amazonaws.com:6379"
+if environment.is_production:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": redis_prod_url,
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            },
+        }
+    }
+elif environment.is_development:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": redis_dev_url,
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            },
+        }
+    }
+else:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [("127.0.0.1", 6379)],
+            },
         },
-    },
-}
+    }
+
+
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 if environment.is_local:

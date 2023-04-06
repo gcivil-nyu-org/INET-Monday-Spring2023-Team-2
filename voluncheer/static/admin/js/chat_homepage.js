@@ -1,4 +1,4 @@
-console.log("Sanity check from chat_homepage.js.");
+
 
 // focus 'roomInput' when user opens the page
 document.querySelector("#roomInput").focus();
