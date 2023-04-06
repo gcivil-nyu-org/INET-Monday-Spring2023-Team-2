@@ -1,5 +1,3 @@
-
-
 const roomName = JSON.parse(document.getElementById('roomName').textContent);
 
 let chatLog = document.querySelector("#chatLog");

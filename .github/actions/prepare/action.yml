@@ -23,8 +23,4 @@ runs:
       run: |
         python manage.py makemigrations
         python manage.py migrate
-    - name: spin up redis with docker
-      shell: bash
-      working-directory: voluncheer
-      run: |
-        docker run -p 6379:6379 -d redis:5
+    

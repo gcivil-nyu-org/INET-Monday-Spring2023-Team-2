@@ -1,5 +1,3 @@
-
-
 // focus 'roomInput' when user opens the page
 document.querySelector("#roomInput").focus();
 

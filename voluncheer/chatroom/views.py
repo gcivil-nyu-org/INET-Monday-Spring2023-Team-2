@@ -19,7 +19,7 @@ def chat_homepage_view(request):
 
 @login_required
 def room_view(request, room_name):
-    room, created = Room.objects.get_or_create(name=room_name)
+    room, _ = Room.objects.get_or_create(name=room_name)
     return render(
         request,
         "chatroom/room.html",

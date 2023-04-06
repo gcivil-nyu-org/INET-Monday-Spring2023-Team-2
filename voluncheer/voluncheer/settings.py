@@ -96,13 +96,14 @@ TEMPLATES = [
 WSGI_APPLICATION = "voluncheer.wsgi.application"
 ASGI_APPLICATION = "voluncheer.asgi.application"
 
-redis_prod_url = "redis://chatroom-redis-cluster-prod.byxkua.ng.0001.use1.cache.amazonaws.com:6379"
-redis_dev_url = "redis://chatroom-redis-cluster-dev-001.byxkua.0001.use1.cache.amazonaws.com:6379"
+
+REDIS_PROD_MAIN_PORT = os.getenv("REDIS_PROD_MAIN_PORT")
+REDIS_DEV_MAIN_PORT = os.getenv("REDIS_DEV_MAIN_PORT")
 if environment.is_production:
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": redis_prod_url,
+            "LOCATION": REDIS_PROD_MAIN_PORT,
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
             },
@@ -112,7 +113,7 @@ elif environment.is_development:
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": redis_dev_url,
+            "LOCATION": REDIS_DEV_MAIN_PORT,
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
             },
@@ -202,7 +203,6 @@ INTERNAL_IPS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-ALLOW_ANONYMOUS = False
 # Authentication and authorization
 AUTH_USER_MODEL = "profiles.User"
 LOGIN_URL = "login"
