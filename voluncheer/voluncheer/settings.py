@@ -97,23 +97,12 @@ WSGI_APPLICATION = "voluncheer.wsgi.application"
 ASGI_APPLICATION = "voluncheer.asgi.application"
 
 
-REDIS_PROD_MAIN_PORT = os.getenv("REDIS_PROD_MAIN_PORT")
-REDIS_DEV_MAIN_PORT = os.getenv("REDIS_DEV_MAIN_PORT")
-if environment.is_production:
+REDIS_CHATROOM_PORT = os.getenv("REDIS_CHATROOM_PORT")
+if environment.is_production or environment.is_development:
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": REDIS_PROD_MAIN_PORT,
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            },
-        }
-    }
-elif environment.is_development:
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": REDIS_DEV_MAIN_PORT,
+            "LOCATION": REDIS_CHATROOM_PORT,
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
             },
