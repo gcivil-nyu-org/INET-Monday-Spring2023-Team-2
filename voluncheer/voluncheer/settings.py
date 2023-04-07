@@ -98,7 +98,7 @@ ASGI_APPLICATION = "voluncheer.asgi.application"
 
 
 REDIS_CHATROOM_PORT = os.getenv("REDIS_CHATROOM_PORT")
-if environment.is_production or environment.is_development:
+if environment.is_aws:
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
