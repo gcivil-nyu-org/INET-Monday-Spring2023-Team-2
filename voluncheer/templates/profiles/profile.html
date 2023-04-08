@@ -178,12 +178,16 @@
         <div class="card">
             <div class="profile-badge">
                 {% csrf_token %}
-                {% for badge in badge_urls %}
-                <span class="fa-stack fa-sm">
-                    <img src="../../static/{{ badge }}" alt="" width="78px" height="78px"/>
-                </span>
+                {% for badge in badges %}
+                    <span class="fa-stack fa-sm">
+                        <img src="{{ badge.img.url }}" alt="{{ badge }}" title = "{{ badge }}" width="78px" height="78px"/>
+                    </span>
                 {% endfor %}
             </div>
+            <p class="volunteer-level"> Volunteer Level: {{ volunteer_level }}</p>
+            {% if hours_required %}
+                <p class="hours-required"> You have {{ hours_required }} hours to go until your next badge!</p>
+            {% endif %}
         </div>
     </div>
     <!-- End -->

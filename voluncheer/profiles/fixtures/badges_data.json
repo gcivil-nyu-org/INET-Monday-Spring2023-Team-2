@@ -1,0 +1,40 @@
+[
+    {
+        "model":"profiles.badge",
+        "fields":{
+          "name": "Silver",
+          "type": 0,
+          "img": "badges/silver_badge.jpeg",
+          "hours_required": "P0DT20H00M00S"
+        }
+      },
+
+      {
+        "model":"profiles.badge",
+        "fields":{
+          "name": "Gold",
+          "type": 0,
+          "img": "badges/gold_badge.jpeg",
+          "hours_required": "P1DT16H00M00S"
+        }
+      },
+
+      {
+        "model":"profiles.badge",
+        "fields":{
+          "name": "Platinum",
+          "type": 0,
+          "img": "badges/platinum_badge.jpeg",
+          "hours_required": "P3DT08H00M00S"
+        }
+      },
+    
+      {
+        "model":"profiles.badge",
+        "fields":{
+            "name": "Bronze",
+            "type": 0,
+            "img": "badges/bronze_badge.jpeg",
+            "hours_required": "P0DT10H00M00S"
+        }   
+      }]
