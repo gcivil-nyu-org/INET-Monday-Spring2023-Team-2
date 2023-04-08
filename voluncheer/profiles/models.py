@@ -184,15 +184,6 @@ class Volunteer(models.Model):
     description = models.TextField(help_text="Introduce yourself here.", default="")
     hours_volunteered = models.DurationField(default=timedelta(days=0))
 
-    BADGES = {
-        "Badge 1": "images/badge-1.png",
-        "Badge 2": "images/badge-2.png",
-        "Badge 3": "images/badge-3.png",
-        "Badge 4": "images/badge-4.png",
-        "Badge 5": "images/badge-5.png",
-        "Badge 6": "images/badge-6.png",
-    }
-
     def __str__(self):
         return self.name
 
