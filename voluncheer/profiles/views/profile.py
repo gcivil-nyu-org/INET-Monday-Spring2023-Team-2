@@ -50,8 +50,8 @@ class ProfileView(DetailView):
             kwargs["volunteer"] = volunteer_profile
             kwargs["user_form"] = VolunteerChangeForm(instance=volunteer_profile)
             kwargs["badges"] = volunteer_profile.badges.order_by("hours_required")
-            kwargs["hours_required"] = volunteer_profile.award_volunteer_level_badges()
-            kwargs["volunteer_level"] = volunteer_profile.volunteer_level
+            kwargs["hours_required"] = volunteer_profile.award_volunteer_hours_badges()
+            kwargs["hours_volunteered"] = volunteer_profile.hours_volunteered.total_seconds() / 3600
 
         return super().get_context_data(**kwargs)
 

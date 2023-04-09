@@ -130,7 +130,7 @@ class Organization(models.Model):
 class BadgeType(models.IntegerChoices):
     """Container for all possible badge types."""
 
-    VOLUNTEER_LEVEL = 0, "VOLUNTEER_LEVEL"
+    VOLUNTEER_HOURS_BADGE = 0, "VOLUNTEER_HOURS_BADGE"
 
 
 def _badge_img_path(instance, filename):
@@ -192,24 +192,15 @@ class Volunteer(models.Model):
         """Returns the full name of the volunteer."""
         return f"{self.first_name} {self.last_name}"
 
-    @property
-    def volunteer_level(self):
-        badges = self.badges.filter(type=0)
-
-        if badges:
-            badges = badges.order_by("hours_required")
-            volunteer_level = badges.reverse()[0]
-        else:
-            volunteer_level = "Newbie"
-        return volunteer_level
-
-    def award_volunteer_level_badges(self):
+    def award_volunteer_hours_badges(self):
         """
         Checks if a volunteer is eligible for any new volunteer level badges.
         If so, adds those badges to the volunteer.
         Returns hours remaining until next volunteer level badge.
         """
-        badges = Badge.objects.filter(type=BadgeType.VOLUNTEER_LEVEL).order_by("hours_required")
+        badges = Badge.objects.filter(type=BadgeType.VOLUNTEER_HOURS_BADGE).order_by(
+            "hours_required"
+        )
         hours_remaining = None
         badge_added = False
 

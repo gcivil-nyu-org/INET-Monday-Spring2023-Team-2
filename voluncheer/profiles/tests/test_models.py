@@ -59,13 +59,13 @@ class UserTest(TestCase):
 
         self.gold_badge = Badge.objects.create(
             name="Gold",
-            type=BadgeType.VOLUNTEER_LEVEL,
+            type=BadgeType.VOLUNTEER_HOURS_BADGE,
             hours_required=timedelta(hours=100),
             img="gold_badge.png",
         )
         self.silver_badge = Badge.objects.create(
             name="Silver",
-            type=BadgeType.VOLUNTEER_LEVEL,
+            type=BadgeType.VOLUNTEER_HOURS_BADGE,
             hours_required=timedelta(hours=50),
             img="silver_badge.jpg",
         )
@@ -135,23 +135,11 @@ class UserTest(TestCase):
         expected_object_name = f"{user.name}"
         self.assertEqual(str(user), expected_object_name)
 
-    def test_volunteer_level(self):
-        """Test that volunteer_level property returns highest volunteer level badge."""
-        with self.subTest("has_badges"):
-            level = self.luke.volunteer_level
-            self.assertEqual(level, self.gold_badge)
-
-        with self.subTest("has_no_badges"):
-            self.luke.badges.remove(self.gold_badge)
-            self.luke.badges.remove(self.silver_badge)
-            level = self.luke.volunteer_level
-            self.assertEqual(level, "Newbie")
-
-    def test_award_volunteer_level_badges(self):
+    def test_award_volunteer_hours_badges(self):
         """Test that volunteer is awarded a new badge and hours_remaining is returned."""
         new_badge = Badge.objects.create(
             name="Platinum",
-            type=BadgeType.VOLUNTEER_LEVEL,
+            type=BadgeType.VOLUNTEER_HOURS_BADGE,
             hours_required=timedelta(hours=500),
             img="platinum_badge.png",
         )
@@ -159,14 +147,14 @@ class UserTest(TestCase):
         with self.subTest("badge_not_awarded"):
             self.luke.hours_volunteered = timedelta(hours=499)
             self.luke.save()
-            hours_remaining = self.luke.award_volunteer_level_badges()
+            hours_remaining = self.luke.award_volunteer_hours_badges()
             self.assertFalse(self.luke.badges.filter(name=new_badge.name).exists())
             self.assertEqual(hours_remaining, 1)
 
         with self.subTest("badge_awarded"):
             self.luke.hours_volunteered = timedelta(hours=500)
             self.luke.save()
-            hours_remaining = self.luke.award_volunteer_level_badges()
+            hours_remaining = self.luke.award_volunteer_hours_badges()
             self.assertTrue(self.luke.badges.filter(name="Platinum").exists())
             self.assertEqual(hours_remaining, None)
 
@@ -178,7 +166,7 @@ class BadgeTest(TestCase):
         """See base class."""
         self.badge = Badge.objects.create(
             name="Gold",
-            type=BadgeType.VOLUNTEER_LEVEL,
+            type=BadgeType.VOLUNTEER_HOURS_BADGE,
             hours_required=timedelta(hours=100),
             img="gold_badge.png",
         )
@@ -186,7 +174,7 @@ class BadgeTest(TestCase):
     def test_badge_details(self):
         """Test basic details for a badge like name or img"""
         self.assertEqual(self.badge.name, "Gold")
-        self.assertEqual(self.badge.type, BadgeType.VOLUNTEER_LEVEL)
+        self.assertEqual(self.badge.type, BadgeType.VOLUNTEER_HOURS_BADGE)
         self.assertEqual(self.badge.hours_required, timedelta(hours=100))
         self.assertEqual(self.badge.img, "gold_badge.png")
 
