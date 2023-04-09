@@ -46,17 +46,13 @@ class ProfileView(DetailView):
             opportunity_lists = organization_profile.opportunity_set.all()
             kwargs["opportunity_lists"] = opportunity_lists
         if user.is_volunteer:
-            kwargs["volunteer"] = Volunteer.objects.get(pk=user)
-            badge_urls = []
-            badge_list = kwargs["volunteer"].badges.split(",")
-            for badge in badge_list:
-                try:
-                    badge_urls.append(Volunteer.BADGES[badge])
-                except KeyError:
-                    pass
-            kwargs["badge_urls"] = badge_urls
             volunteer_profile = Volunteer.objects.get(pk=user)
+            kwargs["volunteer"] = volunteer_profile
             kwargs["user_form"] = VolunteerChangeForm(instance=volunteer_profile)
+            kwargs["badges"] = volunteer_profile.badges.order_by("hours_required")
+            kwargs["hours_required"] = volunteer_profile.award_volunteer_hours_badges()
+            kwargs["hours_volunteered"] = volunteer_profile.hours_volunteered.total_seconds() / 3600
+
         return super().get_context_data(**kwargs)
 
     def password_reset_request(request):
