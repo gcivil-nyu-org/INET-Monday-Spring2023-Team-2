@@ -54,12 +54,15 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "storages",
+    "channels",
+    "channels_redis",
     # Local applications
-    # "chatroom.apps.ChatroomConfig",
     "opportunityboard.apps.OpportunityboardConfig",
     "map.apps.MapConfig",
     "profiles.apps.ProfilesConfig",
+    "chatroom.apps.ChatroomConfig",
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -91,6 +94,29 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "voluncheer.wsgi.application"
+ASGI_APPLICATION = "voluncheer.asgi.application"
+
+
+REDIS_CHATROOM_PORT = os.getenv("REDIS_CHATROOM_PORT")
+if environment.is_aws:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": REDIS_CHATROOM_PORT,
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            },
+        }
+    }
+else:
+    CHANNEL_LAYERS = {
+        "default": {
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+            "CONFIG": {
+                "hosts": [("127.0.0.1", 6379)],
+            },
+        },
+    }
 
 
 # Database
@@ -166,7 +192,6 @@ INTERNAL_IPS = [
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 # Authentication and authorization
 AUTH_USER_MODEL = "profiles.User"
 LOGIN_URL = "login"
