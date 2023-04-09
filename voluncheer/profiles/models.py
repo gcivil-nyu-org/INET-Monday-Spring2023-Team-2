@@ -209,7 +209,7 @@ class Volunteer(models.Model):
         If so, adds those badges to the volunteer.
         Returns hours remaining until next volunteer level badge.
         """
-        badges = Badge.objects.filter(type=0).order_by("hours_required")
+        badges = Badge.objects.filter(type=BadgeType.VOLUNTEER_LEVEL).order_by("hours_required")
         hours_remaining = None
         badge_added = False
 

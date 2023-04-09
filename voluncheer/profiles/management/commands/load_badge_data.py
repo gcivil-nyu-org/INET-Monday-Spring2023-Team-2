@@ -3,11 +3,10 @@ import json
 import re
 
 from django.core.management.base import BaseCommand
-from django.db import transaction
 
 from profiles.models import Badge
 
-regex = re.compile(r"P((?P<days>\d+)DT)((?P<hours>\d+)H)((?P<minutes>\d+)M)((?P<seconds>\d+)S)")
+regex = re.compile(r"((?P<hours>\d+):)((?P<minutes>\d+):)(?P<seconds>\d+)")
 
 
 def parse_time(time_str):
@@ -34,13 +33,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         del args  # Unused.
-        json_data = open("profiles/fixtures/badge_data.json")
+        json_data = open(options["badge_data"])
         data = json.load(json_data)
 
         for entry in data:
             # Create a new Badge object for each entry in the dataset
             name = entry["fields"]["name"]
-            badge, created = Badge.objects.update_or_create(
+            if Badge.objects.filter(name=name):
+                continue
+            Badge.objects.create(
                 name=name,
                 type=entry["fields"]["type"],
                 img=entry["fields"]["img"],

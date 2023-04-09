@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.test import TestCase
 
 from profiles.models import Badge
+from profiles.models import BadgeType
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
@@ -57,10 +58,16 @@ class UserTest(TestCase):
         self.admin = User.objects.create_superuser(email="admin@starwars.com", password="admin")
 
         self.gold_badge = Badge.objects.create(
-            name="Gold", type=0, hours_required=timedelta(hours=100), img="gold_badge.png"
+            name="Gold",
+            type=BadgeType.VOLUNTEER_LEVEL,
+            hours_required=timedelta(hours=100),
+            img="gold_badge.png",
         )
         self.silver_badge = Badge.objects.create(
-            name="Silver", type=0, hours_required=timedelta(hours=50), img="silver_badge.jpg"
+            name="Silver",
+            type=BadgeType.VOLUNTEER_LEVEL,
+            hours_required=timedelta(hours=50),
+            img="silver_badge.jpg",
         )
 
         self.luke.badges.add(self.gold_badge)
@@ -143,7 +150,10 @@ class UserTest(TestCase):
     def test_award_volunteer_level_badges(self):
         """Test that volunteer is awarded a new badge and hours_remaining is returned."""
         new_badge = Badge.objects.create(
-            name="Platinum", type=0, hours_required=timedelta(hours=500), img="platinum_badge.png"
+            name="Platinum",
+            type=BadgeType.VOLUNTEER_LEVEL,
+            hours_required=timedelta(hours=500),
+            img="platinum_badge.png",
         )
 
         with self.subTest("badge_not_awarded"):
@@ -167,13 +177,16 @@ class BadgeTest(TestCase):
     def setUp(self):
         """See base class."""
         self.badge = Badge.objects.create(
-            name="Gold", type=0, hours_required=timedelta(hours=100), img="gold_badge.png"
+            name="Gold",
+            type=BadgeType.VOLUNTEER_LEVEL,
+            hours_required=timedelta(hours=100),
+            img="gold_badge.png",
         )
 
     def test_badge_details(self):
         """Test basic details for a badge like name or img"""
         self.assertEqual(self.badge.name, "Gold")
-        self.assertEqual(self.badge.type, 0)
+        self.assertEqual(self.badge.type, BadgeType.VOLUNTEER_LEVEL)
         self.assertEqual(self.badge.hours_required, timedelta(hours=100))
         self.assertEqual(self.badge.img, "gold_badge.png")
 

@@ -5,7 +5,7 @@
           "name": "Silver",
           "type": 0,
           "img": "badges/silver_badge.jpeg",
-          "hours_required": "P0DT20H00M00S"
+          "hours_required": "20:00:00"
         }
       },
 
@@ -15,7 +15,7 @@
           "name": "Gold",
           "type": 0,
           "img": "badges/gold_badge.jpeg",
-          "hours_required": "P1DT16H00M00S"
+          "hours_required": "40:00:00"
         }
       },
 
@@ -25,7 +25,7 @@
           "name": "Platinum",
           "type": 0,
           "img": "badges/platinum_badge.jpeg",
-          "hours_required": "P3DT08H00M00S"
+          "hours_required": "80:00:00"
         }
       },
     
@@ -35,6 +35,6 @@
             "name": "Bronze",
             "type": 0,
             "img": "badges/bronze_badge.jpeg",
-            "hours_required": "P0DT10H00M00S"
+            "hours_required": "10:00:00"
         }   
       }]

@@ -1,22 +1,26 @@
-from datetime import timedelta
+from io import StringIO
 
 from django.core.management import call_command
 from django.test import TestCase
 
 from profiles.models import Badge
 
+_TEST_DATA = "profiles/testdata/badges.json"
+
 
 class TestLoadBadgeDataCommandTest(TestCase):
-    def setUp(self):
-        call_command("load_badge_data")
-
     def test_badge_details(self):
         """Test that load_badge_data command creates default badges"""
-        badges = Badge.objects.all()
-        self.assertEqual(len(badges), 4)
-        gold_badge = Badge.objects.get(name="Gold")
-        self.assertEqual(gold_badge.name, "Gold")
-        self.assertEqual(gold_badge.type, 0)
-        bronze_badge = Badge.objects.get(name="Bronze")
-        self.assertEqual(str(bronze_badge.img), "badges/bronze_badge.jpeg")
-        self.assertEqual(bronze_badge.hours_required, timedelta(hours=10))
+        out = StringIO()
+        call_command("load_badge_data", badge_data=_TEST_DATA, stdout=out)
+        self.assertTrue(Badge.objects.filter(name="Test Badge 1").exists())
+        self.assertTrue(Badge.objects.filter(name="Test Badge 2").exists())
+        self.assertIn("Successfully created 'Test Badge 1'.", out.getvalue())
+        self.assertIn("Successfully created 'Test Badge 2'.", out.getvalue())
+
+        with self.subTest("test_already_exist_does_not_create_new_badges"):
+            exists_out = StringIO()
+            call_command("load_badge_data", badge_data=_TEST_DATA, stdout=exists_out)
+            self.assertNotIn("Successfully created 'Test Badge 1'.", exists_out.getvalue())
+            self.assertNotIn("Successfully created 'Test Badge 2'.", exists_out.getvalue())
+            self.assertEqual(len(Badge.objects.all()), 2)
