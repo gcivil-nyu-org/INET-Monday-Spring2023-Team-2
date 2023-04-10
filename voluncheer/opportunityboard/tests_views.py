@@ -183,8 +183,10 @@ class OrganizationViewTestCase(TestCase):
         self.assertTemplateUsed(response, "volunteer/vol_org_view.html")
         self.assertEqual(response.context["user"], self.user)
         self.assertEqual(response.context["organization"], self.organization)
+        print(response.context["opportunity_lists"])
         self.assertQuerysetEqual(
             response.context["opportunity_lists"],
-            ["Test Opportunity".replace("<Opportunity: ", "")],
-            ordered=False,
+            ["Test Opportunity"],
+            transform=lambda x: str(x),
+            ordered=False
         )
