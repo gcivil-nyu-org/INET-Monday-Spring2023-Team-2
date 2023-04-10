@@ -37,6 +37,8 @@ class OrganizationChangeForm(UserChangeForm):
 
     password = None
 
+    photo = forms.ImageField(required=False)
+
     class Meta(UserChangeForm.Meta):
         model = Organization
         fields = (

@@ -16,14 +16,3 @@ function EditProfile() {
     edit.style.display = "inline-block";
   }
 }
-
-function ShowDetail(element) {
-  var id = element.id;
-  var form = document.getElementById(id+"-form");
-  console.log(form.style.display);
-  if (form.style.display != "inline-block") {
-    form.style.display = "inline-block";
-  } else {
-    form.style.display = "none";
-  }
-};

@@ -8,6 +8,7 @@
         <div class="profile">
             {% if volunteer.photo %}
                 <img src="{{volunteer.photo.url}}" alt="profile pic" width="100" height="100"/>
+                <hr align="center">
             {% endif %}
             <div class="name">
                 {{ volunteer.first_name }}, {{ volunteer.last_name }}
@@ -23,11 +24,11 @@
 
         <div class="sidenav-url">
             <div class="url">
-                <a href="{% url 'home' %}" >PROFILE</a>
+                <a href="#profile" >PROFILE</a>
                 <hr align="center">
             </div>
             <div class="url">
-                <a class="not-implemented-yet" href="#">SETTINGS</a>
+                <a href="#settings">SETTINGS</a>
                 <hr align="center">
             </div>
             <div class="url">
@@ -39,7 +40,6 @@
     <!-- Main -->
     <div class="main">
         <h2>UPCOMING EVENTS</h2>
-        <div class="card">
             {% csrf_token %}
                 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
                 {% for opportunity in opportunity_selected %}
@@ -57,24 +57,11 @@
                         <div class="url"><a href="{% url 'deregister_volunteer' opportunity.pk %}" class="readmore">Not Interested Anymore</a></div>
                         <hr align="center">
 				    </article>
+                    
                 {% endfor %}
-        </div>
         
-        <h2>MY VOLUNCHEER FOOTPRINTS</h2>
-        <div class="card">
-            {% for opportunity in opportunity_attended %}
-                <article>
-				    <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
-                    <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
-                    <p class="vol-position-disciption-h2">Hours: {{ opportunity.date }}</p>
-                    <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
-                    <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
-                    <hr align="center">
-				</article>
-            {% endfor %}
-        </div>
+        
     </div>
     <!-- End -->
   {% endif %}
-  <script type="text/javascript" src="{% static 'js/jquery_appendix.js' %}"></script>
 {% endblock %}

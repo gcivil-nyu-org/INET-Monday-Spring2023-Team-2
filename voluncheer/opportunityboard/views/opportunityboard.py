@@ -44,8 +44,14 @@ def opportunityboard(request, page_number):
     return render(request, "voluncheer/opportunityboard.html", context)
 
 
+def select(request):
+    """Placeholder view for later use"""
+    opportunity_lists = Opportunity.objects.order_by("-pubdate"[:20])
+    context = {"opportunity_lists": opportunity_lists}
+    return render(request, "voluncheer/opportunityboard.html", context)
+
+
 def category_dict_gen():
-    """Gen a dictionary object from category/subcategory/subsubcategory for frontend uses"""
     categories = Category.objects.all()
     cate_output_dict = {}
     for category in categories:
@@ -63,7 +69,6 @@ def category_dict_gen():
 
 
 def signup_volunteer(request, opportunity_id):
-    """Add volunteer to opportunity.volunteers and update staffing"""
     volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
     opportunity = Opportunity.objects.get(pk=opportunity_id)
     if opportunity.staffing > 0 and volunteer not in opportunity.volunteers.all():
@@ -74,14 +79,10 @@ def signup_volunteer(request, opportunity_id):
 
 
 def deregister_volunteer(request, opportunity_id):
-    """Remove volunteer from opportunity.volunteers and update staffing"""
     volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
     opportunity = Opportunity.objects.get(pk=opportunity_id)
     if volunteer in opportunity.volunteers.all():
         opportunity.volunteers.remove(volunteer)
-        # delete archived objects
-        if volunteer in opportunity.attended_volunteers.all():
-            opportunity.attended_volunteers.remove(volunteer)
         opportunity.staffing += 1
         opportunity.save()
     return HttpResponseRedirect(reverse("opportunityboard", args=[1]))
