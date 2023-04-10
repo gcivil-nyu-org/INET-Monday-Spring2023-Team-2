@@ -53,7 +53,7 @@ class Filter:
         return "DURATION"
 
     def search(self):
-        """Search by the given filters
+        """Search by the given filters from un-archived opportunities
         Input: Filter object
         category(default: None)
         subcategory(default: None)
@@ -61,6 +61,7 @@ class Filter:
         Output: Opportunity list
         """
         filtered_opportunity = Opportunity.objects.all()
+        filtered_opportunity = filtered_opportunity.exclude(staffing=0)
         if self.category is not None:
             filtered_opportunity = filtered_opportunity.filter(category=self.category)
         if self.subcategory is not None:

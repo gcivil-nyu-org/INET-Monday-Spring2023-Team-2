@@ -71,6 +71,7 @@ class Opportunity(models.Model):
         latitude: used for mapping the opportunity. *allowed to be blank for now
         staffing: the requested number of volunteers for the opportunity.
         volunteers: the list of registered users to the event.
+        attended_volunteers: the list of attended volunteers.
     """
 
     FREQUENCIES = [("weekly", "Weekly")]
@@ -100,6 +101,9 @@ class Opportunity(models.Model):
     is_published = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=_opportunity_photo_path, blank=True, null=True)
     volunteers = models.ManyToManyField(Volunteer, blank=True)
+    attended_volunteers = models.ManyToManyField(
+        Volunteer, blank=True, related_name="attended_volunteers"
+    )
 
     def __str__(self):
         return self.title

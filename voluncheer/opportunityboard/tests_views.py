@@ -19,11 +19,6 @@ class OpportunityboardTestCase(TestCase):
         response = self.client.get(reverse("opportunityboard", args=[1]))
         self.assertEqual(response.status_code, 200)
 
-    def test_select_page_loads(self):
-        """Tests select page loads"""
-        response = self.client.get(reverse("select"))
-        self.assertEqual(response.status_code, 200)
-
     def test_post_an_opportunity_page_loads(self):
         """Tests post_an_opportunity page loads"""
         response = self.client.get(reverse("post_an_opportunity"))

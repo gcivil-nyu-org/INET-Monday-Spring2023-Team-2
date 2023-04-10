@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "storages",
     "channels",
     "channels_redis",
+    "mathfilters",
     # Local applications
     "opportunityboard.apps.OpportunityboardConfig",
     "map.apps.MapConfig",
