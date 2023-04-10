@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.conf import settings
+# from django.conf import settings
 from map import models
 from voluncheer import settings
 

@@ -175,7 +175,7 @@ class OrganizationViewTestCase(TestCase):
     #     title="Test Opportunity 2", organization=self.organization, date=dt.date(2023, 11, 4))
 
     def test_organization_view(self):
-        login = self.client.login(username="testuser", password="testpass")
+        # login = self.client.login(username="testuser", password="testpass")
         response = self.client.get(reverse("vol_org_view", args=[self.organization.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "volunteer/vol_org_view.html")

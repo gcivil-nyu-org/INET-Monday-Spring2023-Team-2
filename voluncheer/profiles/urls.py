@@ -1,5 +1,4 @@
 from django.urls import path
-from profiles.models import User
 from profiles.views.activate_email import activate
 from profiles.views.home import SignUpView
 from profiles.views.home import home

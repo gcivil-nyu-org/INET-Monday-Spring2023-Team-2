@@ -120,6 +120,7 @@ def profile_update(request, userid):
     """Get profile update POST and call save function on ChangeForms."""
 
     userid = request.user.pk
+    userid = userid
     profile = get_object_or_404(User, pk=request.user.pk)
 
     if request.user.is_volunteer:
