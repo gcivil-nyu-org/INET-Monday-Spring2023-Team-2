@@ -188,5 +188,5 @@ class OrganizationViewTestCase(TestCase):
             response.context["opportunity_lists"],
             ["Test Opportunity"],
             transform=lambda x: str(x),
-            ordered=False
+            ordered=False,
         )
