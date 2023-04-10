@@ -1,6 +1,6 @@
 import json
 
-from django.apps import apps
+# from django.apps import apps
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -11,12 +11,11 @@ from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
 from opportunityboard.views.search import parse_search_filter
-from profiles.models import Volunteer
-from profiles.models import Organization
+from profiles.models import Volunteer, Organization
 from profiles.models import User
 
 
-Organization = apps.get_model("profiles", "Organization")
+# Organization = apps.get_model("profiles", "Organization")
 OPPORTUNITY_PER_PAGE = 5
 
 
