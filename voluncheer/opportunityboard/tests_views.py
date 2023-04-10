@@ -184,5 +184,7 @@ class OrganizationViewTestCase(TestCase):
         self.assertEqual(response.context["user"], self.user)
         self.assertEqual(response.context["organization"], self.organization)
         self.assertQuerysetEqual(
-            response.context["opportunity_lists"], ["Test Opportunity"], ordered=False
+            response.context["opportunity_lists"],
+            ["Test Opportunity".replace("<Opportunity: ", "")],
+            ordered=False
         )
