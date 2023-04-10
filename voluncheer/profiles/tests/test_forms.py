@@ -170,13 +170,11 @@ class VolunteerChangeFormTest(TestCase):
         self.assertNotEqual(
             self.user.date_of_birth, datetime.strptime("2000-01-01", "%Y-%m-%d").date()
         )
-        self.assertNotEqual(self.user.badges, "badge-2,badge-4")
         self.assertNotEqual(self.user.description, "beep_boop")
         data = {
             "first_name": "R2D2",
             "last_name": "Robot",
             "date_of_birth": "2000-01-01",
-            "badges": "badge-2,badge-4",
             "description": "beep_boop",
         }
         form = VolunteerChangeForm(data=data, instance=self.user)
@@ -186,7 +184,6 @@ class VolunteerChangeFormTest(TestCase):
         self.assertEqual(
             self.user.date_of_birth, datetime.strptime("2000-01-01", "%Y-%m-%d").date()
         )
-        self.assertEqual(self.user.badges, "badge-2,badge-4")
         self.assertEqual(self.user.description, "beep_boop")
 
 

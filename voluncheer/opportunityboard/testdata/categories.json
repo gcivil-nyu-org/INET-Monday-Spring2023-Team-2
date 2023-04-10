@@ -1,0 +1,22 @@
+[
+  {
+    "model": "opportunityboard.category",
+    "fields": {
+      "name": "Test Category"
+    }
+  },
+  {
+    "model": "opportunityboard.subcategory",
+    "fields": {
+      "name": "Test Sub Category",
+      "parent_id": 1
+    }
+  },
+  {
+    "model": "opportunityboard.subsubcategory",
+    "fields": {
+      "name": "Test Sub Sub Category",
+      "parent_id": 1
+    }
+  }
+]
