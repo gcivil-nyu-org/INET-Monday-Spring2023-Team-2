@@ -210,7 +210,7 @@ class Volunteer(models.Model):
                 badge_added = True
             else:
                 duration_remaining = badge.hours_required - self.hours_volunteered
-                hours_remaining = duration_remaining.total_seconds() / 3600
+                hours_remaining = float(duration_remaining.total_seconds()) / 3600
                 break
 
         if badge_added:
