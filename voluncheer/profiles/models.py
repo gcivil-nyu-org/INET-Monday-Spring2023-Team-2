@@ -182,7 +182,7 @@ class Volunteer(models.Model):
     badges = models.ManyToManyField(Badge, related_name="badges", blank=True)
     photo = models.ImageField(upload_to=_profile_photo_path, blank=True, null=True)
     description = models.TextField(help_text="Introduce yourself here.", default="")
-    hours_volunteered = models.DurationField(default=timedelta(days=0), null=True)
+    hours_volunteered = models.DurationField(default=timedelta(days=0))
 
     def __str__(self):
         return self.name
@@ -210,7 +210,7 @@ class Volunteer(models.Model):
                 badge_added = True
             else:
                 duration_remaining = badge.hours_required - self.hours_volunteered
-                hours_remaining = round(duration_remaining.total_seconds() / 3600, 2)
+                hours_remaining = duration_remaining.total_seconds() / 3600
                 break
 
         if badge_added:

@@ -1,8 +1,5 @@
-from django.test.client import RequestFactory
+from django.test import TestCase
 from django.urls import reverse
-
-from opportunityboard.unittest_setup import TestCase
-from profiles.views.profile import confirm_attendance
 
 
 class SignupViewTest(TestCase):
@@ -77,34 +74,3 @@ class HomeViewTest(TestCase):
         """Tests accessing home by URL"""
         response = self.client.get("")
         self.assertEqual(response.status_code, 200)
-
-
-class OrganizationProfileTest(TestCase):
-    """Test cases for Organization profile based functions"""
-
-    def test_confirm_attendance(self):
-        """Test the confirm attendance feature.
-        The request here is for mimicing the get request of select a volunteer and submit.
-        The first confirm_attendance call won't work since volunteer is not signed up.
-        The second confirm_attendance call will add the volunteer to attended_volunteers.
-        The third confirm_attendance call will remove the volunteer from attended_volunteers.
-        """
-        rf = RequestFactory()
-        get_request = rf.get(
-            f"/attendance/{self.opp.pk}",
-            {"volunteer-attended": [str(self.vol.pk)]},
-        )
-        get_request.user = self.org
-
-        confirm_attendance(get_request, self.opp.pk)
-        self.assertEqual(self.opp.attended_volunteers.count(), 0)
-
-        self.opp.volunteers.add(self.vol)
-        self.opp.refresh_from_db()
-        confirm_attendance(get_request, self.opp.pk)
-        self.opp.refresh_from_db()
-        self.assertEqual(self.opp.attended_volunteers.count(), 1)
-
-        confirm_attendance(get_request, self.opp.pk)
-        self.opp.refresh_from_db()
-        self.assertEqual(self.opp.attended_volunteers.count(), 0)

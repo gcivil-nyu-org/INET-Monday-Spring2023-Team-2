@@ -51,6 +51,7 @@ This form is for edit volunteer profile.
 
 class VolunteerChangeForm(UserChangeForm):
     password = None
+    photo = forms.ImageField(required=False)
 
     class Meta(UserChangeForm.Meta):
         model = Volunteer
