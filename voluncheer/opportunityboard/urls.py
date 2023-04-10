@@ -33,5 +33,4 @@ urlpatterns = [
         name="deregister_volunteer",
     ),
     path("profile/<int:userid>", organization_view, name="organization_view"),
-
 ]

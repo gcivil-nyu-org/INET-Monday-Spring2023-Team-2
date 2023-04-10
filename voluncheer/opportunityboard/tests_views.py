@@ -152,11 +152,9 @@ class VolunteerSignUpView(TestCase):
 
 
 class OrganizationViewTestCase(TestCase):
-
     def setUp(self):
         self.client = Client()
-        self.user = User.objects.create_user(
-            password="testpass", email="xyz@xyz.com", type=2)
+        self.user = User.objects.create_user(password="testpass", email="xyz@xyz.com", type=2)
         self.organization = Organization.objects.create(name="Test Organization", user=self.user)
         self.category = Category.objects.create(name="Sports")
         self.subcategory = Subcategory.objects.create(name="Farmwork", parent=self.category)
@@ -166,16 +164,16 @@ class OrganizationViewTestCase(TestCase):
             category=self.category,
             subcategory=self.subcategory,
             subsubcategory=self.subsubcategory,
-            title='Test Opportunity',
-            description='Test description',
+            title="Test Opportunity",
+            description="Test description",
             date=dt.datetime.now() + dt.timedelta(days=1),
             end=dt.datetime.now().time(),
-            address_1='Test address 1',
-            address_2='Test address 2',
-            longitude='55.5555',
-            latitude='44.4444',
+            address_1="Test address 1",
+            address_2="Test address 2",
+            longitude="55.5555",
+            latitude="44.4444",
             staffing=5,
-            is_published=True
+            is_published=True,
         )
 
     # self.opportunity2 = Opportunity.objects.create(
@@ -189,7 +187,5 @@ class OrganizationViewTestCase(TestCase):
         self.assertEqual(response.context["user"], self.user)
         self.assertEqual(response.context["organization"], self.organization)
         self.assertQuerysetEqual(
-            response.context["opportunity_lists"],
-            ['Test Opportunity'],
-            ordered=False
+            response.context["opportunity_lists"], ["Test Opportunity"], ordered=False
         )

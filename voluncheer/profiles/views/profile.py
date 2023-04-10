@@ -26,6 +26,7 @@ from voluncheer.settings import DEFAULT_FROM_EMAIL
 @method_decorator([login_required], name="dispatch")
 class ProfileView(DetailView):
     """Displays a user's profile and additional type specific information."""
+
     # id = User.pk
     model = User
     context_object_name = "user"
@@ -46,8 +47,8 @@ class ProfileView(DetailView):
     # obj = User.objects.get(pk=user_id)
     # return obj
 
-        # del args, kwargs  # Unused.
-        # return self.request.user
+    # del args, kwargs  # Unused.
+    # return self.request.user
     # user_id = self.kwargs.get("user_id")
     # print("user_id", user_id)
     # obj = User.objects.get(pk=user_id)
