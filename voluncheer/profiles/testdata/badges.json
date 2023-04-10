@@ -1,0 +1,21 @@
+[
+    {
+        "model":"profiles.badge",
+        "fields":{
+          "name": "Test Badge 1",
+          "type": 0,
+          "img": "badges/silver_badge.jpeg",
+          "hours_required": "1:00:00"
+        }
+      },
+
+      {
+        "model":"profiles.badge",
+        "fields":{
+          "name": "Test Badge 2",
+          "type": 0,
+          "img": "badges/gold_badge.jpeg",
+          "hours_required": "2:00:00"
+        }
+      }
+]

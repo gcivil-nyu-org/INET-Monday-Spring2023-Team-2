@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -125,6 +127,37 @@ class Organization(models.Model):
         return self.name
 
 
+class BadgeType(models.IntegerChoices):
+    """Container for all possible badge types."""
+
+    VOLUNTEER_HOURS_BADGE = 0, "VOLUNTEER_HOURS_BADGE"
+
+
+def _badge_img_path(instance, filename):
+    """Returns directory path for storing badge images"""
+    return f"badges/{filename}"
+
+
+class Badge(models.Model):
+    """The Badge model for Volunteer achievements
+
+    Attributes:
+        name: the name of the badge.
+        type: the type of the badge.
+        img: the image associated with badge.
+        hours_required: the amount of time required to earn the badge.
+
+    """
+
+    name = models.TextField(max_length=200)
+    type = models.IntegerField(choices=BadgeType.choices)
+    img = models.ImageField(upload_to=_badge_img_path)
+    hours_required = models.DurationField()
+
+    def __str__(self):
+        return self.name
+
+
 class Volunteer(models.Model):
     """The Volunteer profile type.
 
@@ -146,18 +179,10 @@ class Volunteer(models.Model):
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
     date_of_birth = models.DateField(blank=True, null=True)
-    badges = models.CharField(max_length=1024, default="")
+    badges = models.ManyToManyField(Badge, related_name="badges", blank=True)
     photo = models.ImageField(upload_to=_profile_photo_path, blank=True, null=True)
     description = models.TextField(help_text="Introduce yourself here.", default="")
-
-    BADGES = {
-        "Badge 1": "images/badge-1.png",
-        "Badge 2": "images/badge-2.png",
-        "Badge 3": "images/badge-3.png",
-        "Badge 4": "images/badge-4.png",
-        "Badge 5": "images/badge-5.png",
-        "Badge 6": "images/badge-6.png",
-    }
+    hours_volunteered = models.DurationField(default=timedelta(days=0))
 
     def __str__(self):
         return self.name
@@ -166,3 +191,29 @@ class Volunteer(models.Model):
     def name(self):
         """Returns the full name of the volunteer."""
         return f"{self.first_name} {self.last_name}"
+
+    def award_volunteer_hours_badges(self):
+        """
+        Checks if a volunteer is eligible for any new volunteer level badges.
+        If so, adds those badges to the volunteer.
+        Returns hours remaining until next volunteer level badge.
+        """
+        badges = Badge.objects.filter(type=BadgeType.VOLUNTEER_HOURS_BADGE).order_by(
+            "hours_required"
+        )
+        hours_remaining = None
+        badge_added = False
+
+        for badge in badges:
+            if self.hours_volunteered >= badge.hours_required:
+                self.badges.add(badge)
+                badge_added = True
+            else:
+                duration_remaining = badge.hours_required - self.hours_volunteered
+                hours_remaining = duration_remaining.total_seconds() / 3600
+                break
+
+        if badge_added:
+            self.save()
+
+        return hours_remaining
