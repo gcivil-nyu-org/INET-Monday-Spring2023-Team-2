@@ -82,7 +82,7 @@
                                         <input type="checkbox" class="volunteer-attandence" name="volunteer-attended" value="{{volunteer.pk}}">Attended
                                     {% else %}
                                     <div class="sticky-note">
-                                        <input type="checkbox" class="volunteer-attandence" name="volunteer-attended" value="{{volunteer.pk}}">Not Attend
+                                        <input type="checkbox" class="volunteer-attandence" name="volunteer-attended" value="{{volunteer.pk}}">Did Not Attend
                                     {% endif %} 
                                         <br>
                                         Name: {{volunteer.first_name}}, {{volunteer.last_name}}
@@ -92,7 +92,7 @@
                                     </div>
                                 {% endfor %}
                             </div>
-                            <button type="submit" id="opportunities-detail-form-btn" class="opportunities-detail-form-submit">Confirm Attandence</button>
+                            <button type="submit" id="opportunities-detail-form-btn" class="opportunities-detail-form-submit">Confirm Attendence</button>
                         </form>
                         <div class="url"><a href="#opportunity-edit-{{opportunity.pk}}" id="opportunities-detail-{{opportunity.pk}}" class="opportunities-detail-btn" onclick="ShowDetail(this)">Details</a></div>
                         <hr align="center">
