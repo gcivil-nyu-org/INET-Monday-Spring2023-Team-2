@@ -1,17 +1,19 @@
 import datetime as dt
 
+from django.test import Client
 from django.test.client import RequestFactory
 from django.urls import reverse
 
-from opportunityboard.models import Category, Subcategory, Subsubcategory
+from opportunityboard.models import Category
+from opportunityboard.models import Opportunity
+from opportunityboard.models import Subcategory
+from opportunityboard.models import Subsubcategory
 from opportunityboard.unittest_setup import TestCase
 from opportunityboard.views.opportunityboard import deregister_volunteer
 from opportunityboard.views.opportunityboard import opportunityboard
 from opportunityboard.views.opportunityboard import signup_volunteer
 from opportunityboard.views.search import Filter
 from profiles.models import Organization
-from opportunityboard.models import Opportunity
-from django.test import Client
 from profiles.models import User
 
 

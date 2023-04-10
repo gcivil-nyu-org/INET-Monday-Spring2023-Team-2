@@ -11,9 +11,9 @@ from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
 from opportunityboard.views.search import parse_search_filter
-from profiles.models import Volunteer, Organization
+from profiles.models import Organization
 from profiles.models import User
-
+from profiles.models import Volunteer
 
 # Organization = apps.get_model("profiles", "Organization")
 OPPORTUNITY_PER_PAGE = 5
