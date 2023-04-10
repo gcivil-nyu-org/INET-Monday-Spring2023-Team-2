@@ -14,6 +14,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.views.generic import DetailView
 
+from opportunityboard.models import Opportunity
 from profiles.forms.organizations import OrganizationChangeForm
 from profiles.forms.volunteers import VolunteerChangeForm
 from profiles.models import Organization
@@ -51,7 +52,9 @@ class ProfileView(DetailView):
             kwargs["user_form"] = VolunteerChangeForm(instance=volunteer_profile)
             kwargs["badges"] = volunteer_profile.badges.order_by("hours_required")
             kwargs["hours_required"] = volunteer_profile.award_volunteer_hours_badges()
-            kwargs["hours_volunteered"] = volunteer_profile.hours_volunteered.total_seconds() / 3600
+            kwargs["hours_volunteered"] = round(
+                volunteer_profile.hours_volunteered.total_seconds() / 3600, 2
+            )
 
         return super().get_context_data(**kwargs)
 
@@ -97,14 +100,15 @@ class ProfileView(DetailView):
 
 def profile_update(request):
     """Get profile update POST and call save function on ChangeForms."""
-    profile = get_object_or_404(User, pk=request.user.pk)
     if request.user.is_volunteer:
+        profile = get_object_or_404(Volunteer, pk=request.user)
         form = VolunteerChangeForm(
             request.POST,
             request.FILES,
             instance=profile,
         )
     elif request.user.is_organization:
+        profile = get_object_or_404(Organization, pk=request.user)
         form = OrganizationChangeForm(request.POST, request.FILES, instance=profile)
     else:
         raise ValueError("profile_update: user must either a volunteer or an organizaiton.")
@@ -112,11 +116,65 @@ def profile_update(request):
     return redirect("profile")
 
 
+# This part is for Volunteer specified features.
+
+
 def saved_events(request):
     volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
     opportunity_selected = volunteer.opportunity_set.all()
+    opportunity_attended = Opportunity.objects.filter(is_archive=True, volunteer_archive=volunteer)
     return render(
         request=request,
         template_name="profiles/savedevents.html",
-        context={"opportunity_selected": opportunity_selected},
+        context={
+            "opportunity_selected": opportunity_selected,
+            "volunteer": volunteer,
+            "opportunity_attended": opportunity_attended,
+        },
     )
+
+
+# This part is for Organization specified features.
+
+
+def confirm_attendance(request, opportunity_id):
+    """Get the request contains volunteer selection,
+    update opportunity's attended_volunteers attribute, and create archive object.
+    """
+    confirm_attendees = request.GET.getlist("volunteer-attended")
+    organization = get_object_or_404(Organization, pk=request.user.pk)
+    opportunity = get_object_or_404(Opportunity, pk=opportunity_id)
+    for attendee_pk in confirm_attendees:
+        volunteer = Volunteer.objects.get(pk=attendee_pk)
+        if volunteer not in opportunity.volunteers.all():
+            continue
+        if volunteer in opportunity.attended_volunteers.all():
+            opportunity.attended_volunteers.remove(volunteer)
+            Opportunity.objects.filter(
+                is_archive=True, volunteer_archive=volunteer, title=opportunity.title
+            ).delete()
+            volunteer.hours_volunteered -= opportunity.duration
+            volunteer.save()
+        else:
+            opportunity.attended_volunteers.add(volunteer)
+            print(f"{volunteer.hours_volunteered} + {opportunity.duration}")
+            volunteer.hours_volunteered += opportunity.duration
+            volunteer.save()
+            Opportunity.objects.create(
+                organization=organization,
+                category=opportunity.category,
+                subcategory=opportunity.subcategory,
+                subsubcategory=opportunity.subsubcategory,
+                title=opportunity.title,
+                description=opportunity.description,
+                date=opportunity.date,
+                end=opportunity.end,
+                address_1=opportunity.address_1,
+                address_2=opportunity.address_2,
+                longitude=opportunity.longitude,
+                latitude=opportunity.latitude,
+                is_archive=True,
+                volunteer_archive=volunteer,
+            ).save()
+
+    return redirect("profile")

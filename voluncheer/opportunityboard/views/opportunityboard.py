@@ -44,13 +44,6 @@ def opportunityboard(request, page_number):
     return render(request, "voluncheer/opportunityboard.html", context)
 
 
-def select(request):
-    """Placeholder view for later use"""
-    opportunity_lists = Opportunity.objects.order_by("-pubdate"[:20])
-    context = {"opportunity_lists": opportunity_lists}
-    return render(request, "voluncheer/opportunityboard.html", context)
-
-
 def category_dict_gen():
     categories = Category.objects.all()
     cate_output_dict = {}
@@ -83,6 +76,12 @@ def deregister_volunteer(request, opportunity_id):
     opportunity = Opportunity.objects.get(pk=opportunity_id)
     if volunteer in opportunity.volunteers.all():
         opportunity.volunteers.remove(volunteer)
+        # delete archived objects
+        if volunteer in opportunity.attended_volunteers.all():
+            opportunity.attended_volunteers.remove(volunteer)
+            Opportunity.objects.filter(
+                is_archive=True, volunteer_archive=volunteer, title=opportunity.title
+            ).delete()
         opportunity.staffing += 1
         opportunity.save()
     return HttpResponseRedirect(reverse("opportunityboard", args=[1]))

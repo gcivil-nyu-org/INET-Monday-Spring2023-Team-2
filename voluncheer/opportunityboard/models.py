@@ -71,6 +71,9 @@ class Opportunity(models.Model):
         latitude: used for mapping the opportunity. *allowed to be blank for now
         staffing: the requested number of volunteers for the opportunity.
         volunteers: the list of registered users to the event.
+
+        is_archive: flag for archive, default is False.
+        volunteer_archive: foreign key for archive.
     """
 
     FREQUENCIES = [("weekly", "Weekly")]
@@ -100,6 +103,14 @@ class Opportunity(models.Model):
     is_published = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=_opportunity_photo_path, blank=True, null=True)
     volunteers = models.ManyToManyField(Volunteer, blank=True)
+    attended_volunteers = models.ManyToManyField(
+        Volunteer, blank=True, related_name="attended_volunteers"
+    )
+    # this part is used only for archive opportunity!
+    is_archive = models.BooleanField(default=False, null=True)
+    volunteer_archive = models.ForeignKey(
+        Volunteer, on_delete=models.CASCADE, null=True, related_name="volunteer_archive"
+    )
 
     def __str__(self):
         return self.title

@@ -5,6 +5,7 @@ from profiles.views.home import SignUpView
 from profiles.views.home import home
 from profiles.views.organizations import OrganizationSignUpView
 from profiles.views.profile import ProfileView
+from profiles.views.profile import confirm_attendance
 from profiles.views.profile import profile_update
 from profiles.views.profile import saved_events
 from profiles.views.volunteers import VolunteerSignUpView
@@ -26,4 +27,5 @@ urlpatterns = [
         name="volunteer_signup",
     ),
     path("savedevents/", saved_events, name="saved_events"),
+    path("attandance/<int:opportunity_id>", confirm_attendance, name="attandance"),
 ]

@@ -60,7 +60,8 @@ class Filter:
         subsubcategory(default: None)
         Output: Opportunity list
         """
-        filtered_opportunity = Opportunity.objects.all()
+        filtered_opportunity = Opportunity.objects.filter(is_archive=False)
+        filtered_opportunity = filtered_opportunity.exclude(staffing=0)
         if self.category is not None:
             filtered_opportunity = filtered_opportunity.filter(category=self.category)
         if self.subcategory is not None:
