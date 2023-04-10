@@ -124,7 +124,7 @@
 		<div id="secwrapper">
 			<section>
 {#      django script goes here       #}
-            <form class="opportunities-showcase" action="{% url 'select' %}" method="post">
+            <form class="opportunities-showcase" action="" method="post">
 				<article id="photobox">
 					<h1>Badges You Can Earn</h1>
 					<img src="../../static/images/badge-1.png" alt=""/>
@@ -176,7 +176,12 @@
 			</section>
 		</div>
     <div class="pagination">
-      <a method="get" class="page-button" href="#">&laquo;</a>
+      {% load mathfilters %}
+      {% if curr_page != 1 %}
+        {% with prev_page=curr_page|sub:1 %}
+          <a method="get" class="page-button" href="{% url 'opportunityboard' prev_page %}">&laquo;</a>
+        {% endwith %}
+      {% endif %}
       {% for page_number in range_of_pages %}
       {% if curr_page == page_number %}
       <a method="get" class="page-button active" href="{% url 'opportunityboard' page_number%}">{{ page_number }}</a>
@@ -184,7 +189,11 @@
       <a method="get" class="page-button" href="{% url 'opportunityboard' page_number%}">{{ page_number }}</a>
       {% endif %}
       {% endfor %}
-      <a method="get" class="page-button" href="#">&raquo;</a>
+      {% if curr_page != range_of_pages|last  %}
+        {% with next_page=curr_page|add:1 %}
+          <a method="get" class="page-button" href="{% url 'opportunityboard' next_page %}">&raquo;</a>
+        {% endwith %}
+      {% endif %}  
     </div>
 		<footer>
 			<p>Copyright &copy 2023 VolunCheer, org.  All Rights Reserved.</p>
