@@ -180,4 +180,4 @@ def confirm_attendance(request, opportunity_id):
             volunteer.hours_volunteered += opportunity.duration
             volunteer.save()
 
-    return redirect("profile")
+    return redirect("home")
