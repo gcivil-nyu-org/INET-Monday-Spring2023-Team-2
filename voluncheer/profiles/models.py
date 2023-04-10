@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 
 class UserType(models.IntegerChoices):
@@ -66,7 +67,6 @@ class User(AbstractUser):
     date_joined = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
     type = models.IntegerField(choices=UserType.choices)
-
     objects = UserManager()
 
     REQUIRED_FIELDS = []
@@ -89,6 +89,9 @@ class User(AbstractUser):
     def is_admin(self):
         """Returns true if this user is an admin."""
         return self.type == UserType.ADMIN
+
+    # def get_absolute_url(self):
+    #     return reverse('profile', args=[str(self.pk)])
 
 
 def _profile_photo_path(instance, filename):

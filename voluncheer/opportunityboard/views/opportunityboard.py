@@ -12,6 +12,9 @@ from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
 from opportunityboard.views.search import parse_search_filter
 from profiles.models import Volunteer
+from profiles.models import Organization
+from profiles.models import User
+
 
 Organization = apps.get_model("profiles", "Organization")
 OPPORTUNITY_PER_PAGE = 5
@@ -86,3 +89,12 @@ def deregister_volunteer(request, opportunity_id):
         opportunity.staffing += 1
         opportunity.save()
     return HttpResponseRedirect(reverse("opportunityboard", args=[1]))
+
+
+def organization_view(request, userid):
+    organization = Organization.objects.get(pk=userid)
+    print(organization)
+    user = get_object_or_404(User, pk=userid)
+    opportunity_lists = organization.opportunity_set.all()
+    context = {"user": user, "organization": organization, "opportunity_lists": opportunity_lists}
+    return render(request, "volunteer/vol_org_view.html", context)

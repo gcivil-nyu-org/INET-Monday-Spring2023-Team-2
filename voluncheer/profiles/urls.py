@@ -1,5 +1,5 @@
 from django.urls import path
-
+from profiles.models import User
 from profiles.views.activate_email import activate
 from profiles.views.home import SignUpView
 from profiles.views.home import home
@@ -11,8 +11,8 @@ from profiles.views.volunteers import VolunteerSignUpView
 
 urlpatterns = [
     path("", home, name="home"),
-    path("profile/", ProfileView.as_view(), name="profile"),
-    path("profile/update/", profile_update, name="profile_update"),
+    path("profile/<int:pk>", ProfileView.as_view(), name="profile"),
+    path("profile/update/<int:userid>", profile_update, name="profile_update"),
     path("activate/<uidb64>/<token>", activate, name="activate"),
     path("accounts/signup/", SignUpView.as_view(), name="signup"),
     path(

@@ -12,5 +12,5 @@ class SignUpView(TemplateView):
 def home(request):
     """Directs the user to their home page."""
     if request.user.is_authenticated:
-        return redirect("profile")
+        return redirect(f"profile/{request.user.pk}")
     return render(request, "voluncheer/home.html")

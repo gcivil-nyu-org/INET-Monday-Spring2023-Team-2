@@ -26,15 +26,32 @@ from voluncheer.settings import DEFAULT_FROM_EMAIL
 @method_decorator([login_required], name="dispatch")
 class ProfileView(DetailView):
     """Displays a user's profile and additional type specific information."""
-
+    # id = User.pk
     model = User
     context_object_name = "user"
     template_name = "profiles/profile.html"
+    pk_url_kwarg = "user_id"
 
     def get_object(self, *args, **kwargs):
         """Returns the user object for display."""
-        del args, kwargs  # Unused.
-        return self.request.user
+        user_id = self.request.user.pk
+        return get_object_or_404(User, pk=user_id)
+
+    # def get_object(self, queryset=None):
+    #     pk = self.kwargs.get('pk')
+    #     return get_object_or_404(User, pk=pk)
+
+    # user_id = self.request.user.pk
+    # print("user_id", user_id)
+    # obj = User.objects.get(pk=user_id)
+    # return obj
+
+        # del args, kwargs  # Unused.
+        # return self.request.user
+    # user_id = self.kwargs.get("user_id")
+    # print("user_id", user_id)
+    # obj = User.objects.get(pk=user_id)
+    # return obj
 
     def get_context_data(self, **kwargs):
         """Returns additional contextual information for display."""
@@ -99,8 +116,9 @@ class ProfileView(DetailView):
         )
 
 
-def profile_update(request):
+def profile_update(request, userid):
     """Get profile update POST and call save function on ChangeForms."""
+    userid = request.user.pk
     profile = get_object_or_404(User, pk=request.user.pk)
     if request.user.is_volunteer:
         form = VolunteerChangeForm(
@@ -113,7 +131,7 @@ def profile_update(request):
     else:
         raise ValueError("profile_update: user must either a volunteer or an organizaiton.")
     form.save()
-    return redirect("profile")
+    return redirect("home")
 
 
 def saved_events(request):

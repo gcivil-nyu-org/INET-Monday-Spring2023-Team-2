@@ -3,12 +3,16 @@ import datetime as dt
 from django.test.client import RequestFactory
 from django.urls import reverse
 
-from opportunityboard.models import Category
+from opportunityboard.models import Category, Subcategory, Subsubcategory
 from opportunityboard.unittest_setup import TestCase
 from opportunityboard.views.opportunityboard import deregister_volunteer
 from opportunityboard.views.opportunityboard import opportunityboard
 from opportunityboard.views.opportunityboard import signup_volunteer
 from opportunityboard.views.search import Filter
+from profiles.models import Organization
+from opportunityboard.models import Opportunity
+from django.test import Client
+from profiles.models import User
 
 
 class OpportunityboardTestCase(TestCase):
@@ -145,3 +149,47 @@ class VolunteerSignUpView(TestCase):
         deregister_volunteer(test_request, self.opp.pk)
         self.opp.refresh_from_db()
         self.assertEqual(self.opp.staffing, 9)
+
+
+class OrganizationViewTestCase(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            password="testpass", email="xyz@xyz.com", type=2)
+        self.organization = Organization.objects.create(name="Test Organization", user=self.user)
+        self.category = Category.objects.create(name="Sports")
+        self.subcategory = Subcategory.objects.create(name="Farmwork", parent=self.category)
+        self.subsubcategory = Subsubcategory.objects.create(name="Feeding", parent=self.subcategory)
+        self.opportunity1 = Opportunity.objects.create(
+            organization=self.organization,
+            category=self.category,
+            subcategory=self.subcategory,
+            subsubcategory=self.subsubcategory,
+            title='Test Opportunity',
+            description='Test description',
+            date=dt.datetime.now() + dt.timedelta(days=1),
+            end=dt.datetime.now().time(),
+            address_1='Test address 1',
+            address_2='Test address 2',
+            longitude='55.5555',
+            latitude='44.4444',
+            staffing=5,
+            is_published=True
+        )
+
+    # self.opportunity2 = Opportunity.objects.create(
+    #     title="Test Opportunity 2", organization=self.organization, date=dt.date(2023, 11, 4))
+
+    def test_organization_view(self):
+        login = self.client.login(username="testuser", password="testpass")
+        response = self.client.get(reverse("vol_org_view", args=[self.organization.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "volunteer/vol_org_view.html")
+        self.assertEqual(response.context["user"], self.user)
+        self.assertEqual(response.context["organization"], self.organization)
+        self.assertQuerysetEqual(
+            response.context["opportunity_lists"],
+            ['Test Opportunity'],
+            ordered=False
+        )
