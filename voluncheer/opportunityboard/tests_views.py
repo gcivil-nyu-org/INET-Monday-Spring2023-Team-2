@@ -186,5 +186,5 @@ class OrganizationViewTestCase(TestCase):
         self.assertQuerysetEqual(
             response.context["opportunity_lists"],
             ["Test Opportunity".replace("<Opportunity: ", "")],
-            ordered=False
+            ordered=False,
         )
