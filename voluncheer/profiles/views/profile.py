@@ -139,6 +139,8 @@ def saved_events(request):
 def confirm_attendance(request, opportunity_id):
     """Get the request contains volunteer selection,
     update opportunity's attended_volunteers attribute, and create archive object.
+    checks to see if the volunteer is attended.
+    If attended, trigger this function will cancel their attendance.
     """
     confirm_attendees = request.GET.getlist("volunteer-attended")
     opportunity = get_object_or_404(Opportunity, pk=opportunity_id)
