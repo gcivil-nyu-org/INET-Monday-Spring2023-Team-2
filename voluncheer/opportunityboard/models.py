@@ -71,9 +71,9 @@ class Opportunity(models.Model):
         latitude: used for mapping the opportunity. *allowed to be blank for now
         staffing: the requested number of volunteers for the opportunity.
         volunteers: the list of registered users to the event.
-
+        attended_volunteers: the list of attended volunteers.
         is_archive: flag for archive, default is False.
-        volunteer_archive: foreign key for archive.
+        volunteer_archive: foreign key for archive. Used for archived opportunity only
     """
 
     FREQUENCIES = [("weekly", "Weekly")]

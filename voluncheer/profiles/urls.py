@@ -27,5 +27,5 @@ urlpatterns = [
         name="volunteer_signup",
     ),
     path("savedevents/", saved_events, name="saved_events"),
-    path("attandance/<int:opportunity_id>", confirm_attendance, name="attandance"),
+    path("attendance/<int:opportunity_id>", confirm_attendance, name="attendance"),
 ]

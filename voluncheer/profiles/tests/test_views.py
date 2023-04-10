@@ -83,9 +83,6 @@ class HomeViewTest(TestCase):
 class OrganizationProfileTest(TestCase):
     """Test cases for Organization profile based functions"""
 
-    def setUp(self):
-        super().setUp()
-
     def test_confirm_attendance(self):
         """Test the confirm attendance feature.
         The request here is for mimicing the get request of select a volunteer and submit.
@@ -95,7 +92,7 @@ class OrganizationProfileTest(TestCase):
         """
         rf = RequestFactory()
         get_request = rf.get(
-            f"/attandance/{self.opp.pk}",
+            f"/attendance/{self.opp.pk}",
             {"volunteer-attended": [str(self.vol.pk)]},
         )
         get_request.user = self.org

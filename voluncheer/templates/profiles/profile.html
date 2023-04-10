@@ -73,9 +73,9 @@
                         <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
                         <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
                         <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
-                        <form method="get" id="opportunities-detail-{{opportunity.pk}}-form" class="opportunities-detail-form" action="{% url 'attandance' opportunity.pk %}">
+                        <form method="get" id="opportunities-detail-{{opportunity.pk}}-form" class="opportunities-detail-form" action="{% url 'attendance' opportunity.pk %}">
                             <div id="volunteer-attandence">
-                                <p class="vol-position-disciption-h1">Volunteer Attandance:</p>
+                                <p class="vol-position-disciption-h1">Volunteer attendance:</p>
                                 {% for volunteer in opportunity.volunteers.all %}
                                     {% if volunteer in opportunity.attended_volunteers.all %}
                                     <div class="sticky-note green">

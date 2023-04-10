@@ -53,7 +53,7 @@ class Filter:
         return "DURATION"
 
     def search(self):
-        """Search by the given filters
+        """Search by the given filters from un-archived opportunities
         Input: Filter object
         category(default: None)
         subcategory(default: None)

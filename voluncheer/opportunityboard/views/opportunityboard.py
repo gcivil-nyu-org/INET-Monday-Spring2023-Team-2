@@ -45,6 +45,7 @@ def opportunityboard(request, page_number):
 
 
 def category_dict_gen():
+    """Gen a dictionary object from category/subcategory/subsubcategory for frontend uses"""
     categories = Category.objects.all()
     cate_output_dict = {}
     for category in categories:
@@ -62,6 +63,7 @@ def category_dict_gen():
 
 
 def signup_volunteer(request, opportunity_id):
+    """Add volunteer to opportunity.volunteers and update staffing"""
     volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
     opportunity = Opportunity.objects.get(pk=opportunity_id)
     if opportunity.staffing > 0 and volunteer not in opportunity.volunteers.all():
@@ -72,6 +74,7 @@ def signup_volunteer(request, opportunity_id):
 
 
 def deregister_volunteer(request, opportunity_id):
+    """Remove volunteer from opportunity.volunteers and update staffing"""
     volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
     opportunity = Opportunity.objects.get(pk=opportunity_id)
     if volunteer in opportunity.volunteers.all():

@@ -157,7 +157,6 @@ def confirm_attendance(request, opportunity_id):
             volunteer.save()
         else:
             opportunity.attended_volunteers.add(volunteer)
-            print(f"{volunteer.hours_volunteered} + {opportunity.duration}")
             volunteer.hours_volunteered += opportunity.duration
             volunteer.save()
             Opportunity.objects.create(
