@@ -165,6 +165,10 @@
                 <a href="{% url 'saved_events' %}" >MY VOLUNCHEERS</a>
                 <hr align="center">
             </div>
+            <div class="url">
+                <a href="{% url 'create_post' %}" >CREATE POST</a>
+                <hr align="center">
+            </div>
         </div>
     </div>
     <!-- Main -->
@@ -209,6 +213,21 @@
             {% if hours_required %}
                 <p class="hours-required"> You have {{ hours_required }} hours to go until your next badge!</p>
             {% endif %}
+        </div>
+
+        <h2>MY GALLERY</h2>
+        <div class="card">
+            {% for post in gallery_post %}
+            <article>
+                {% if post.photo %}
+                <a href="#"><img src="{{post.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
+                {% endif %}
+                <p class="vol-position-disciption-h1">{{ post.title }}</p>
+                <p class="vol-position-disciption-h2">{{ post.content }}</p>
+                <div class="url"><a href="#" id="{{post.pk}}" class="opportunities-detail-btn">Delete</a></div>
+                <hr align="center">
+            </article>
+            {% endfor %}
         </div>
     </div>
     <!-- End -->

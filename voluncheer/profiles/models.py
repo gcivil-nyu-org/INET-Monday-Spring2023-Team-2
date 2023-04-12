@@ -219,3 +219,30 @@ class Volunteer(models.Model):
             self.save()
 
         return hours_remaining
+
+
+def _post_photo_path(instance, filename):
+    return f"opportunities/{instance.volunteer.user.id}/{filename}"
+
+
+class GallaryPost(models.Model):
+    """The GalaryPost type.
+
+    Attributes:
+        volunteer: post belong to.
+        author: post author, either created by the same volunteer or aliens.
+        title: post title.
+        photo: post feature. Image field, required.
+        content: post content.
+    """
+
+    volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE, blank=True)
+    author = models.ForeignKey(
+        Volunteer, on_delete=models.CASCADE, blank=True, related_name="author"
+    )
+    title = models.CharField(help_text="Title:", max_length=200)
+    photo = models.ImageField(upload_to=_post_photo_path, blank=True, null=True)
+    content = models.TextField(help_text="Caption:", default="")
+
+    def __str__(self):
+        return self.title

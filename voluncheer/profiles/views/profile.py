@@ -20,6 +20,7 @@ from profiles.forms.volunteers import VolunteerChangeForm
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
+from profiles.models import GallaryPost
 from voluncheer.settings import AWS_SES_DOMAIN
 from voluncheer.settings import DEFAULT_FROM_EMAIL
 
@@ -73,6 +74,8 @@ class ProfileView(DetailView):
             kwargs["hours_volunteered"] = round(
                 volunteer_profile.hours_volunteered.total_seconds() / 3600, 2
             )
+            gallery_post = GallaryPost.objects.filter(volunteer=volunteer_profile)
+            kwargs["gallery_post"] = gallery_post
 
         return super().get_context_data(**kwargs)
 

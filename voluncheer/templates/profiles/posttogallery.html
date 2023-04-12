@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% if user.is_volunteer %}
+
+</div>
+<!-- Side Nav -->
+<div class="sidenav">
+    <div class="profile">
+        {% if volunteer.photo %}
+            <img src="{{volunteer.photo.url}}" alt="profile pic" width="100" height="100"/>
+        {% endif %}
+        <div class="name">
+            {{ volunteer.first_name }}, {{ volunteer.last_name }}
+        </div>
+        <div class="email">
+            {{ user.email }}
+        </div>
+        <hr align="center">
+        <div class="self-description">
+            <p>{{ volunteer.description }}</p>
+        </div>
+    </div>
+
+    <div class="sidenav-url">
+        <div class="url">
+            <a href="{% url 'home' %}" class="active" >PROFILE</a>
+            <hr align="center">
+        </div>
+        <div class="url">
+            <a class="not-implemented-yet" href="#">SETTINGS</a>
+            <hr align="center">
+        </div>
+        <div class="url">
+            <a href="{% url 'saved_events' %}" >MY VOLUNCHEERS</a>
+            <hr align="center">
+        </div>
+        <div class="url">
+            <a href="{% url 'create_post' %}" >CREATE POST</a>
+            <hr align="center">
+        </div>
+    </div>
+</div>
+
+<div class="main">
+<h2>NEW GALLERY POST</h2>
+<div class="card">
+    <div class="card-body">
+        <form method="post" class="edit-form" 
+        id="gallerypost_form" enctype="multipart/form-data" action="{% url 'create_post' %}">
+            {% csrf_token %}
+            {{ gallerypost_form.as_p }}
+            <button type="submit" id="edit-form-edit-btn" class="edit-form">Post</button>
+        </form>
+    </div>
+</div>
+</div>
+{% endif %}
+{% endblock %}
