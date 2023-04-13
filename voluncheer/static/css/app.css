@@ -284,6 +284,13 @@ td {
     width: 100px;
     margin-top: 10px;
 }
+#photo-clear_id {
+    display: none;
+    width: 15px;
+}
+label[for=photo-clear_id] {
+    display: none;
+}
 
 .pagination {
     display: inline-block;
@@ -311,4 +318,34 @@ td {
   
 .pagination a:hover:not(.active) {background-color: #ddd;}
 
+
+.opportunities-detail-form {
+    display: none;
+    border: none;
+    font-size: 16px;
+    width: 90%;
+}
+.opportunities-detail-form input {
+    width: 20px;
+}
+
+#opportunities-detail-form-btn {
+    margin-top: 10px;
+    border: none;
+    font-size: 16px;
+}
+
+.sticky-note {
+  text-decoration:none;
+  color:#000;
+  background:#ffc;
+  display:inline-block;
+  width:10em;
+  padding:1em;
+  box-shadow: 0 5px 2px #aaa;
+}
+
+.sticky-note.green {
+    background:rgb(222,255,180);
+}
 /* End */

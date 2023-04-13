@@ -14,6 +14,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.views.generic import DetailView
 
+from opportunityboard.models import Opportunity
 from profiles.forms.organizations import OrganizationChangeForm
 from profiles.forms.volunteers import VolunteerChangeForm
 from profiles.models import Organization
@@ -27,14 +28,32 @@ from voluncheer.settings import DEFAULT_FROM_EMAIL
 class ProfileView(DetailView):
     """Displays a user's profile and additional type specific information."""
 
+    # id = User.pk
     model = User
     context_object_name = "user"
     template_name = "profiles/profile.html"
+    pk_url_kwarg = "user_id"
 
     def get_object(self, *args, **kwargs):
         """Returns the user object for display."""
-        del args, kwargs  # Unused.
-        return self.request.user
+        user_id = self.request.user.pk
+        return get_object_or_404(User, pk=user_id)
+
+    # def get_object(self, queryset=None):
+    #     pk = self.kwargs.get('pk')
+    #     return get_object_or_404(User, pk=pk)
+
+    # user_id = self.request.user.pk
+    # print("user_id", user_id)
+    # obj = User.objects.get(pk=user_id)
+    # return obj
+
+    # del args, kwargs  # Unused.
+    # return self.request.user
+    # user_id = self.kwargs.get("user_id")
+    # print("user_id", user_id)
+    # obj = User.objects.get(pk=user_id)
+    # return obj
 
     def get_context_data(self, **kwargs):
         """Returns additional contextual information for display."""
@@ -51,7 +70,9 @@ class ProfileView(DetailView):
             kwargs["user_form"] = VolunteerChangeForm(instance=volunteer_profile)
             kwargs["badges"] = volunteer_profile.badges.order_by("hours_required")
             kwargs["hours_required"] = volunteer_profile.award_volunteer_hours_badges()
-            kwargs["hours_volunteered"] = volunteer_profile.hours_volunteered.total_seconds() / 3600
+            kwargs["hours_volunteered"] = round(
+                volunteer_profile.hours_volunteered.total_seconds() / 3600, 2
+            )
 
         return super().get_context_data(**kwargs)
 
@@ -95,21 +116,30 @@ class ProfileView(DetailView):
         )
 
 
-def profile_update(request):
+def profile_update(request, userid):
     """Get profile update POST and call save function on ChangeForms."""
+
+    userid = request.user.pk
+    userid = userid
     profile = get_object_or_404(User, pk=request.user.pk)
+
     if request.user.is_volunteer:
+        profile = get_object_or_404(Volunteer, pk=request.user)
         form = VolunteerChangeForm(
             request.POST,
             request.FILES,
             instance=profile,
         )
     elif request.user.is_organization:
+        profile = get_object_or_404(Organization, pk=request.user)
         form = OrganizationChangeForm(request.POST, request.FILES, instance=profile)
     else:
         raise ValueError("profile_update: user must either a volunteer or an organizaiton.")
     form.save()
-    return redirect("profile")
+    return redirect("home")
+
+
+# This part is for Volunteer specified features.
 
 
 def saved_events(request):
@@ -118,5 +148,36 @@ def saved_events(request):
     return render(
         request=request,
         template_name="profiles/savedevents.html",
-        context={"opportunity_selected": opportunity_selected},
+        context={
+            "opportunity_selected": opportunity_selected,
+            "volunteer": volunteer,
+            "opportunity_attended": [],
+        },
     )
+
+
+# This part is for Organization specified features.
+
+
+def confirm_attendance(request, opportunity_id):
+    """Get the request contains volunteer selection,
+    update opportunity's attended_volunteers attribute, and create archive object.
+    checks to see if the volunteer is attended.
+    If attended, trigger this function will cancel their attendance.
+    """
+    confirm_attendees = request.GET.getlist("volunteer-attended")
+    opportunity = get_object_or_404(Opportunity, pk=opportunity_id)
+    for attendee_pk in confirm_attendees:
+        volunteer = Volunteer.objects.get(pk=attendee_pk)
+        if volunteer not in opportunity.volunteers.all():
+            continue
+        if volunteer in opportunity.attended_volunteers.all():
+            opportunity.attended_volunteers.remove(volunteer)
+            volunteer.hours_volunteered -= opportunity.duration
+            volunteer.save()
+        else:
+            opportunity.attended_volunteers.add(volunteer)
+            volunteer.hours_volunteered += opportunity.duration
+            volunteer.save()
+
+    return redirect("home")

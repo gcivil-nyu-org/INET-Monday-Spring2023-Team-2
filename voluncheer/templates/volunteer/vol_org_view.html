@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<!-- Sidenav -->
+<div class="sidenav">
+    <div class="profile">
+        {% if organization.photo %}
+        <img src="{{organization.photo.url}}" alt="profile pic" width="100" height="100" />
+        <hr align="center">
+        {% endif %}
+        <div class="name">
+            {{ organization }}
+        </div>
+        <div class="email">
+            {{ user.email }}
+        </div>
+        <hr align="center">
+        <div class="self-description">
+            <p>{{ user.description }}</p>
+        </div>
+    </div>
+</div>
+<!-- End -->
+
+<!-- Main -->
+<div class="main">
+    <h2>ABOUT US</h2>
+    <div class="card">
+        <div class="card-body">
+            <div class="edit-form" id="edit-form-view">
+                <tr>
+                    Name:
+                    <p>{{organization.name}}</p>
+                </tr>
+                <tr>
+                    Website:
+                    <a href="https://{{ organization.website }}">
+                        <p>{{organization.website}}</p>
+                    </a>
+                </tr>
+            </div>
+        </div>
+    </div>
+
+    <h2>POSTED OPPORTUNITIES</h2>
+    <div class="card">
+        {% csrf_token %}
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        {% for opportunity in opportunity_lists %}
+        {% if opportunity.is_published %}
+        <article>
+            {% if opportunity.photo %}
+            <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px" /></a>
+            {% endif %}
+            <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
+            <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
+            <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
+            <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
+            <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
+            <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
+            <hr align="center">
+        </article>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

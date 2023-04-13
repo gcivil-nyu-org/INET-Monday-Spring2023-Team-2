@@ -19,11 +19,6 @@ class OpportunityboardTestCase(TestCase):
         response = self.client.get(reverse("opportunityboard", args=[1]))
         self.assertEqual(response.status_code, 200)
 
-    def test_select_page_loads(self):
-        """Tests select page loads"""
-        response = self.client.get(reverse("select"))
-        self.assertEqual(response.status_code, 200)
-
     def test_post_an_opportunity_page_loads(self):
         """Tests post_an_opportunity page loads"""
         response = self.client.get(reverse("post_an_opportunity"))
@@ -145,3 +140,23 @@ class VolunteerSignUpView(TestCase):
         deregister_volunteer(test_request, self.opp.pk)
         self.opp.refresh_from_db()
         self.assertEqual(self.opp.staffing, 9)
+
+
+class OrganizationViewTestCase(TestCase):
+    def setUp(self):
+        super().setUp()
+
+    def test_organization_view(self):
+        # login = self.client.login(username="testuser", password="testpass")
+        response = self.client.get(reverse("organization_view", args=[self.org.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "volunteer/vol_org_view.html")
+        self.assertEqual(response.context["user"], self.org.user)
+        self.assertEqual(response.context["organization"], self.org)
+        print(response.context["opportunity_lists"])
+        self.assertQuerysetEqual(
+            response.context["opportunity_lists"],
+            ["Cloud City Soup Kitchen"],
+            transform=lambda x: str(x),
+            ordered=False,
+        )

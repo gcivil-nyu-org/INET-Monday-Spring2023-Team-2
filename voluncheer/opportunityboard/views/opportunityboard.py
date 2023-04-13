@@ -1,6 +1,6 @@
 import json
 
-from django.apps import apps
+# from django.apps import apps
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render
@@ -11,9 +11,11 @@ from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
 from opportunityboard.views.search import parse_search_filter
+from profiles.models import Organization
+from profiles.models import User
 from profiles.models import Volunteer
 
-Organization = apps.get_model("profiles", "Organization")
+# Organization = apps.get_model("profiles", "Organization")
 OPPORTUNITY_PER_PAGE = 5
 
 
@@ -44,14 +46,8 @@ def opportunityboard(request, page_number):
     return render(request, "voluncheer/opportunityboard.html", context)
 
 
-def select(request):
-    """Placeholder view for later use"""
-    opportunity_lists = Opportunity.objects.order_by("-pubdate"[:20])
-    context = {"opportunity_lists": opportunity_lists}
-    return render(request, "voluncheer/opportunityboard.html", context)
-
-
 def category_dict_gen():
+    """Gen a dictionary object from category/subcategory/subsubcategory for frontend uses"""
     categories = Category.objects.all()
     cate_output_dict = {}
     for category in categories:
@@ -69,6 +65,7 @@ def category_dict_gen():
 
 
 def signup_volunteer(request, opportunity_id):
+    """Add volunteer to opportunity.volunteers and update staffing"""
     volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
     opportunity = Opportunity.objects.get(pk=opportunity_id)
     if opportunity.staffing > 0 and volunteer not in opportunity.volunteers.all():
@@ -79,10 +76,23 @@ def signup_volunteer(request, opportunity_id):
 
 
 def deregister_volunteer(request, opportunity_id):
+    """Remove volunteer from opportunity.volunteers and update staffing"""
     volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
     opportunity = Opportunity.objects.get(pk=opportunity_id)
     if volunteer in opportunity.volunteers.all():
         opportunity.volunteers.remove(volunteer)
+        # delete archived objects
+        if volunteer in opportunity.attended_volunteers.all():
+            opportunity.attended_volunteers.remove(volunteer)
         opportunity.staffing += 1
         opportunity.save()
     return HttpResponseRedirect(reverse("opportunityboard", args=[1]))
+
+
+def organization_view(request, userid):
+    organization = Organization.objects.get(pk=userid)
+    print(organization)
+    user = get_object_or_404(User, pk=userid)
+    opportunity_lists = organization.opportunity_set.all()
+    context = {"user": user, "organization": organization, "opportunity_lists": opportunity_lists}
+    return render(request, "volunteer/vol_org_view.html", context)

@@ -7,7 +7,6 @@
         <div class="profile">
             {% if organization.photo %}
                 <img src="{{organization.photo.url}}" alt="profile pic" width="100" height="100"/>
-                <hr align="center">
             {% endif %}
             <div class="name">
                 {{ organization.name }}
@@ -26,7 +25,9 @@
                 <hr align="center">
             </div>
             <div class="url">
-                <a href="#settings">IMPACT</a>
+
+                <a href="#impact">IMPACT</a>
+
                 <hr align="center">
             </div>
         </div>
@@ -49,7 +50,7 @@
                         <a href="https://{{ organization.website }}"><input type="text" value="{{ organization.website }}" contenteditable="false"></a>
                         </tr>
                     </div>
-                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
+                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' user.pk %}">
                         {% csrf_token %}
                         {{ user_form }}
                         <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>
@@ -74,7 +75,28 @@
                         <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
                         <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
                         <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
-                        <div class="url"><a href="#" class="readmore">Connect</a></div>
+                        <form method="get" id="opportunities-detail-{{opportunity.pk}}-form" class="opportunities-detail-form" action="{% url 'attendance' opportunity.pk %}">
+                            <div id="volunteer-attandence">
+                                <p class="vol-position-disciption-h1">Volunteer attendance:</p>
+                                {% for volunteer in opportunity.volunteers.all %}
+                                    {% if volunteer in opportunity.attended_volunteers.all %}
+                                    <div class="sticky-note green">
+                                        <input type="checkbox" class="volunteer-attandence" name="volunteer-attended" value="{{volunteer.pk}}">Attended
+                                    {% else %}
+                                    <div class="sticky-note">
+                                        <input type="checkbox" class="volunteer-attandence" name="volunteer-attended" value="{{volunteer.pk}}">Did Not Attend
+                                    {% endif %} 
+                                        <br>
+                                        Name: {{volunteer.first_name}}, {{volunteer.last_name}}
+                                        {% if volunteer.photo %}
+                                        <img src="{{volunteer.photo.url}}" alt="profile pic" width="100" height="100"/>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button type="submit" id="opportunities-detail-form-btn" class="opportunities-detail-form-submit">Confirm Attendence</button>
+                        </form>
+                        <div class="url"><a href="#opportunity-edit-{{opportunity.pk}}" id="opportunities-detail-{{opportunity.pk}}" class="opportunities-detail-btn" onclick="ShowDetail(this)">Details</a></div>
                         <hr align="center">
 				    </article>
                     {% endif %}
@@ -97,7 +119,7 @@
                         <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
                         <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
                         <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
-                        <div class="url"><a href="#" class="readmore">Connect</a></div>
+                        <div class="url"><a href="#" id="{{opportunity.pk}}" class="opportunities-detail-btn">Details</a></div>
                         <hr align="center">
 				    </article>
                     {% endif %}
@@ -117,7 +139,6 @@
         <div class="profile">
             {% if volunteer.photo %}
                 <img src="{{volunteer.photo.url}}" alt="profile pic" width="100" height="100"/>
-                <hr align="center">
             {% endif %}
             <div class="name">
                 {{ volunteer.first_name }}, {{ volunteer.last_name }}
@@ -133,11 +154,11 @@
 
         <div class="sidenav-url">
             <div class="url">
-                <a href="#profile" class="active" >PROFILE</a>
+                <a href="{% url 'home' %}" class="active" >PROFILE</a>
                 <hr align="center">
             </div>
             <div class="url">
-                <a href="#settings">SETTINGS</a>
+                <a class="not-implemented-yet" href="#">SETTINGS</a>
                 <hr align="center">
             </div>
             <div class="url">
@@ -166,7 +187,7 @@
                         <input type="text" value="{{ volunteer.date_of_birth }}" contenteditable="false">
                         </tr>
                     </div>
-                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
+                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' user.pk %}">
                         {% csrf_token %}
                         {{ user_form }}
                         <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>
@@ -192,4 +213,5 @@
     </div>
     <!-- End -->
   {% endif %}
+  <script type="text/javascript" src="{% static 'js/jquery_appendix.js' %}"></script>
 {% endblock %}
