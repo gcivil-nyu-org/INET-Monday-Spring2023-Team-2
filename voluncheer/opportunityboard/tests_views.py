@@ -1,22 +1,14 @@
 import datetime as dt
 
-from django.test import Client
 from django.test.client import RequestFactory
 from django.urls import reverse
 
 from opportunityboard.models import Category
-from opportunityboard.models import Opportunity
-from opportunityboard.models import Subcategory
-from opportunityboard.models import Subsubcategory
 from opportunityboard.unittest_setup import TestCase
 from opportunityboard.views.opportunityboard import deregister_volunteer
 from opportunityboard.views.opportunityboard import opportunityboard
 from opportunityboard.views.opportunityboard import signup_volunteer
 from opportunityboard.views.search import Filter
-from profiles.models import Organization
-from profiles.models import User
-from opportunityboard.unittest_setup import TestCase
-
 
 
 class OpportunityboardTestCase(TestCase):
@@ -151,30 +143,6 @@ class VolunteerSignUpView(TestCase):
 
 
 class OrganizationViewTestCase(TestCase):
-    # def setUp(self):
-    #     self.client = Client()
-    #     self.user = User.objects.create_user(password="testpass", email="xyz@xyz.com", type=2)
-    #     self.organization = Organization.objects.create(name="Test Organization", user=self.user)
-    #     self.category = Category.objects.create(name="Sports")
-    #     self.subcategory = Subcategory.objects.create(name="Farmwork", parent=self.category)
-    #     self.subsubcategory = Subsubcategory.objects.create(name="Feeding", parent=self.subcategory)
-    #     self.opportunity1 = Opportunity.objects.create(
-    #         organization=self.organization,
-    #         category=self.category,
-    #         subcategory=self.subcategory,
-    #         subsubcategory=self.subsubcategory,
-    #         title="Test Opportunity",
-    #         description="Test description",
-    #         date=dt.datetime.now() + dt.timedelta(days=1),
-    #         end=dt.datetime.now().time(),
-    #         address_1="Test address 1",
-    #         address_2="Test address 2",
-    #         longitude="55.5555",
-    #         latitude="44.4444",
-    #         staffing=5,
-    #         is_published=True,
-    #     )
-
     def setUp(self):
         super().setUp()
 
