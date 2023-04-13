@@ -45,6 +45,7 @@ if _ALLOWED_HOSTS_CSV:
 INSTALLED_APPS = [
     #Run server application
     "daphne",
+    "gunicorn",
     # Django built-ins
     "django.contrib.admin",
     "django.contrib.auth",
@@ -236,6 +237,7 @@ if DEBUG:
 if environment.is_local:
     STATIC_URL = "/static/"
     STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+    #STATIC_ROOT = os.path.join(BASE_DIR, "static")
 else:
     STATIC_URL = "/static/"
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
