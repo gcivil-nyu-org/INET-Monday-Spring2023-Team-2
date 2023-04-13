@@ -43,6 +43,8 @@ if _ALLOWED_HOSTS_CSV:
 
 # Application definition
 INSTALLED_APPS = [
+    #Run server application
+    "daphne",
     # Django built-ins
     "django.contrib.admin",
     "django.contrib.auth",
