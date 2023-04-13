@@ -1,6 +1,8 @@
 from django.urls import path
 
 from profiles.views.activate_email import activate
+from profiles.views.gallery import create_post
+from profiles.views.gallery import delete_post
 from profiles.views.home import SignUpView
 from profiles.views.home import home
 from profiles.views.organizations import OrganizationSignUpView
@@ -9,7 +11,6 @@ from profiles.views.profile import confirm_attendance
 from profiles.views.profile import profile_update
 from profiles.views.profile import saved_events
 from profiles.views.volunteers import VolunteerSignUpView
-from profiles.views.gallery import create_post
 
 urlpatterns = [
     path("", home, name="home"),
@@ -30,4 +31,5 @@ urlpatterns = [
     path("savedevents/", saved_events, name="saved_events"),
     path("attendance/<int:opportunity_id>", confirm_attendance, name="attendance"),
     path("profile/post/", create_post, name="create_post"),
+    path("profile/post/<int:post_id>/delete/", delete_post, name="delete_post"),
 ]

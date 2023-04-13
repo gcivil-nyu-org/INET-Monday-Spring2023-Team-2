@@ -240,9 +240,9 @@ class GallaryPost(models.Model):
     author = models.ForeignKey(
         Volunteer, on_delete=models.CASCADE, blank=True, related_name="author"
     )
-    title = models.CharField(help_text="Title:", max_length=200)
+    title = models.CharField(max_length=200)
     photo = models.ImageField(upload_to=_post_photo_path, blank=True, null=True)
-    content = models.TextField(help_text="Caption:", default="")
+    content = models.TextField(help_text="Caption your photo", default="")
 
     def __str__(self):
         return self.title

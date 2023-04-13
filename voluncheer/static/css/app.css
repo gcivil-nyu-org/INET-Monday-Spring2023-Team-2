@@ -18,6 +18,12 @@
     font-weight: auto;
     font-style: normal;
 }
+@font-face {
+    font-family: 'Caveat';
+    src: url('../fonts/Caveat-Regular.ttf'); format('truetype');
+    font-weight: auto;
+    font-style: normal;
+}
 * {
     margin: 0;
 }
@@ -347,5 +353,39 @@ label[for=photo-clear_id] {
 
 .sticky-note.green {
     background:rgb(222,255,180);
+}
+
+.gallery-post {
+    font-family: Caveat, sans-serif;
+    text-decoration:none;
+    color:#000;
+    background:#ffc;
+    display:inline-block;
+    width:12em;
+    padding:1em;
+    box-shadow: 0 5px 2px #aaa;
+    transform: rotate(-6deg);
+}
+
+.gallery-post:nth-child(even){
+    transform:rotate(4deg);
+    position:relative;
+    top:5px;
+}
+.gallery-post:nth-child(3n) a{
+    transform:rotate(-3deg);
+    position:relative;
+    top:-5px;
+}
+.gallery-post:nth-child(5n) a{
+    transform:rotate(5deg);
+    position:relative;
+    top:-10px;
+}
+.gallery-post:hover,.gallery-post:focus{
+    box-shadow:10px 10px 7px rgba(0,0,0,.7);
+    transform: scale(1.25);
+    position:relative;
+    z-index:5;
 }
 /* End */

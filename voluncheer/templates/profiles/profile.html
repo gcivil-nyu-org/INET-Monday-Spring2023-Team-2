@@ -216,19 +216,16 @@
         </div>
 
         <h2>MY GALLERY</h2>
-        <div class="card">
-            {% for post in gallery_post %}
-            <article>
+        {% for post in gallery_post %}
+            <article class="gallery-post">
                 {% if post.photo %}
                 <a href="#"><img src="{{post.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
                 {% endif %}
                 <p class="vol-position-disciption-h1">{{ post.title }}</p>
                 <p class="vol-position-disciption-h2">{{ post.content }}</p>
-                <div class="url"><a href="#" id="{{post.pk}}" class="opportunities-detail-btn">Delete</a></div>
-                <hr align="center">
+                <div class="url"><a href="{% url 'delete_post' post.pk %}" id="{{post.pk}}" class="opportunities-detail-btn">Delete</a></div>
             </article>
-            {% endfor %}
-        </div>
+        {% endfor %}
     </div>
     <!-- End -->
   {% endif %}

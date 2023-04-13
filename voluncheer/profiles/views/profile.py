@@ -17,10 +17,10 @@ from django.views.generic import DetailView
 from opportunityboard.models import Opportunity
 from profiles.forms.organizations import OrganizationChangeForm
 from profiles.forms.volunteers import VolunteerChangeForm
+from profiles.models import GallaryPost
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
-from profiles.models import GallaryPost
 from voluncheer.settings import AWS_SES_DOMAIN
 from voluncheer.settings import DEFAULT_FROM_EMAIL
 

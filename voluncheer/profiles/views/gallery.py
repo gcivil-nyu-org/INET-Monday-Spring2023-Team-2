@@ -1,10 +1,8 @@
-from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
 
 from profiles.forms.gallery import CreateGalleryPostForm
 from profiles.models import Volunteer
-from profiles.models import GallaryPost
 
 
 def create_post(request):
@@ -35,3 +33,9 @@ def create_post(request):
             "profiles/posttogallery.html",
             {"gallerypost_form": form, "volunteer": volunteer_profile},
         )
+
+
+def delete_post(request, post_id):
+    form = CreateGalleryPostForm()
+    form.delete(post_id)
+    return redirect("home")
