@@ -140,3 +140,23 @@ class VolunteerSignUpView(TestCase):
         deregister_volunteer(test_request, self.opp.pk)
         self.opp.refresh_from_db()
         self.assertEqual(self.opp.staffing, 9)
+
+
+class OrganizationViewTestCase(TestCase):
+    def setUp(self):
+        super().setUp()
+
+    def test_organization_view(self):
+        # login = self.client.login(username="testuser", password="testpass")
+        response = self.client.get(reverse("organization_view", args=[self.org.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "volunteer/vol_org_view.html")
+        self.assertEqual(response.context["user"], self.org.user)
+        self.assertEqual(response.context["organization"], self.org)
+        print(response.context["opportunity_lists"])
+        self.assertQuerysetEqual(
+            response.context["opportunity_lists"],
+            ["Cloud City Soup Kitchen"],
+            transform=lambda x: str(x),
+            ordered=False,
+        )

@@ -25,7 +25,9 @@
                 <hr align="center">
             </div>
             <div class="url">
-                <a class="not-implemented-yet" href="#">IMPACT</a>
+
+                <a href="#impact">IMPACT</a>
+
                 <hr align="center">
             </div>
         </div>
@@ -48,7 +50,7 @@
                         <a href="https://{{ organization.website }}"><input type="text" value="{{ organization.website }}" contenteditable="false"></a>
                         </tr>
                     </div>
-                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
+                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' user.pk %}">
                         {% csrf_token %}
                         {{ user_form }}
                         <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>
@@ -185,7 +187,7 @@
                         <input type="text" value="{{ volunteer.date_of_birth }}" contenteditable="false">
                         </tr>
                     </div>
-                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' %}">
+                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' user.pk %}">
                         {% csrf_token %}
                         {{ user_form }}
                         <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>

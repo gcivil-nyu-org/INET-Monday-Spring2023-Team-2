@@ -12,3 +12,5 @@ static/images/
 blackAndFlake8.sh
 voluncheer/media/*
 **/.elasticbeanstalk/
+.vscode/settings.json
+voluncheer/map/urls.py
