@@ -1,10 +1,9 @@
+from datetime import datetime
 from django.core.management.base import BaseCommand
 from django.db import transaction
-from datetime import datetime
+import pytz
 
 from opportunityboard.models import Opportunity
-
-import pytz
 
 
 class Command(BaseCommand):
