@@ -1,11 +1,11 @@
-from io import StringIO
 from datetime import datetime
 from datetime import timedelta
-import pytz
+from io import StringIO
 
 from django.core.management import call_command
 from django.test import TestCase
 from django.utils import timezone
+import pytz
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
