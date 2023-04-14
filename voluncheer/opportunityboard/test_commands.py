@@ -58,10 +58,10 @@ class TestArchiveOpportunities(TestCase):
             ),
             name="Jedi Council",
         )
-        self.category = Category.objects.create(name="Environment")
-        self.subcategory = Subcategory.objects.create(name="Conservation", parent=self.category)
+        self.category = Category.objects.create(name="Social")
+        self.subcategory = Subcategory.objects.create(name="Community", parent=self.category)
         self.subsubcategory = Subsubcategory.objects.create(
-            name="Reforestation", parent=self.subcategory
+            name="Soup Kitchen", parent=self.subcategory
         )
         self.now = datetime.now(pytz.utc)
         description = "Please help us support our community at this week's soup kitchen"
