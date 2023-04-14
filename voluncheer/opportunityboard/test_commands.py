@@ -58,18 +58,13 @@ class TestArchiveOpportunities(TestCase):
             ),
             name="Jedi Council",
         )
-        self.category = Category.objects.create(name="Social")
-        self.subcategory = Subcategory.objects.create(name="Community", parent=self.category)
-        self.subsubcategory = Subsubcategory.objects.create(
-            name="Soup Kitchen", parent=self.subcategory
-        )
+
         self.now = datetime.now(pytz.utc)
         description = "Please help us support our community at this week's soup kitchen"
+
         self.opportunity1 = Opportunity.objects.create(
             organization=self.org,
-            category=self.category,
-            subcategory=self.subcategory,
-            subsubcategory=self.subsubcategory,
+            category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 1",
             description=description,
             date=timezone.now() - timedelta(days=1),
@@ -86,9 +81,7 @@ class TestArchiveOpportunities(TestCase):
 
         self.opportunity2 = Opportunity.objects.create(
             organization=self.org,
-            category=self.category,
-            subcategory=self.subcategory,
-            subsubcategory=self.subsubcategory,
+            category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 2",
             description=description,
             date=timezone.now() + timedelta(days=1),
@@ -105,9 +98,7 @@ class TestArchiveOpportunities(TestCase):
 
         self.opportunity3 = Opportunity.objects.create(
             organization=self.org,
-            category=self.category,
-            subcategory=self.subcategory,
-            subsubcategory=self.subsubcategory,
+            category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 3",
             description=description,
             date=timezone.now() - timedelta(days=1),
@@ -123,9 +114,7 @@ class TestArchiveOpportunities(TestCase):
         )
         self.opportunity4 = Opportunity.objects.create(
             organization=self.org,
-            category=self.category,
-            subcategory=self.subcategory,
-            subsubcategory=self.subsubcategory,
+            category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 4",
             description=description,
             date=timezone.now() - timedelta(days=1),
@@ -141,9 +130,7 @@ class TestArchiveOpportunities(TestCase):
         )
         self.opportunity5 = Opportunity.objects.create(
             organization=self.org,
-            category=self.category,
-            subcategory=self.subcategory,
-            subsubcategory=self.subsubcategory,
+            category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 5",
             description=description,
             date=timezone.now() - timedelta(days=1),
