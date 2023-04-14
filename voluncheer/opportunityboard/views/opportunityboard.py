@@ -3,6 +3,7 @@ import json
 # from django.apps import apps
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -72,7 +73,7 @@ def signup_volunteer(request, opportunity_id):
         opportunity.volunteers.add(volunteer)
         opportunity.staffing -= 1
         opportunity.save()
-    return HttpResponseRedirect(reverse("opportunityboard", args=[1]))
+    return redirect("saved_events")
 
 
 def deregister_volunteer(request, opportunity_id):
@@ -91,8 +92,13 @@ def deregister_volunteer(request, opportunity_id):
 
 def organization_view(request, userid):
     organization = Organization.objects.get(pk=userid)
-    print(organization)
-    user = get_object_or_404(User, pk=userid)
+    user = get_object_or_404(User, pk=request.user.pk)
+    volunteer = get_object_or_404(Volunteer, pk=user)
     opportunity_lists = organization.opportunity_set.all()
-    context = {"user": user, "organization": organization, "opportunity_lists": opportunity_lists}
+    context = {
+        "user": user,
+        "organization": organization,
+        "opportunity_lists": opportunity_lists,
+        "volunteer": volunteer,
+    }
     return render(request, "volunteer/vol_org_view.html", context)

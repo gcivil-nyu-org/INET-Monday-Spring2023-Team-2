@@ -361,10 +361,32 @@ label[for=photo-clear_id] {
     color:#000;
     background:#ffc;
     display:inline-block;
-    width:12em;
-    padding:1em;
+    width:230px;
+    padding:5px;
     box-shadow: 0 5px 2px #aaa;
     transform: rotate(-6deg);
+}
+
+.total-hours {
+    font-size: 20px;
+}
+
+.hours-required {
+    font-size: 15px;
+}
+
+.gallery-post-image {
+    width: 220px;
+}
+
+.gallery-post-disciption-h1 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+.gallery-post-disciption-h2 {
+    font-size: 15px;
+    margin-bottom: 0px;
 }
 
 .gallery-post:nth-child(even){

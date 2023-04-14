@@ -219,10 +219,10 @@
         {% for post in gallery_post %}
             <article class="gallery-post">
                 {% if post.photo %}
-                <a href="#"><img src="{{post.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
+                <a href="#"><img src="{{post.photo.url}}" alt="" class="gallery-post-image" width="220px"/></a>
                 {% endif %}
-                <p class="vol-position-disciption-h1">{{ post.title }}</p>
-                <p class="vol-position-disciption-h2">{{ post.content }}</p>
+                <p class="gallery-post-disciption-h1">{{ post.title }}</p>
+                <p class="gallery-post-disciption-h2">{{ post.content }}</p>
                 <div class="url"><a href="{% url 'delete_post' post.pk %}" id="{{post.pk}}" class="opportunities-detail-btn">Delete</a></div>
             </article>
         {% endfor %}

@@ -6,7 +6,6 @@
     <div class="profile">
         {% if organization.photo %}
         <img src="{{organization.photo.url}}" alt="profile pic" width="100" height="100" />
-        <hr align="center">
         {% endif %}
         <div class="name">
             {{ organization }}
@@ -29,13 +28,11 @@
         <div class="card-body">
             <div class="edit-form" id="edit-form-view">
                 <tr>
-                    Name:
-                    <p>{{organization.name}}</p>
+                    Name: <input type="text" value="{{ organization.name }}" contenteditable="false">
                 </tr>
                 <tr>
-                    Website:
-                    <a href="https://{{ organization.website }}">
-                        <p>{{organization.website}}</p>
+                    Website: 
+                    <a href="https://{{ organization.website }}"><input type="text" value="{{ organization.website }}" contenteditable="false"></a>
                     </a>
                 </tr>
             </div>
@@ -58,10 +55,30 @@
             <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
             <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
             <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
+            {% if user.is_volunteer %}
+                {% if volunteer not in opportunity.volunteers.all %}
+                <div class="url"><a href="{% url 'signup_volunteer' opportunity.pk %}" id="register-opportunity" class="readmore" onclick="toggleButton()">
+                    Register?
+                </a></div>
+                {% else %}
+                <div class="url"><a id="register-opportunity" class="readmore" onclick="toggleButton()">Registered!</a></div>
+                {% endif %}
+            {% endif %}
             <hr align="center">
         </article>
         {% endif %}
         {% endfor %}
     </div>
 </div>
+<script>
+    function toggleButton() {
+      const button = document.getElementById("register-opportunity");
+      var value = button.innerHTML
+      if (value == "Register?") {
+        alert('You are successfully registered for the event!');
+      } else {
+        alert('You already registered this event!');
+      }
+    };
+</script>
 {% endblock %}

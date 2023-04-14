@@ -40,22 +40,6 @@ class ProfileView(DetailView):
         user_id = self.request.user.pk
         return get_object_or_404(User, pk=user_id)
 
-    # def get_object(self, queryset=None):
-    #     pk = self.kwargs.get('pk')
-    #     return get_object_or_404(User, pk=pk)
-
-    # user_id = self.request.user.pk
-    # print("user_id", user_id)
-    # obj = User.objects.get(pk=user_id)
-    # return obj
-
-    # del args, kwargs  # Unused.
-    # return self.request.user
-    # user_id = self.kwargs.get("user_id")
-    # print("user_id", user_id)
-    # obj = User.objects.get(pk=user_id)
-    # return obj
-
     def get_context_data(self, **kwargs):
         """Returns additional contextual information for display."""
         user = self.request.user
@@ -100,7 +84,6 @@ class ProfileView(DetailView):
                         },
                     )
                     try:
-                        print()
                         send_mail(
                             subject,
                             message,
