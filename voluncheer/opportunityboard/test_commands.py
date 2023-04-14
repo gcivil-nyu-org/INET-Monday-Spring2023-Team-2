@@ -11,7 +11,9 @@ from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
-from profiles.models import Organization, User, UserType
+from profiles.models import Organization
+from profiles.models import User
+from profiles.models import UserType
 
 _TEST_DATA = "opportunityboard/testdata/categories.json"
 
