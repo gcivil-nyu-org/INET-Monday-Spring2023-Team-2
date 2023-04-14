@@ -1,11 +1,17 @@
 from io import StringIO
+from datetime import datetime
+from datetime import timedelta
+import pytz
 
 from django.core.management import call_command
 from django.test import TestCase
+from django.utils import timezone
 
 from opportunityboard.models import Category
+from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
+from profiles.models import Organization, User, UserType
 
 _TEST_DATA = "opportunityboard/testdata/categories.json"
 
@@ -38,3 +44,131 @@ class TestLoadCategories(TestCase):
             self.assertEqual(len(Category.objects.all()), 1)
             self.assertEqual(len(Subcategory.objects.all()), 1)
             self.assertEqual(len(Subsubcategory.objects.all()), 1)
+
+
+class TestArchiveOpportunities(TestCase):
+    def setUp(self):
+        self.org = Organization.objects.create(
+            user=User.objects.create(
+                email="jedi@jedi.com",
+                password="peace_and_justice_for_the_galaxy",
+                type=UserType.ORGANIZATION,
+            ),
+            name="Jedi Council",
+        )
+        self.category = Category.objects.create(name="Environment")
+        self.subcategory = Subcategory.objects.create(name="Conservation", parent=self.category)
+        self.subsubcategory = Subsubcategory.objects.create(
+            name="Reforestation", parent=self.subcategory
+        )
+        self.now = datetime.now(pytz.utc)
+        description = "Please help us support our community at this week's soup kitchen"
+        self.opportunity1 = Opportunity.objects.create(
+            organization=self.org,
+            category=self.category,
+            subcategory=self.subcategory,
+            subsubcategory=self.subsubcategory,
+            title="Test opportunity 1",
+            description=description,
+            date=timezone.now() - timedelta(days=1),
+            end=timezone.now() - timedelta(hours=1),
+            is_archived=False,
+            is_published=True,
+            address_1="200 Calrissian Av.",
+            address_2="NY",
+            longitude=12.34,
+            latitude=56.78,
+            staffing=9,
+            is_recurring=False,
+        )
+
+        self.opportunity2 = Opportunity.objects.create(
+            organization=self.org,
+            category=self.category,
+            subcategory=self.subcategory,
+            subsubcategory=self.subsubcategory,
+            title="Test opportunity 2",
+            description=description,
+            date=timezone.now() + timedelta(days=1),
+            end=timezone.now() + timedelta(hours=2),
+            is_archived=False,
+            is_published=True,
+            address_1="200 Calrissian Av.",
+            address_2="NY",
+            longitude=12.34,
+            latitude=56.78,
+            staffing=9,
+            is_recurring=False,
+        )
+
+        self.opportunity3 = Opportunity.objects.create(
+            organization=self.org,
+            category=self.category,
+            subcategory=self.subcategory,
+            subsubcategory=self.subsubcategory,
+            title="Test opportunity 3",
+            description=description,
+            date=timezone.now() - timedelta(days=1),
+            end=timezone.now() + timedelta(hours=1),
+            is_archived=False,
+            is_published=True,
+            address_1="200 Calrissian Av.",
+            address_2="NY",
+            longitude=12.34,
+            latitude=56.78,
+            staffing=9,
+            is_recurring=False,
+        )
+        self.opportunity4 = Opportunity.objects.create(
+            organization=self.org,
+            category=self.category,
+            subcategory=self.subcategory,
+            subsubcategory=self.subsubcategory,
+            title="Test opportunity 4",
+            description=description,
+            date=timezone.now() - timedelta(days=1),
+            end=timezone.now() - timedelta(hours=1),
+            is_archived=False,
+            is_published=False,
+            address_1="200 Calrissian Av.",
+            address_2="NY",
+            longitude=12.34,
+            latitude=56.78,
+            staffing=9,
+            is_recurring=False,
+        )
+        self.opportunity5 = Opportunity.objects.create(
+            organization=self.org,
+            category=self.category,
+            subcategory=self.subcategory,
+            subsubcategory=self.subsubcategory,
+            title="Test opportunity 5",
+            description=description,
+            date=timezone.now() - timedelta(days=1),
+            end=timezone.now() - timedelta(hours=1),
+            is_archived=False,
+            is_published=False,
+            address_1="200 Calrissian Av.",
+            address_2="NY",
+            longitude=12.34,
+            latitude=56.78,
+            staffing=9,
+            is_recurring=True,
+        )
+
+    def test_archive_opportunities(self):
+        # Call the archive_opportunities command
+        call_command("archive_opportunities")
+
+        # Check if the opportunity is archived
+        self.opportunity1.refresh_from_db()
+        self.opportunity2.refresh_from_db()
+        self.opportunity3.refresh_from_db()
+        self.opportunity4.refresh_from_db()
+        self.opportunity5.refresh_from_db()
+
+        self.assertTrue(self.opportunity1.is_archived)
+        self.assertFalse(self.opportunity2.is_archived)
+        self.assertTrue(self.opportunity3.is_archived)
+        self.assertFalse(self.opportunity4.is_archived)
+        self.assertFalse(self.opportunity5.is_archived)

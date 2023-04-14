@@ -104,6 +104,7 @@ class Opportunity(models.Model):
     attended_volunteers = models.ManyToManyField(
         Volunteer, blank=True, related_name="attended_volunteers"
     )
+    is_archived = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
