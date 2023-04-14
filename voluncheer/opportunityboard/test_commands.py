@@ -60,11 +60,10 @@ class TestArchiveOpportunities(TestCase):
 
         self.today = dt.datetime(year=2023, month=4, day=16, tzinfo=dt.timezone.utc)
         description = "Please help us support our community at this week's soup kitchen"
+
         self.opportunity1 = Opportunity.objects.create(
             organization=self.org,
-            category=self.category,
-            subcategory=self.subcategory,
-            subsubcategory=self.subsubcategory,
+            category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 1",
             description=description,
             date=self.today - dt.timedelta(days=1),
@@ -81,9 +80,7 @@ class TestArchiveOpportunities(TestCase):
 
         self.opportunity2 = Opportunity.objects.create(
             organization=self.org,
-            category=self.category,
-            subcategory=self.subcategory,
-            subsubcategory=self.subsubcategory,
+            category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 2",
             description=description,
             date=self.today + dt.timedelta(days=1),
@@ -100,9 +97,7 @@ class TestArchiveOpportunities(TestCase):
 
         self.opportunity3 = Opportunity.objects.create(
             organization=self.org,
-            category=self.category,
-            subcategory=self.subcategory,
-            subsubcategory=self.subsubcategory,
+            category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 3",
             description=description,
             date=self.today - dt.timedelta(days=1),
@@ -118,9 +113,7 @@ class TestArchiveOpportunities(TestCase):
         )
         self.opportunity4 = Opportunity.objects.create(
             organization=self.org,
-            category=self.category,
-            subcategory=self.subcategory,
-            subsubcategory=self.subsubcategory,
+            category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 4",
             description=description,
             date=self.today - dt.timedelta(days=1),
@@ -136,9 +129,7 @@ class TestArchiveOpportunities(TestCase):
         )
         self.opportunity5 = Opportunity.objects.create(
             organization=self.org,
-            category=self.category,
-            subcategory=self.subcategory,
-            subsubcategory=self.subsubcategory,
+            category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 5",
             description=description,
             date=self.today - dt.timedelta(days=1),
