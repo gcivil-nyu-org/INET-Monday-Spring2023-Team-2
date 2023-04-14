@@ -18,14 +18,14 @@
 
   <body>
     <div class="container">
-      <img
+      <a href="{% url 'home' %}"><img
         src="{% static 'images/voluncheer_logo.png' %}"
         alt="logo"
         class="logo title"
         height="80px"
-      />
+      /></a>
       {% block content %}
-      <form method="get">
+      <div>
         <h2>
           Search for an address
           <span style="font-size: 0.5em">
@@ -37,7 +37,7 @@
             />
           </span>
         </h2>
-      </form>
+      </div>
       <div id="map"></div>
       <div id="infowindow-content">
         <span id="place-name" class="title"></span><br />
