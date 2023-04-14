@@ -49,6 +49,8 @@ class TestLoadCategories(TestCase):
 
 
 class TestArchiveOpportunities(TestCase):
+    """Tests the archive opportunities command."""
+
     def setUp(self):
         self.org = Organization.objects.create(
             user=User.objects.create(

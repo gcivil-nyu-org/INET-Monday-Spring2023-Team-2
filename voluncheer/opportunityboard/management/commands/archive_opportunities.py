@@ -22,7 +22,7 @@ class Command(BaseCommand):
         )
 
         for opportunity in opportunities:
-            # Set is_archived to True
+            # Set is_archived to True if end date and time has passed
             end_datetime = datetime.combine(opportunity.date.date(), opportunity.end).replace(
                 tzinfo=pytz.utc
             )
