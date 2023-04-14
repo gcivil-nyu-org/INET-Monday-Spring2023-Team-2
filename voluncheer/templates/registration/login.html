@@ -27,4 +27,14 @@
       <p><a href="{% url 'password_reset' %}">Forgot Password</a></p>
     </div>
   </div>
+  <script>
+    $(function() {
+      var user_auth = "{{user.is_authenticated}}";
+      console.log(user_auth)
+      if (user_auth == "True") {
+        var url= "{% url 'home' %}";
+        window.location = url;
+      }
+    });
+  </script>
 {% endblock %}

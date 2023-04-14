@@ -5,4 +5,14 @@
   <p class="lead">Select the type of account you want to create:</p>
   <a href="{% url 'volunteer_signup' %}" class="btn btn-primary btn-lg" role="button">Volunteer</a>
   <a href="{% url 'organization_signup' %}" class="btn btn-primary btn-lg" role="button">Organization</a>
+  <script>
+    $(function() {
+      var user_auth = "{{user.is_authenticated}}";
+      console.log(user_auth)
+      if (user_auth == "True") {
+        var url= "{% url 'home' %}";
+        window.location = url;
+      }
+    });
+  </script>
 {% endblock %}
