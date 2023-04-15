@@ -114,7 +114,7 @@ class OrganizationProfileTest(TestCase):
 
 
 class ProfileViewTest(TestCase):
-    """Tests that users see only a subset of profile features on other users profiles"""
+    """Tests related to users viewing other user's profiles."""
 
     def setUp(self):
         super().setUp()
@@ -127,35 +127,49 @@ class ProfileViewTest(TestCase):
         )
 
     def test_requesting_another_users_profile_returns_200(self):
-        """Test that requesting another profile does not redirect the user"""
+        """Test that requesting another profile does not redirect the user."""
         self.client.login(email="volunteer@voluncheer.com", password="secret")
         response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
         self.assertEqual(response.status_code, 200)
 
-    def test_other_user_cannot_edit_other_profiles(self):
-        """Tests that a user cannot edit another user's profile"""
-        with self.subTest("test_volunteer_viewing_organization"):
+    def test_user_can_only_edit_own_profile(self):
+        """Tests that a user cannot edit another user's profile."""
+        with self.subTest("test_volunteer_requests_own_profile"):
+            self.client.login(email="luke@jedi.com", password="NOOOOOOOOOOOOOOOOOOO")
+            response = self.client.get(reverse("profile", kwargs={"pk": self.vol.pk}))
+            self.assertContains(
+                response,
+                """<i class="fa fa-pen fa-xs edit" onclick="EditProfile()"></i>""",
+            )
+        with self.subTest("test_organization_requests_own_profile"):
+            self.client.login(email="jedi@jedi.com", password="peace_and_justice_for_the_galaxy")
+            response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
+            self.assertContains(
+                response,
+                """<i class="fa fa-pen fa-xs edit" onclick="EditProfile()"></i>""",
+            )
+        with self.subTest("test_volunteer_request_organization_profile"):
             self.client.login(email="volunteer@voluncheer.com", password="secret")
             response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
             self.assertNotContains(
                 response,
                 """<i class="fa fa-pen fa-xs edit" onclick="EditProfile()"></i>""",
             )
-        with self.subTest("test_organization_viewing_volunteer"):
+        with self.subTest("test_organization_requests_volunteer_profile"):
             self.client.login(email="organization@voluncheer.com", password="secret")
             response = self.client.get(reverse("profile", kwargs={"pk": self.vol.pk}))
             self.assertNotContains(
                 response,
                 """<i class="fa fa-pen fa-xs edit" onclick="EditProfile()"></i>""",
             )
-        with self.subTest("test_organization_viewing_another_organization"):
+        with self.subTest("test_organization_requests_another_organization_profile"):
             self.client.login(email="organization@voluncheer.com", password="secret")
             response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
             self.assertNotContains(
                 response,
                 """<i class="fa fa-pen fa-xs edit" onclick="EditProfile()"></i>""",
             )
-        with self.subTest("test_volunteer_viewing_another_volunteer"):
+        with self.subTest("test_volunteer_requests_another_volunteer_profile"):
             self.client.login(email="volunteer@voluncheer.com", password="secret")
             response = self.client.get(reverse("profile", kwargs={"pk": self.vol.pk}))
             self.assertNotContains(
@@ -164,7 +178,7 @@ class ProfileViewTest(TestCase):
             )
 
     def test_curr_user_appears_on_other_users_profile(self):
-        """Test that the phrase "Logged in as [user]" contains the current user"""
+        """Test that the phrase "Logged in as [user]" contains the current user."""
         self.client.login(email="organization@voluncheer.com", password="secret")
         response = self.client.get(reverse("profile", kwargs={"pk": self.vol.pk}))
         self.assertContains(
@@ -172,20 +186,37 @@ class ProfileViewTest(TestCase):
             f"Logged in as <strong>{self.org_user}</strong>",
         )
 
-    def test_user_cant_post_opportunities_on_another_profile(self):
-        """Test that a user can't post opportunities on another org's profile"""
-        self.client.login(email="organization@voluncheer.com", password="secret")
-        response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
-        self.assertNotContains(
-            response,
-            """<div class="url" id="post_an_opportunity">""",
-        )
+    def test_post_an_opportunity_appears_only_on_orgs_own_profile(self):
+        """Test that a user can't post opportunities on another org's profile."""
 
-    def test_user_cant_see_saved_opportunities_on_another_profile(self):
-        """Test that a user can't see saved opportunities on another org's profile"""
-        self.client.login(email="organization@voluncheer.com", password="secret")
-        response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
-        self.assertNotContains(
-            response,
-            """<div class="card" id="saved_opportunities">""",
-        )
+        with self.subTest("test_requesting_own_profile"):
+            self.client.login(email="jedi@jedi.com", password="peace_and_justice_for_the_galaxy")
+            response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
+            self.assertContains(
+                response,
+                """<div class="url" id="post_an_opportunity">""",
+            )
+        with self.subTest("test_requesting_another_profile"):
+            self.client.login(email="organization@voluncheer.com", password="secret")
+            response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
+            self.assertNotContains(
+                response,
+                """<div class="url" id="post_an_opportunity">""",
+            )
+
+    def test_user_can_see_only_their_saved_opportunities(self):
+        """Test that a user can't see saved opportunities on another org's profile."""
+        with self.subTest("test_requesting_own_profile"):
+            self.client.login(email="jedi@jedi.com", password="peace_and_justice_for_the_galaxy")
+            response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
+            self.assertContains(
+                response,
+                """<div class="card" id="saved_opportunities">""",
+            )
+        with self.subTest("test_requesting_another_profile"):
+            self.client.login(email="organization@voluncheer.com", password="secret")
+            response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
+            self.assertNotContains(
+                response,
+                """<div class="card" id="saved_opportunities">""",
+            )
