@@ -1,3 +1,7 @@
+import datetime
+
+import freezegun
+
 from opportunityboard.forms.postanopportunity import PostAnOpportunityForm
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
@@ -35,6 +39,23 @@ class PostAnOpportunityFormTest(TestCase):
         self.assertEqual(posted_opportunity.title, "Sith Surfing")
         self.assertEqual(posted_opportunity.category.name, "healthcare")
         self.assertEqual(posted_opportunity.description, "Let's surfing")
+
+    def test_date_validation(self):
+        data = {
+            "organization": self.org,
+            "category": self.healthcare,
+            "title": "Sith Surfing",
+            "description": "Let's surfing",
+            "staffing": "1",
+            "date": self.date,
+            "end": self.end,
+            "address_1": "New York, NY",
+            "address_2": "Down st",
+            "is_published": False,
+        }
+        with freezegun.freeze_time(self.date + datetime.timedelta(days=1)):
+            form = PostAnOpportunityForm(data=data)
+            self.assertFalse(form.is_valid())
 
     def test_update(self):
         """Test Update An Opportunity validation"""
