@@ -1,7 +1,10 @@
+from django.contrib.auth import get_user_model
 from django.test.client import RequestFactory
 from django.urls import reverse
 
+from opportunityboard import unittest_setup  # noqa:F401
 from opportunityboard.unittest_setup import TestCase
+from profiles.models import UserType
 from profiles.views.profile import confirm_attendance
 
 
@@ -108,3 +111,81 @@ class OrganizationProfileTest(TestCase):
         confirm_attendance(get_request, self.opp.pk)
         self.opp.refresh_from_db()
         self.assertEqual(self.opp.attended_volunteers.count(), 0)
+
+
+class ProfileViewTest(TestCase):
+    """Tests that users see only a subset of profile features on other users profiles"""
+
+    def setUp(self):
+        super().setUp()
+        self.vol_user = get_user_model().objects.create_user(
+            email="volunteer@voluncheer.com", password="secret", type=UserType.VOLUNTEER
+        )
+
+        self.org_user = get_user_model().objects.create_user(
+            email="organization@voluncheer.com", password="secret", type=UserType.ORGANIZATION
+        )
+
+    def test_requesting_another_users_profile_returns_200(self):
+        """Test that requesting another profile does not redirect the user"""
+        self.client.login(email="volunteer@voluncheer.com", password="secret")
+        response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_other_user_cannot_edit_other_profiles(self):
+        """Tests that a user cannot edit another user's profile"""
+        with self.subTest("test_volunteer_viewing_organization"):
+            self.client.login(email="volunteer@voluncheer.com", password="secret")
+            response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
+            self.assertNotContains(
+                response,
+                """<i class="fa fa-pen fa-xs edit" onclick="EditProfile()"></i>""",
+            )
+        with self.subTest("test_organization_viewing_volunteer"):
+            self.client.login(email="organization@voluncheer.com", password="secret")
+            response = self.client.get(reverse("profile", kwargs={"pk": self.vol.pk}))
+            self.assertNotContains(
+                response,
+                """<i class="fa fa-pen fa-xs edit" onclick="EditProfile()"></i>""",
+            )
+        with self.subTest("test_organization_viewing_another_organization"):
+            self.client.login(email="organization@voluncheer.com", password="secret")
+            response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
+            self.assertNotContains(
+                response,
+                """<i class="fa fa-pen fa-xs edit" onclick="EditProfile()"></i>""",
+            )
+        with self.subTest("test_volunteer_viewing_another_volunteer"):
+            self.client.login(email="volunteer@voluncheer.com", password="secret")
+            response = self.client.get(reverse("profile", kwargs={"pk": self.vol.pk}))
+            self.assertNotContains(
+                response,
+                """<i class="fa fa-pen fa-xs edit" onclick="EditProfile()"></i>""",
+            )
+
+    def test_curr_user_appears_on_other_users_profile(self):
+        """Test that the phrase "Logged in as [user]" contains the current user"""
+        self.client.login(email="organization@voluncheer.com", password="secret")
+        response = self.client.get(reverse("profile", kwargs={"pk": self.vol.pk}))
+        self.assertContains(
+            response,
+            f"Logged in as <strong>{self.org_user}</strong>",
+        )
+
+    def test_user_cant_post_opportunities_on_another_profile(self):
+        """Test that a user can't post opportunities on another org's profile"""
+        self.client.login(email="organization@voluncheer.com", password="secret")
+        response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
+        self.assertNotContains(
+            response,
+            """<div class="url" id="post_an_opportunity">""",
+        )
+
+    def test_user_cant_see_saved_opportunities_on_another_profile(self):
+        """Test that a user can't see saved opportunities on another org's profile"""
+        self.client.login(email="organization@voluncheer.com", password="secret")
+        response = self.client.get(reverse("profile", kwargs={"pk": self.org.pk}))
+        self.assertNotContains(
+            response,
+            """<div class="card" id="saved_opportunities">""",
+        )

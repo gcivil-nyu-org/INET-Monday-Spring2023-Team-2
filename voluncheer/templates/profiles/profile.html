@@ -20,14 +20,14 @@
             </div>
         </div>
         <div class="sidenav-url">
-            <div class="url">
+            {% if user.pk is curr_user.pk %}
+            <div class="url" id="post_an_opportunity">
                 <a href="{% url 'post_an_opportunity' %}" class="active">POST AN OPPORTUNITY</a>
                 <hr align="center">
             </div>
+            {% endif %}
             <div class="url">
-
                 <a href="#impact">IMPACT</a>
-
                 <hr align="center">
             </div>
         </div>
@@ -39,22 +39,29 @@
         <h2>ABOUT US</h2>
         <div class="card">
             <div class="card-body">
+            {% if user.pk is curr_user.pk %}
                 <i class="fa fa-pen fa-xs edit" onclick="EditProfile()"></i>
-                    <div class="edit-form" id="edit-form-view">
-                        <tr>
-                        Name:
-                        <input type="text" value="{{ organization.name }}" contenteditable="false">
-                        </tr>
-                        <tr>
-                        Website:
-                        <a href="https://{{ organization.website }}"><input type="text" value="{{ organization.website }}" contenteditable="false"></a>
-                        </tr>
-                    </div>
-                    <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' user.pk %}">
-                        {% csrf_token %}
-                        {{ user_form }}
-                        <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>
-                    </form>
+                <div class="edit-form" id="edit-form-view">
+                    <tr>
+                    Name:
+                    <input type="text" value="{{ organization.name }}" contenteditable="false">
+                    </tr>
+                    <tr>
+                    Website:
+                    <a href="https://{{ organization.website }}"><input type="text" value="{{ organization.website }}" contenteditable="false"></a>
+                    </tr>
+                </div>
+                <form method="post" enctype="multipart/form-data" class="edit-form" id="edit-form-edit" action="{% url 'profile_update' user.pk %}">
+                    {% csrf_token %}
+                    {{ user_form }}
+                    <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>
+                </form>
+            {% else %}
+            <div class="org-details" id="org-details-view">
+                <p>Name: {{ organization.name }}</p>
+                <p>Website: <a href="https://{{ organization.website }}">{{ organization.website }}</a></p>
+            </div>
+            {% endif %}
             </div>
         </div>
 
@@ -65,7 +72,9 @@
                 {% for opportunity in opportunity_lists %}
                     {% if opportunity.is_published %}
                     <article>
+                        {% if user.pk is curr_user.pk %}
                         <a href="{% url 'update_an_opportunity' opportunity.pk %}"><i id="opportunity-edit-{{opportunity.pk}}" class="fa fa-pen fa-xs edit"></i></a>
+                        {% endif %}
                         {% if opportunity.photo %}
 					    <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
                         {% endif %}
@@ -75,6 +84,7 @@
                         <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
                         <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
                         <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
+                        {% if user.pk is curr_user.pk %}
                         <form method="get" id="opportunities-detail-{{opportunity.pk}}-form" class="opportunities-detail-form" action="{% url 'attendance' opportunity.pk %}">
                             <div id="volunteer-attandence">
                                 <p class="vol-position-disciption-h1">Volunteer attendance:</p>
@@ -87,7 +97,7 @@
                                         <input type="checkbox" class="volunteer-attandence" name="volunteer-attended" value="{{volunteer.pk}}">Did Not Attend
                                     {% endif %} 
                                         <br>
-                                        Name: {{volunteer.first_name}}, {{volunteer.last_name}}
+                                        Name: <a href="{%url 'profile' volunteer.pk%}">{{volunteer.first_name}} {{volunteer.last_name}}</a>
                                         {% if volunteer.photo %}
                                         <img src="{{volunteer.photo.url}}" alt="profile pic" width="100" height="100"/>
                                         {% endif %}
@@ -97,14 +107,16 @@
                             <button type="submit" id="opportunities-detail-form-btn" class="opportunities-detail-form-submit">Confirm Attendence</button>
                         </form>
                         <div class="url"><a href="#opportunity-edit-{{opportunity.pk}}" id="opportunities-detail-{{opportunity.pk}}" class="opportunities-detail-btn" onclick="ShowDetail(this)">Details</a></div>
+                        {% endif %}
                         <hr align="center">
 				    </article>
                     {% endif %}
                 {% endfor %}
         </div>
 
+        {% if user.pk is curr_user.pk %}
         <h2>SAVED OPPORTUNITIES</h2>
-        <div class="card">
+        <div class="card" id="saved_opportunities">
             {% csrf_token %}
                 {% for opportunity in opportunity_lists %}
                     {% if not opportunity.is_published %}
@@ -125,6 +137,7 @@
                     {% endif %}
                 {% endfor %}
         </div>
+        {% endif %}
     </div>
     <!-- End -->
 
@@ -157,14 +170,17 @@
                 <a href="{% url 'home' %}" class="active" >PROFILE</a>
                 <hr align="center">
             </div>
+            {% if user.pk is curr_user.pk %}
             <div class="url">
                 <a class="not-implemented-yet" href="#">SETTINGS</a>
                 <hr align="center">
             </div>
+
             <div class="url">
                 <a href="{% url 'saved_events' %}" >MY VOLUNCHEERS</a>
                 <hr align="center">
             </div>
+            {% endif %}
         </div>
     </div>
     <!-- Main -->
@@ -172,6 +188,7 @@
         <h2>ABOUT ME</h2>
         <div class="card">
             <div class="card-body">
+                {% if user.pk is curr_user.pk %}
                 <i class="fa fa-pen fa-xs edit" onclick="EditProfile()"></i>
                     <div class="edit-form" id="edit-form-view">
                         <tr>
@@ -192,6 +209,12 @@
                         {{ user_form }}
                         <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>
                     </form>
+                {% else %} 
+                <div class="vol-details" id="vol-details-view">
+                    <p>Name: {{ volunteer.first_name }} {{ volunteer.last_name }}</p>
+                    <p>Date of birth: {{ volunteer.date_of_birth }}</p>
+                </div>
+                {% endif %}
             </div>
         </div>
 

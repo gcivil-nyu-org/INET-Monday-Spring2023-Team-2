@@ -36,8 +36,8 @@ class ProfileView(DetailView):
 
     def get_object(self, *args, **kwargs):
         """Returns the user object for display."""
-        user_id = self.request.user.pk
-        return get_object_or_404(User, pk=user_id)
+        pk = self.kwargs["pk"]
+        return get_object_or_404(User, pk=pk)
 
     # def get_object(self, queryset=None):
     #     pk = self.kwargs.get('pk')
@@ -57,7 +57,9 @@ class ProfileView(DetailView):
 
     def get_context_data(self, **kwargs):
         """Returns additional contextual information for display."""
-        user = self.request.user
+        pk = self.kwargs["pk"]
+        user = get_object_or_404(User, pk=pk)
+        kwargs["curr_user"] = self.request.user
         if user.is_organization:
             organization_profile = Organization.objects.get(pk=user)
             kwargs["organization"] = organization_profile

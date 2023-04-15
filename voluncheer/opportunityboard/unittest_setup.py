@@ -1,13 +1,13 @@
 import datetime as dt
 
 from django import test
+from django.contrib.auth import get_user_model
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
 from profiles.models import Organization
-from profiles.models import User
 from profiles.models import UserType
 from profiles.models import Volunteer
 
@@ -30,7 +30,7 @@ class TestCase(test.TestCase):
     def setUp(self):
         super().setUp()
         self.org = Organization.objects.create(
-            user=User.objects.create(
+            user=get_user_model().objects.create_user(
                 email="jedi@jedi.com",
                 password="peace_and_justice_for_the_galaxy",
                 type=UserType.ORGANIZATION,
@@ -68,7 +68,7 @@ class TestCase(test.TestCase):
         )
 
         self.vol = Volunteer.objects.create(
-            user=User.objects.create(
+            user=get_user_model().objects.create_user(
                 email="luke@jedi.com",
                 password="NOOOOOOOOOOOOOOOOOOO",
                 type=UserType.VOLUNTEER,
