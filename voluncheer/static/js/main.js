@@ -15,6 +15,7 @@ function EditProfile() {
     view.style.display = "none";
     edit.style.display = "inline-block";
   }
+  $("#edit-form-edit a").html("link")
 }
 
 function ShowDetail(element) {
