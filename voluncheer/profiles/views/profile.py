@@ -17,7 +17,7 @@ from django.views.generic import DetailView
 from opportunityboard.models import Opportunity
 from profiles.forms.organizations import OrganizationChangeForm
 from profiles.forms.volunteers import VolunteerChangeForm
-from profiles.models import GallaryPost
+from profiles.models import GalleryPost
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
@@ -58,7 +58,7 @@ class ProfileView(DetailView):
             kwargs["hours_volunteered"] = round(
                 volunteer_profile.hours_volunteered.total_seconds() / 3600, 2
             )
-            gallery_post = GallaryPost.objects.filter(volunteer=volunteer_profile)
+            gallery_post = GalleryPost.objects.filter(volunteer=volunteer_profile)
             kwargs["gallery_post"] = gallery_post
 
         return super().get_context_data(**kwargs)

@@ -225,12 +225,12 @@ def _post_photo_path(instance, filename):
     return f"opportunities/{instance.volunteer.user.id}/{filename}"
 
 
-class GallaryPost(models.Model):
-    """The GalaryPost type.
+class GalleryPost(models.Model):
+    """The GalleryPost type.
 
     Attributes:
-        volunteer: post belong to.
-        author: post author, either created by the same volunteer or aliens.
+        volunteer: The owner of the post. Posts appear on this volunteer's profile.
+        author: The author of the post. A user can post on any other volunteer's profile.
         title: post title.
         photo: post feature. Image field, required.
         content: post content.

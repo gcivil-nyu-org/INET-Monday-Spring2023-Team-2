@@ -146,6 +146,8 @@ class VolunteerSignUpView(TestCase):
 
 
 class OrganizationViewTestCase(TestCase):
+    """This is the test case for Volunteer-side Organization view"""
+
     def setUp(self):
         super().setUp()
         self.user = get_user_model().objects.create_user(
@@ -163,6 +165,7 @@ class OrganizationViewTestCase(TestCase):
         ).save()
 
     def test_organization_view(self):
+        """test volunteer can visit organization profiles"""
         response = self.client.get(reverse("organization_view", args=[self.org.pk]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "volunteer/vol_org_view.html")

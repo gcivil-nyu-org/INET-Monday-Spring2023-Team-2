@@ -1,14 +1,14 @@
 from django import forms
 from django.db import transaction
 
-from profiles.models import GallaryPost
+from profiles.models import GalleryPost
 
 
 class CreateGalleryPostForm(forms.ModelForm):
     """This is the form used for creating a new post for volunteer gallery."""
 
     class Meta:
-        model = GallaryPost
+        model = GalleryPost
         fields = (
             "title",
             "photo",
@@ -18,7 +18,7 @@ class CreateGalleryPostForm(forms.ModelForm):
     @transaction.atomic
     def save(self, target_volunteer):
         if self.is_valid():
-            GallaryPost.objects.create(
+            GalleryPost.objects.create(
                 volunteer=target_volunteer,
                 author=self.data.get("volunteer"),
                 title=self.cleaned_data.get("title"),
@@ -27,4 +27,4 @@ class CreateGalleryPostForm(forms.ModelForm):
             )
 
     def delete(self, post_pk):
-        GallaryPost.objects.filter(pk=post_pk).delete()
+        GalleryPost.objects.filter(pk=post_pk).delete()

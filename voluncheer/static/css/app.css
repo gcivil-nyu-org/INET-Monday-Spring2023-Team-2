@@ -234,20 +234,20 @@ body {
     color: #fffb01 !important;
 }
 
-.vol-position-disciption-h1 {
+.vol-position-description-h1 {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 3px;
 }
-.vol-position-disciption-h2 {
+.vol-position-description-h2 {
     font-size: 15px;
     margin-bottom: 3px;
 }
-.vol-position-disciption-h3 {
+.vol-position-description-h3 {
     font-size: 13px;
     margin-bottom: 3px;
 }
-.vol-position-disciption-p {
+.vol-position-description-p {
     font-size: 14px;
 }
 
@@ -377,14 +377,15 @@ label[for=photo-clear_id] {
 
 .gallery-post-image {
     width: 220px;
+    padding-top: 5px;
 }
 
-.gallery-post-disciption-h1 {
+.gallery-post-description-h1 {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 0px;
 }
-.gallery-post-disciption-h2 {
+.gallery-post-description-h2 {
     font-size: 15px;
     margin-bottom: 0px;
 }
@@ -406,7 +407,7 @@ label[for=photo-clear_id] {
 }
 .gallery-post:hover,.gallery-post:focus{
     box-shadow:10px 10px 7px rgba(0,0,0,.7);
-    transform: scale(1.25);
+    transform: scale(1.75);
     position:relative;
     z-index:5;
 }

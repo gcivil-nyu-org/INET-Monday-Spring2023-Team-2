@@ -2,7 +2,7 @@ from django.test.client import RequestFactory
 from django.urls import reverse
 
 from opportunityboard.unittest_setup import TestCase
-from profiles.models import GallaryPost
+from profiles.models import GalleryPost
 from profiles.views.gallery import create_post
 from profiles.views.profile import confirm_attendance
 
@@ -116,6 +116,7 @@ class GalleryTest(TestCase):
     """Test cases for Gallery based functions"""
 
     def test_create_post(self):
+        """test create gallery post function"""
         rf = RequestFactory()
         get_request = rf.post(
             "profile/post/",
@@ -123,14 +124,15 @@ class GalleryTest(TestCase):
         )
         get_request.user = self.vol.user
 
-        self.assertEqual(GallaryPost.objects.all().count(), 0)
+        self.assertEqual(GalleryPost.objects.all().count(), 0)
         create_post(get_request)
-        self.assertEqual(GallaryPost.objects.all().count(), 1)
+        self.assertEqual(GalleryPost.objects.all().count(), 1)
 
     def test_delete_post(self):
-        new_post = GallaryPost.objects.create(
+        """test delete gallery post function"""
+        new_post = GalleryPost.objects.create(
             volunteer=self.vol, author=self.vol, title="Booo", content="Hoooo"
         )
-        self.assertEqual(GallaryPost.objects.all().count(), 1)
+        self.assertEqual(GalleryPost.objects.all().count(), 1)
         self.client.get(reverse("delete_post", args=[new_post.pk]))
-        self.assertEqual(GallaryPost.objects.all().count(), 0)
+        self.assertEqual(GalleryPost.objects.all().count(), 0)

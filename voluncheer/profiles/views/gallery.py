@@ -8,7 +8,7 @@ from profiles.models import Volunteer
 def create_post(request):
     """create a new Post and save it to the database."""
     user = request.user
-    if user.is_anonymous:
+    if user.is_anonymous or user.is_organization:
         return redirect("home")
     if user.is_volunteer:
         volunteer_profile = Volunteer.objects.get(pk=user)
