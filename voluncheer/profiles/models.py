@@ -219,3 +219,30 @@ class Volunteer(models.Model):
             self.save()
 
         return hours_remaining
+
+
+def _post_photo_path(instance, filename):
+    return f"opportunities/{instance.volunteer.user.id}/{filename}"
+
+
+class GalleryPost(models.Model):
+    """The GalleryPost type.
+
+    Attributes:
+        volunteer: The owner of the post. Posts appear on this volunteer's profile.
+        author: The author of the post. A user can post on any other volunteer's profile.
+        title: post title.
+        photo: post feature. Image field, required.
+        content: post content.
+    """
+
+    volunteer = models.ForeignKey(Volunteer, on_delete=models.CASCADE, blank=True)
+    author = models.ForeignKey(
+        Volunteer, on_delete=models.CASCADE, blank=True, related_name="author"
+    )
+    title = models.CharField(max_length=200)
+    photo = models.ImageField(upload_to=_post_photo_path, blank=True, null=True)
+    content = models.TextField(help_text="Caption your photo", default="")
+
+    def __str__(self):
+        return self.title
