@@ -4,16 +4,15 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('profiles', '0002_auto_20230325_2115'),
-        ('opportunityboard', '0014_alter_opportunity_photo'),
+        ("profiles", "0002_auto_20230325_2115"),
+        ("opportunityboard", "0014_alter_opportunity_photo"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='opportunity',
-            name='volunteer',
-            field=models.ManyToManyField(blank=True, to='profiles.Volunteer'),
+            model_name="opportunity",
+            name="volunteer",
+            field=models.ManyToManyField(blank=True, to="profiles.Volunteer"),
         ),
     ]

@@ -1,13 +1,9 @@
 import logging
 
 from django import forms
-from django.contrib.auth.forms import UserChangeForm
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.db import transaction
-
-from profiles.models import Organization
-from profiles.models import User
-from profiles.models import UserType
+from profiles.models import Organization, User, UserType
 
 
 class OrganizationCreationForm(UserCreationForm):

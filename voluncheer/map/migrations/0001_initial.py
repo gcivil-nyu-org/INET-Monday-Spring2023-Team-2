@@ -4,28 +4,34 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='NYCharities',
+            name="NYCharities",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('street', models.CharField(max_length=255)),
-                ('city', models.CharField(max_length=255)),
-                ('state', models.CharField(max_length=2)),
-                ('type', models.CharField(max_length=255)),
-                ('bin_num', models.PositiveBigIntegerField(default=0)),
-                ('latitude', models.DecimalField(decimal_places=6, max_digits=9)),
-                ('longitude', models.DecimalField(decimal_places=6, max_digits=9)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("street", models.CharField(max_length=255)),
+                ("city", models.CharField(max_length=255)),
+                ("state", models.CharField(max_length=2)),
+                ("type", models.CharField(max_length=255)),
+                ("bin_num", models.PositiveBigIntegerField(default=0)),
+                ("latitude", models.DecimalField(decimal_places=6, max_digits=9)),
+                ("longitude", models.DecimalField(decimal_places=6, max_digits=9)),
             ],
             options={
-                'verbose_name_plural': 'NYCharities',
+                "verbose_name_plural": "NYCharities",
             },
         ),
     ]

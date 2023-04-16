@@ -1,12 +1,10 @@
-from io import StringIO
 import random
 import string
+from io import StringIO
 
 from django.core.management import call_command
 from django.test import TestCase
-
-from profiles.models import User
-from profiles.models import UserType
+from profiles.models import User, UserType
 
 
 class TestCreateSuperUser(TestCase):
@@ -14,7 +12,9 @@ class TestCreateSuperUser(TestCase):
 
     def setUp(self):
         self.email = "super@admin.com"
-        self.password = "".join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        self.password = "".join(
+            random.choices(string.ascii_uppercase + string.digits, k=8)
+        )
 
     def test_creates_super_user(self):
         out = StringIO()

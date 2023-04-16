@@ -1,9 +1,6 @@
 import datetime as dt
 
-from opportunityboard.models import Category
-from opportunityboard.models import Opportunity
-from opportunityboard.models import Subcategory
-from opportunityboard.models import Subsubcategory
+from opportunityboard.models import Category, Opportunity, Subcategory, Subsubcategory
 from opportunityboard.unittest_setup import TestCase
 
 

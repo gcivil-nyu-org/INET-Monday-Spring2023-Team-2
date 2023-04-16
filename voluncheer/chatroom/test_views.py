@@ -4,14 +4,15 @@ import string
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-
 from profiles.models import UserType
 
 
 class ChatroomViewTest(TestCase):
     def setUp(self):
         super().setUp()
-        self.password = "".join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        self.password = "".join(
+            random.choices(string.ascii_uppercase + string.digits, k=8)
+        )
         self.user = get_user_model().objects.create_user(
             email="test@voluncheer.com",
             password="secret",

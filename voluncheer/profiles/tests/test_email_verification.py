@@ -1,11 +1,9 @@
 from django.contrib.auth.tokens import default_token_generator
 from django.core import mail
-from django.test import Client
-from django.test import TestCase
+from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-
 from profiles.forms.organizations import OrganizationCreationForm
 from profiles.models import User
 
@@ -27,12 +25,16 @@ class activateEmailTest(TestCase):
 
     def test_user_inactive(self):
         """Assert User is inactive after sign up"""
-        self.response = self.client.post(reverse("organization_signup"), data=self.form1.data)
+        self.response = self.client.post(
+            reverse("organization_signup"), data=self.form1.data
+        )
         test_user = User.objects.get(email="test_org@testing.org")
         self.assertFalse(test_user.is_active)
 
     def test_email_sent(self):
-        self.response = self.client.post(reverse("organization_signup"), data=self.form1.data)
+        self.response = self.client.post(
+            reverse("organization_signup"), data=self.form1.data
+        )
         test_user = User.objects.get(email="test_org@testing.org")
         uidb64 = urlsafe_base64_encode(force_bytes(test_user.pk))
         token = default_token_generator.make_token(test_user)

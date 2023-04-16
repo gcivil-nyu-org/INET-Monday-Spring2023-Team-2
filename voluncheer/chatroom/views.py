@@ -1,7 +1,6 @@
+from chatroom.models import Room
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-
-from chatroom.models import Room
 
 # To be changed after UI is designed.
 

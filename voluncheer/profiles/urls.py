@@ -1,13 +1,13 @@
 from django.urls import path
-
 from profiles.views.activate_email import activate
-from profiles.views.home import SignUpView
-from profiles.views.home import home
+from profiles.views.home import SignUpView, home
 from profiles.views.organizations import OrganizationSignUpView
-from profiles.views.profile import ProfileView
-from profiles.views.profile import confirm_attendance
-from profiles.views.profile import profile_update
-from profiles.views.profile import saved_events
+from profiles.views.profile import (
+    ProfileView,
+    confirm_attendance,
+    profile_update,
+    saved_events,
+)
 from profiles.views.volunteers import VolunteerSignUpView
 
 urlpatterns = [

@@ -1,13 +1,7 @@
 from datetime import timedelta
 
 from django.test import TestCase
-
-from profiles.models import Badge
-from profiles.models import BadgeType
-from profiles.models import Organization
-from profiles.models import User
-from profiles.models import UserType
-from profiles.models import Volunteer
+from profiles.models import Badge, BadgeType, Organization, User, UserType, Volunteer
 
 
 class UserTest(TestCase):
@@ -55,7 +49,9 @@ class UserTest(TestCase):
             photo="sith-lord.jpg",
         )
 
-        self.admin = User.objects.create_superuser(email="admin@starwars.com", password="admin")
+        self.admin = User.objects.create_superuser(
+            email="admin@starwars.com", password="admin"
+        )
 
         self.gold_badge = Badge.objects.create(
             name="Gold",

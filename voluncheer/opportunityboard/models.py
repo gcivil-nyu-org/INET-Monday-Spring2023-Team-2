@@ -1,9 +1,7 @@
 import datetime as dt
 
 from django.db import models
-
-from profiles.models import Organization
-from profiles.models import Volunteer
+from profiles.models import Organization, Volunteer
 
 
 class Category(models.Model):
@@ -79,10 +77,14 @@ class Opportunity(models.Model):
     class Meta:
         verbose_name_plural = "opportunities"
 
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True, blank=True)
+    organization = models.ForeignKey(
+        Organization, on_delete=models.CASCADE, null=True, blank=True
+    )
     pubdate = models.DateTimeField(auto_now_add=True, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
-    subcategory = models.ForeignKey(Subcategory, on_delete=models.SET_NULL, blank=True, null=True)
+    subcategory = models.ForeignKey(
+        Subcategory, on_delete=models.SET_NULL, blank=True, null=True
+    )
     subsubcategory = models.ForeignKey(
         Subsubcategory, on_delete=models.SET_NULL, blank=True, null=True
     )
@@ -91,12 +93,18 @@ class Opportunity(models.Model):
     date = models.DateTimeField()
     end = models.TimeField()
     is_recurring = models.BooleanField(default=False)
-    recurrence = models.CharField(max_length=6, choices=FREQUENCIES, null=True, blank=True)
+    recurrence = models.CharField(
+        max_length=6, choices=FREQUENCIES, null=True, blank=True
+    )
     end_date = models.DateField(null=True, blank=True)
     address_1 = models.CharField(max_length=255)
     address_2 = models.CharField(null=True, blank=True, max_length=255)
-    longitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
-    latitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
+    longitude = models.DecimalField(
+        null=True, blank=True, max_digits=9, decimal_places=6
+    )
+    latitude = models.DecimalField(
+        null=True, blank=True, max_digits=9, decimal_places=6
+    )
     staffing = models.PositiveIntegerField(null=True, blank=True)
     is_published = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=_opportunity_photo_path, blank=True, null=True)
@@ -114,7 +122,9 @@ class Opportunity(models.Model):
             end_datetime = dt.datetime.combine(self.date.date(), self.end)
         else:
             end_datetime = dt.datetime.combine(self.end_date, self.end)
-        start_datetime = self.date.replace(tzinfo=None)  # make start date naive for subtraction
+        start_datetime = self.date.replace(
+            tzinfo=None
+        )  # make start date naive for subtraction
         duration = end_datetime - start_datetime
         duration_seconds = dt.timedelta(seconds=duration.seconds)  # remove date
         return duration_seconds

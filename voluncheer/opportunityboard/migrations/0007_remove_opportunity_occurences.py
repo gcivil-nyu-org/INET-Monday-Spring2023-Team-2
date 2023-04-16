@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('opportunityboard', '0006_rename_frequency_opportunity_recurrence'),
+        ("opportunityboard", "0006_rename_frequency_opportunity_recurrence"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='opportunity',
-            name='occurences',
+            model_name="opportunity",
+            name="occurences",
         ),
     ]

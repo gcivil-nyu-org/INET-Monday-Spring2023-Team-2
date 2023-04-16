@@ -1,18 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import BadHeaderError
-from django.core.mail import send_mail
+from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes
-from django.utils.encoding import force_str
-from django.utils.http import urlsafe_base64_decode
-from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
-from voluncheer.settings import AWS_SES_DOMAIN
-from voluncheer.settings import DEFAULT_FROM_EMAIL
+from voluncheer.settings import AWS_SES_DOMAIN, DEFAULT_FROM_EMAIL
 
 
 def activateEmail(request, user, to_email):

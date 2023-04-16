@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('profiles', '0008_alter_badge_img'),
+        ("profiles", "0008_alter_badge_img"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='badge',
-            name='type',
-            field=models.IntegerField(choices=[(0, 'VOLUNTEER_HOURS_BADGE')]),
+            model_name="badge",
+            name="type",
+            field=models.IntegerField(choices=[(0, "VOLUNTEER_HOURS_BADGE")]),
         ),
     ]

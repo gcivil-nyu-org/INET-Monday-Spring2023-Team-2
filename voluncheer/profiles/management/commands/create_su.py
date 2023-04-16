@@ -2,7 +2,6 @@
 
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
-
 from profiles.models import UserType
 
 
@@ -27,7 +26,9 @@ class Command(BaseCommand):
 
         if User.objects.filter(email=email).exists():
             self.stdout.write(
-                self.style.SUCCESS(f"Super user with email address {repr(email)} already exists.")
+                self.style.SUCCESS(
+                    f"Super user with email address {repr(email)} already exists."
+                )
             )
             return
 
@@ -37,4 +38,6 @@ class Command(BaseCommand):
             is_active=True,
             type=UserType.ADMIN,
         )
-        self.stdout.write(self.style.SUCCESS(f"Successfully created super user for {repr(email)}."))
+        self.stdout.write(
+            self.style.SUCCESS(f"Successfully created super user for {repr(email)}.")
+        )

@@ -4,15 +4,14 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('opportunityboard', '0005_auto_20230326_0057'),
+        ("opportunityboard", "0005_auto_20230326_0057"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='opportunity',
-            old_name='frequency',
-            new_name='recurrence',
+            model_name="opportunity",
+            old_name="frequency",
+            new_name="recurrence",
         ),
     ]

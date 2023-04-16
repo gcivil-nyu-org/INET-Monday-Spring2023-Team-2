@@ -1,10 +1,9 @@
 from decimal import Decimal
 from unittest.mock import patch
 
+import requests
 from django.core.management import call_command
 from django.test import TestCase
-import requests
-
 from map.models import NYCharities
 
 

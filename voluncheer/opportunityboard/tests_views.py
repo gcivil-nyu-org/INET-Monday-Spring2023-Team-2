@@ -2,12 +2,13 @@ import datetime as dt
 
 from django.test.client import RequestFactory
 from django.urls import reverse
-
 from opportunityboard.models import Category
 from opportunityboard.unittest_setup import TestCase
-from opportunityboard.views.opportunityboard import deregister_volunteer
-from opportunityboard.views.opportunityboard import opportunityboard
-from opportunityboard.views.opportunityboard import signup_volunteer
+from opportunityboard.views.opportunityboard import (
+    deregister_volunteer,
+    opportunityboard,
+    signup_volunteer,
+)
 from opportunityboard.views.search import Filter
 
 

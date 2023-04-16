@@ -14,6 +14,7 @@
     />
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/map.css' %}" />
+    <script src="{% static 'js/map.js' %}"></script>
   </head>
 
   <body>
@@ -52,7 +53,7 @@
     <!-- prettier-ignore -->
     <script>
     (g => { var h, a, k, p = "The Google Maps JavaScript API", c = "google", l = "importLibrary", q = "__ib__", m = document, b = window; b = b[c] || (b[c] = {}); var d = b.maps || (b.maps = {}), r = new Set, e = new URLSearchParams, u = () => h || (h = new Promise(async (f, n) => { await (a = m.createElement("script")); e.set("libraries", [...r] + ""); for (k in g) e.set(k.replace(/[A-Z]/g, t => "_" + t[0].toLowerCase()), g[k]); e.set("callback", c + ".maps." + q); a.src = `https://maps.${c}apis.com/maps/api/js?` + e; d[q] = f; a.onerror = () => h = n(Error(p + " could not load.")); a.nonce = m.querySelector("script[nonce]")?.nonce || ""; m.head.append(a) })); d[l] ? console.warn(p + " only loads once. Ignoring:", g) : d[l] = (f, ...n) => r.add(f) && u().then(() => d[l](f, ...n)) })({
-      key: "{{ key }}",
+      key: "AIzaSyBzE-wnZ_7yuWH3c6kRTPyIBwTSYJG1VzI",
       v: "beta",
     });
   </script>
@@ -61,7 +62,7 @@
       src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}&libraries=places&callback=initMap&v=weekly"
       defer
     ></script>
-    <script>
+    <!-- <script>
       function initMap() {
         const map = new google.maps.Map(document.getElementById("map"), {
           center: { lat: 40.76, lng: -73.983 },
@@ -70,50 +71,8 @@
         });
         const input = document.getElementById("address");
 
-        const autocomplete = new google.maps.places.Autocomplete(input);
-        autocomplete.bindTo("bounds", map);
-
-        const infowindow = new google.maps.InfoWindow();
-        const infowindowContent = document.getElementById("infowindow-content");
-
-        infowindow.setContent(infowindowContent);
-
-        const marker = new google.maps.Marker({
-          map,
-          anchorPoint: new google.maps.Point(0, -29),
-        });
-
-        autocomplete.addListener("place_changed", () => {
-          infowindow.close();
-          marker.setVisible(false);
-
-          const place = autocomplete.getPlace();
-
-          if (!place.geometry || !place.geometry.location) {
-            // User entered the name of a Place that was not suggested and
-            // pressed the Enter key, or the Place Details request failed.
-            window.alert(
-              "No details available for input: '" + place.name + "'"
-            );
-            return;
-          }
-
-          // If the place has a geometry, then present it on a map.
-          if (place.geometry.viewport) {
-            map.fitBounds(place.geometry.viewport);
-          } else {
-            map.setCenter(place.geometry.location);
-            map.setZoom(15);
-          }
-
-          marker.setPosition(place.geometry.location);
-          marker.setVisible(true);
-          infowindowContent.children["place-name"].textContent = place.name;
-          infowindowContent.children["place-address"].textContent =
-            place.formatted_address;
-          infowindow.open(map, marker);
-        });
+        
       }
-    </script>
+    </script> -->
   </body>
 </html>

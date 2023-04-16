@@ -2,18 +2,11 @@ import json
 
 # from django.apps import apps
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-
-from opportunityboard.models import Category
-from opportunityboard.models import Opportunity
-from opportunityboard.models import Subcategory
-from opportunityboard.models import Subsubcategory
+from opportunityboard.models import Category, Opportunity, Subcategory, Subsubcategory
 from opportunityboard.views.search import parse_search_filter
-from profiles.models import Organization
-from profiles.models import User
-from profiles.models import Volunteer
+from profiles.models import Organization, User, Volunteer
 
 # Organization = apps.get_model("profiles", "Organization")
 OPPORTUNITY_PER_PAGE = 5
@@ -55,9 +48,9 @@ def category_dict_gen():
         subcategories = Subcategory.objects.filter(parent=category).order_by("name")
         for subcategory in subcategories:
             subsublist = []
-            for subsubcategory in Subsubcategory.objects.filter(parent=subcategory).order_by(
-                "name"
-            ):
+            for subsubcategory in Subsubcategory.objects.filter(
+                parent=subcategory
+            ).order_by("name"):
                 subsublist.append(subsubcategory.name)
             cate_dict[subcategory.name] = subsublist
         cate_output_dict[category.name] = cate_dict
@@ -94,5 +87,9 @@ def organization_view(request, userid):
     print(organization)
     user = get_object_or_404(User, pk=userid)
     opportunity_lists = organization.opportunity_set.all()
-    context = {"user": user, "organization": organization, "opportunity_lists": opportunity_lists}
+    context = {
+        "user": user,
+        "organization": organization,
+        "opportunity_lists": opportunity_lists,
+    }
     return render(request, "volunteer/vol_org_view.html", context)

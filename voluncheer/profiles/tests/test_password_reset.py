@@ -4,7 +4,6 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-
 from profiles.models import User
 
 
@@ -28,7 +27,9 @@ class PasswordResetTest(TestCase):
         self.assertTemplateUsed(response, "registration/password_reset_form.html")
 
     def test_password_reset_form(self):
-        response = self.client.post(reverse("password_reset"), {"email": self.test_user.email})
+        response = self.client.post(
+            reverse("password_reset"), {"email": self.test_user.email}
+        )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to, ["testuser@example.com"])
@@ -43,7 +44,9 @@ class PasswordResetTest(TestCase):
         )
 
     def test_password_reset_link(self):
-        response = self.client.post(reverse("password_reset"), {"email": self.test_user.email})
+        response = self.client.post(
+            reverse("password_reset"), {"email": self.test_user.email}
+        )
         response = self.client.get(
             reverse("password_reset_confirm", args=[self.uidb64, self.token])
         )
@@ -56,7 +59,9 @@ class PasswordResetTest(TestCase):
         self.assertTemplateUsed(response, "registration/password_reset_confirm.html")
 
     def test_password_reset_confirm_view(self):
-        response = self.client.post(reverse("password_reset"), {"email": self.test_user.email})
+        response = self.client.post(
+            reverse("password_reset"), {"email": self.test_user.email}
+        )
         response = self.client.get(
             reverse("password_reset_confirm", args=[self.uidb64, self.token])
         )

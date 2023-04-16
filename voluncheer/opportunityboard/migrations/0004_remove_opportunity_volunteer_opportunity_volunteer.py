@@ -17,6 +17,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="opportunity",
             name="volunteer",
-            field=models.ManyToManyField(blank=True, null=True, to="profiles.volunteer"),
+            field=models.ManyToManyField(
+                blank=True, null=True, to="profiles.volunteer"
+            ),
         ),
     ]

@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('map', '0001_initial'),
+        ("map", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='nycharities',
-            name='zip_code',
+            model_name="nycharities",
+            name="zip_code",
             field=models.CharField(default=0, max_length=5),
         ),
     ]

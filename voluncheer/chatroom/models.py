@@ -1,5 +1,4 @@
 from django.db import models
-
 from profiles.models import User
 
 
@@ -12,7 +11,9 @@ class Room(models.Model):
 
     name = models.CharField(max_length=128)
     # TO BE COMPLETED RIGHT NOW YOU DON'T NEED TO SIGH UP TO JOIN CHAT
-    signed_up_users = models.ManyToManyField(to=User, blank=True, related_name="signed_up_user")
+    signed_up_users = models.ManyToManyField(
+        to=User, blank=True, related_name="signed_up_user"
+    )
     online = models.ManyToManyField(to=User, blank=True, related_name="online_user")
     # If it's private, then it's a two people/organization chat.
 
