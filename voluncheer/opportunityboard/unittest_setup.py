@@ -78,3 +78,4 @@ class TestCase(test.TestCase):
             date_of_birth="1955-09-25",
             description="I want to come with you to Alderaan.",
         )
+        self.vol.save()
