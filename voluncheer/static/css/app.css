@@ -355,6 +355,14 @@ label[for=photo-clear_id] {
     background:rgb(222,255,180);
 }
 
+.org-details {
+    font-size: 20px;
+}
+
+.vol-details {
+    font-size: 20px;
+}
+
 .gallery-post {
     font-family: Caveat, sans-serif;
     text-decoration:none;
