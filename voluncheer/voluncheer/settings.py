@@ -43,7 +43,7 @@ if _ALLOWED_HOSTS_CSV:
 
 # Application definition
 INSTALLED_APPS = [
-    #Run server application
+    # Run server application
     "daphne",
     "gunicorn",
     # Django built-ins
@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "storages",
     "channels",
-    "supervisor", #Not sure if supervisor is needed here.
+    "supervisor",  # Not sure if supervisor is needed here.
     "channels_redis",
     "mathfilters",
     # Local applications
@@ -71,7 +71,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -102,25 +101,20 @@ TEMPLATES = [
 WSGI_APPLICATION = "voluncheer.wsgi.application"
 ASGI_APPLICATION = "voluncheer.asgi.application"
 
-REDIS_CHATROOM_PORT = os.getenv("REDIS_CHATROOM_PORT")
 if environment.is_aws:
-    CHANNEL_LAYERS = {
-        "default": {
-            'BACKEND': 'channels_redis.core.RedisChannelLayer',
-            "CONFIG": {
-                "hosts": [(REDIS_CHATROOM_PORT, 6379)],
-            },
-        }
-    }
+    REDIS_CHATROOM_PORT = os.getenv("REDIS_CHATROOM_PORT")
 else:
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [("127.0.0.1", 6379)],
-            },
+    REDIS_CHATROOM_PORT = "127.0.0.1"
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(REDIS_CHATROOM_PORT, 6379)],
         },
     }
+}
 
 
 # Database
@@ -238,7 +232,7 @@ if DEBUG:
 if environment.is_local:
     STATIC_URL = "/static/"
     STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-    #STATIC_ROOT = os.path.join(BASE_DIR, "static")
+    # STATIC_ROOT = os.path.join(BASE_DIR, "static")
 else:
     STATIC_URL = "/static/"
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
