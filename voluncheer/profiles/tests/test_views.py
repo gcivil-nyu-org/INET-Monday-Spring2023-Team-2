@@ -4,8 +4,8 @@ from django.urls import reverse
 
 from opportunityboard import unittest_setup  # noqa:F401
 from opportunityboard.unittest_setup import TestCase
-from profiles.models import UserType
 from profiles.models import GalleryPost
+from profiles.models import UserType
 from profiles.views.gallery import create_post
 from profiles.views.profile import confirm_attendance
 
