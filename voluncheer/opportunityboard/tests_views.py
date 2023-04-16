@@ -115,6 +115,21 @@ class OpportunityboardTestCase(TestCase):
             opp_list = filters.search()
             self.assertFalse(opp_list.filter(pk=opp_pk).exists())
 
+    def test_search_by_distance(self):
+        filters = Filter(latitude=40.752133, longitude=-73.984776)
+
+        with self.subTest("within_distance"):
+            filters.distance = 3
+            self.opp.save()
+            opp_list = filters.search()
+            self.assertEqual(len(opp_list), 1)
+
+        with self.subTest("outside_distance"):
+            filters.distance = 2
+            self.opp.save()
+            opp_list = filters.search()
+            self.assertEqual(len(opp_list), 0)
+
 
 class VolunteerSignUpView(TestCase):
     """This is the test case for Volunteer signup and other volunteer centric behaviors"""
