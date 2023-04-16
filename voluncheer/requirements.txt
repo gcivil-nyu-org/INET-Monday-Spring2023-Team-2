@@ -37,6 +37,7 @@ requests==2.28.2
 s3transfer==0.6.0
 six==1.16.0
 sqlparse==0.4.3
+supervisor==4.2.2
 urllib3==1.26.14
 verify-email==2.4.3
-whitenoise==6.4.0
+
