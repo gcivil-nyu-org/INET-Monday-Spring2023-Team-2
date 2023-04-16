@@ -1,3 +1,5 @@
+import datetime
+
 from django import forms
 from django.core.exceptions import ValidationError
 
@@ -16,6 +18,7 @@ class PostAnOpportunityForm(forms.ModelForm):
                 "type": "datetime-local",
             }
         ),
+        required=True,
     )
     end = forms.TimeField(
         widget=forms.TimeInput(
@@ -120,6 +123,8 @@ class PostAnOpportunityForm(forms.ModelForm):
             raise ValidationError("Must enter recurrence if opportunity is recurring")
 
         date = self.cleaned_data.get("date")
+        if date < datetime.datetime.now(tz=date.tzinfo):
+            raise ValidationError("Start date and time must be in the future.")
         start_time = date.time()
         end_time = self.cleaned_data.get("end")
 
