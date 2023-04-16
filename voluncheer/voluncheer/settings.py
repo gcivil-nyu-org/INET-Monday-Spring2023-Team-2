@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "storages",
     "channels",
+    "supervisor", #Not sure if supervisor is needed here.
     "channels_redis",
     "mathfilters",
     # Local applications
@@ -105,10 +106,9 @@ REDIS_CHATROOM_PORT = os.getenv("REDIS_CHATROOM_PORT")
 if environment.is_aws:
     CHANNEL_LAYERS = {
         "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": REDIS_CHATROOM_PORT,
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            "CONFIG": {
+                "hosts": [(REDIS_CHATROOM_PORT, 6379)],
             },
         }
     }
