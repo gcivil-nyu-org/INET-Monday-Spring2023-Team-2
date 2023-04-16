@@ -147,26 +147,26 @@
                   {% if opportunity.is_published and opportunity.staffing > 0 %}
                     <article name="article">
                     {% if opportunity.photo %}
-                    <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
+                    <a href="{%url 'organization_view' opportunity.organization.pk%}"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
                     {% endif %}
-                      <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
+                      <p class="vol-position-description-h1">{{ opportunity.title }}</p>
                       {%if user.is_volunteer%}
-                      <p class="vol-position-disciption-h1">
-                        <a href="{%url 'organization_view' opportunity.organization.pk%}">{{ opportunity.organization }}</a>
+                      <p class="vol-position-description-h3">
+                        Published by: <a href="{%url 'organization_view' opportunity.organization.pk%}">{{ opportunity.organization }}</a>
                       </p>
                       {%endif%}
-                      <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
-                      <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
-                      <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
-                      <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
+                      <p class="vol-position-description-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                      <p class="vol-position-description-h2">Address: {{ opportunity.address_1 }}</p>
+                      <p class="vol-position-description-h2">Date: {{ opportunity.date }}</p>
+                      <p class="vol-position-description-h2">End: {{ opportunity.end }}</p>
                       <p>{{ opportunity.description }}</p>
                       {% if user.is_volunteer %}
-                        {% if volunteer not in opportunity.volunteers.all %}
+                        {% if volunteer in opportunity.volunteers.all %}
+                        <button type="button" id="register-opportunity" value="false" class="readmore" onclick="toggleButton()">Registered!</button>
+                        {% else %}
                         <a href="{% url 'signup_volunteer' opportunity.pk %}">
                           <button type="button" id="register-opportunity" value="false" class="readmore" onclick="toggleButton()">Register?</button>
                         </a>
-                        {% else %}
-                        <button type="button" id="register-opportunity" value="false" class="readmore" onclick="toggleButton()">Registered!</button>
                         {% endif %}
                       {% endif %}
                     </article>

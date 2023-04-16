@@ -7,4 +7,14 @@
     by creating a <a href="{% url 'volunteer_signup' %}">volunteer account</a> or an <a href="{% url 'organization_signup' %}">organization account</a>.
   </p>
   <hr>
+  <script>
+    $(function() {
+      var user_auth = "{{user.is_authenticated}}";
+      console.log(user_auth)
+      if (user_auth == "True") {
+        var url= "{% url 'home' %}";
+        window.location = url;
+      }
+    });
+  </script>
 {% endblock %}

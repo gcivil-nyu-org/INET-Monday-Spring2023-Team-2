@@ -18,6 +18,12 @@
     font-weight: auto;
     font-style: normal;
 }
+@font-face {
+    font-family: 'Caveat';
+    src: url('../fonts/Caveat-Regular.ttf'); format('truetype');
+    font-weight: auto;
+    font-style: normal;
+}
 * {
     margin: 0;
 }
@@ -228,20 +234,20 @@ body {
     color: #fffb01 !important;
 }
 
-.vol-position-disciption-h1 {
+.vol-position-description-h1 {
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 3px;
 }
-.vol-position-disciption-h2 {
+.vol-position-description-h2 {
     font-size: 15px;
     margin-bottom: 3px;
 }
-.vol-position-disciption-h3 {
+.vol-position-description-h3 {
     font-size: 13px;
     margin-bottom: 3px;
 }
-.vol-position-disciption-p {
+.vol-position-description-p {
     font-size: 14px;
 }
 
@@ -357,4 +363,60 @@ label[for=photo-clear_id] {
     font-size: 20px;
 }
 
+.gallery-post {
+    font-family: Caveat, sans-serif;
+    text-decoration:none;
+    color:#000;
+    background:#ffc;
+    display:inline-block;
+    width:230px;
+    padding:5px;
+    box-shadow: 0 5px 2px #aaa;
+    transform: rotate(-6deg);
+}
+
+.total-hours {
+    font-size: 20px;
+}
+
+.hours-required {
+    font-size: 15px;
+}
+
+.gallery-post-image {
+    width: 220px;
+    padding-top: 5px;
+}
+
+.gallery-post-description-h1 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+.gallery-post-description-h2 {
+    font-size: 15px;
+    margin-bottom: 0px;
+}
+
+.gallery-post:nth-child(even){
+    transform:rotate(4deg);
+    position:relative;
+    top:5px;
+}
+.gallery-post:nth-child(3n) a{
+    transform:rotate(-3deg);
+    position:relative;
+    top:-5px;
+}
+.gallery-post:nth-child(5n) a{
+    transform:rotate(5deg);
+    position:relative;
+    top:-10px;
+}
+.gallery-post:hover,.gallery-post:focus{
+    box-shadow:10px 10px 7px rgba(0,0,0,.7);
+    transform: scale(1.75);
+    position:relative;
+    z-index:5;
+}
 /* End */

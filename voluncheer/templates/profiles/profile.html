@@ -78,16 +78,16 @@
                         {% if opportunity.photo %}
 					    <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
                         {% endif %}
-					    <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
-                        <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
-                        <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
-                        <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
-                        <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
-                        <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
+					    <p class="vol-position-description-h1">{{ opportunity.title }}</p>
+                        <p class="vol-position-description-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                        <p class="vol-position-description-h2">Address: {{ opportunity.address_1 }}</p>
+                        <p class="vol-position-description-h2">Date: {{ opportunity.date }}</p>
+                        <p class="vol-position-description-h2">End: {{ opportunity.end }}</p>
+                        <p class="vol-position-description-h2">{{ opportunity.description }}</p>
                         {% if user.pk is curr_user.pk %}
                         <form method="get" id="opportunities-detail-{{opportunity.pk}}-form" class="opportunities-detail-form" action="{% url 'attendance' opportunity.pk %}">
                             <div id="volunteer-attandence">
-                                <p class="vol-position-disciption-h1">Volunteer attendance:</p>
+                                <p class="vol-position-description-h1">Volunteer attendance:</p>
                                 {% for volunteer in opportunity.volunteers.all %}
                                     {% if volunteer in opportunity.attended_volunteers.all %}
                                     <div class="sticky-note green">
@@ -125,12 +125,12 @@
 					    {% if opportunity.photo %}
 					    <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
                         {% endif %}
-					    <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
-                        <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
-                        <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
-                        <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
-                        <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
-                        <p class="vol-position-disciption-h2">{{ opportunity.description }}</p>
+					    <p class="vol-position-description-h1">{{ opportunity.title }}</p>
+                        <p class="vol-position-description-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                        <p class="vol-position-description-h2">Address: {{ opportunity.address_1 }}</p>
+                        <p class="vol-position-description-h2">Date: {{ opportunity.date }}</p>
+                        <p class="vol-position-description-h2">End: {{ opportunity.end }}</p>
+                        <p class="vol-position-description-h2">{{ opportunity.description }}</p>
                         <div class="url"><a href="#" id="{{opportunity.pk}}" class="opportunities-detail-btn">Details</a></div>
                         <hr align="center">
 				    </article>
@@ -181,6 +181,10 @@
                 <hr align="center">
             </div>
             {% endif %}
+            <div class="url">
+                <a href="{% url 'create_post' %}" >CREATE POST</a>
+                <hr align="center">
+            </div>
         </div>
     </div>
     <!-- Main -->
@@ -233,6 +237,18 @@
                 <p class="hours-required"> You have {{ hours_required }} hours to go until your next badge!</p>
             {% endif %}
         </div>
+
+        <h2>MY GALLERY</h2>
+        {% for post in gallery_post %}
+            <article class="gallery-post" id="post-{{post.pk}}">
+                {% if post.photo %}
+                <a href="#post-{{post.pk}}"><img src="{{post.photo.url}}" alt="" class="gallery-post-image" width="220px"/></a>
+                {% endif %}
+                <p class="gallery-post-description-h1">{{ post.title }}</p>
+                <p class="gallery-post-description-h2">{{ post.content }}</p>
+                <div class="url"><a href="{% url 'delete_post' post.pk %}" id="{{post.pk}}" class="opportunities-detail-btn">Delete</a></div>
+            </article>
+        {% endfor %}
     </div>
     <!-- End -->
   {% endif %}
