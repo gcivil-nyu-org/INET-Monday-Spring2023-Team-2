@@ -8,9 +8,11 @@ https://docs.djangoproject.com/en/4.1/howto/deployment/asgi/
 """
 import os
 
-from channels.routing import ProtocolTypeRouter, URLRouter
-from chatroom import routing
+from channels.routing import ProtocolTypeRouter
+from channels.routing import URLRouter
 from django.core.asgi import get_asgi_application
+
+from chatroom import routing
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "voluncheer.settings")
 application = ProtocolTypeRouter(

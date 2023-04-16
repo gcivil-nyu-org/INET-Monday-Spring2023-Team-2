@@ -1,5 +1,6 @@
 from opportunityboard.forms.postanopportunity import PostAnOpportunityForm
-from opportunityboard.models import Category, Opportunity
+from opportunityboard.models import Category
+from opportunityboard.models import Opportunity
 from opportunityboard.unittest_setup import TestCase
 
 

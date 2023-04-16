@@ -1,6 +1,11 @@
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+from django.shortcuts import render
+
 from opportunityboard.forms.postanopportunity import PostAnOpportunityForm
-from opportunityboard.models import Opportunity, Subcategory, Subsubcategory
+from opportunityboard.models import Opportunity
+from opportunityboard.models import Subcategory
+from opportunityboard.models import Subsubcategory
 from profiles.models import Organization
 
 
@@ -49,9 +54,7 @@ def update_an_opportunity(request, opportunity_id):
     if user.is_organization:
         organization_profile = Organization.objects.get(pk=user)
     if request.method == "POST":
-        form = PostAnOpportunityForm(
-            request.POST, request.FILES, instance=opportunity_to_update
-        )
+        form = PostAnOpportunityForm(request.POST, request.FILES, instance=opportunity_to_update)
         if form.is_valid():
             if "delete" in request.POST:
                 form.delete(opportunity_id)
@@ -96,9 +99,7 @@ def load_subsubcategories(request):
     """Request all subsubcategories for a given subcategory to populate drop-down"""
     subcategory_id = request.GET.get("subcategory")
     if subcategory_id:
-        subsubcategories = Subsubcategory.objects.filter(
-            parent=subcategory_id
-        ).order_by("name")
+        subsubcategories = Subsubcategory.objects.filter(parent=subcategory_id).order_by("name")
     else:  # drop-down changed to empty field
         subsubcategories = {}
     return render(

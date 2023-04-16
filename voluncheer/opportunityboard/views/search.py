@@ -1,6 +1,9 @@
 import datetime as dt
 
-from opportunityboard.models import Category, Opportunity, Subcategory, Subsubcategory
+from opportunityboard.models import Category
+from opportunityboard.models import Opportunity
+from opportunityboard.models import Subcategory
+from opportunityboard.models import Subsubcategory
 
 
 class Filter:
@@ -62,13 +65,9 @@ class Filter:
         if self.category is not None:
             filtered_opportunity = filtered_opportunity.filter(category=self.category)
         if self.subcategory is not None:
-            filtered_opportunity = filtered_opportunity.filter(
-                subcategory=self.subcategory
-            )
+            filtered_opportunity = filtered_opportunity.filter(subcategory=self.subcategory)
         if self.subsubcategory is not None:
-            filtered_opportunity = filtered_opportunity.filter(
-                subsubcategory=self.subsubcategory
-            )
+            filtered_opportunity = filtered_opportunity.filter(subsubcategory=self.subsubcategory)
         if self.duration == "2 hours or less":
             filtered_opportunity = filter_by_duration(filtered_opportunity, 2)
         if self.duration == "4 hours or less":

@@ -1,5 +1,6 @@
 from django.shortcuts import redirect
 from django.views.generic import CreateView
+
 from profiles.forms.organizations import OrganizationCreationForm
 from profiles.models import User
 from profiles.views.activate_email import activateEmail

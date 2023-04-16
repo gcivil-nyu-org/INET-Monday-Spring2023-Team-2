@@ -1,21 +1,27 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import BadHeaderError, send_mail
+from django.core.mail import BadHeaderError
+from django.core.mail import send_mail
 from django.db.models.query_utils import Q
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.views.generic import DetailView
+
 from opportunityboard.models import Opportunity
 from profiles.forms.organizations import OrganizationChangeForm
 from profiles.forms.volunteers import VolunteerChangeForm
-from profiles.models import Organization, User, Volunteer
-
-from voluncheer.settings import AWS_SES_DOMAIN, DEFAULT_FROM_EMAIL
+from profiles.models import Organization
+from profiles.models import User
+from profiles.models import Volunteer
+from voluncheer.settings import AWS_SES_DOMAIN
+from voluncheer.settings import DEFAULT_FROM_EMAIL
 
 
 @method_decorator([login_required], name="dispatch")
@@ -83,16 +89,10 @@ class ProfileView(DetailView):
                         {
                             "email": associated_user.email,
                             "user": associated_user,
-                            "domain": AWS_SES_DOMAIN
-                            if AWS_SES_DOMAIN
-                            else "127.0.0.1:8000",
+                            "domain": AWS_SES_DOMAIN if AWS_SES_DOMAIN else "127.0.0.1:8000",
                             "site_name": "VolunCHEER",
-                            "uid": urlsafe_base64_encode(
-                                force_bytes(associated_user.pk)
-                            ),
-                            "token": default_token_generator.make_token(
-                                associated_user
-                            ),
+                            "uid": urlsafe_base64_encode(force_bytes(associated_user.pk)),
+                            "token": default_token_generator.make_token(associated_user),
                             "protocol": "https" if request.is_secure() else "http",
                         },
                     )
@@ -134,9 +134,7 @@ def profile_update(request, userid):
         profile = get_object_or_404(Organization, pk=request.user)
         form = OrganizationChangeForm(request.POST, request.FILES, instance=profile)
     else:
-        raise ValueError(
-            "profile_update: user must either a volunteer or an organizaiton."
-        )
+        raise ValueError("profile_update: user must either a volunteer or an organizaiton.")
     form.save()
     return redirect("home")
 

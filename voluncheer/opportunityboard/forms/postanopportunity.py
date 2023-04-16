@@ -1,6 +1,9 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from opportunityboard.models import Opportunity, Subcategory, Subsubcategory
+
+from opportunityboard.models import Opportunity
+from opportunityboard.models import Subcategory
+from opportunityboard.models import Subsubcategory
 
 
 class PostAnOpportunityForm(forms.ModelForm):
@@ -97,9 +100,7 @@ class PostAnOpportunityForm(forms.ModelForm):
             try:
                 self.fields[
                     "subsubcategory"
-                ].queryset = self.instance.subcategory.subsubcategory_set.order_by(
-                    "name"
-                )
+                ].queryset = self.instance.subcategory.subsubcategory_set.order_by("name")
             except (ValueError, TypeError, AttributeError):
                 pass
 

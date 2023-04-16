@@ -3,7 +3,10 @@
 import json
 
 from django.core.management.base import BaseCommand
-from opportunityboard.models import Category, Subcategory, Subsubcategory
+
+from opportunityboard.models import Category
+from opportunityboard.models import Subcategory
+from opportunityboard.models import Subsubcategory
 
 # JSON model type representations.
 _CATEGORY = "opportunityboard.category"

@@ -1,9 +1,12 @@
 import datetime
 
-import freezegun
-from chatroom.models import Message, Room
 from django.test import TestCase
-from profiles.models import User, UserType
+import freezegun
+
+from chatroom.models import Message
+from chatroom.models import Room
+from profiles.models import User
+from profiles.models import UserType
 
 
 class ChatroomTest(TestCase):
@@ -30,9 +33,7 @@ class ChatroomTest(TestCase):
         cls.room.signed_up_users.add(cls.user2)
         cls.room.online.add(cls.user2)
         cls.room.online.add(cls.user1)
-        cls.time = datetime.datetime(
-            year=2023, month=5, day=8, tzinfo=datetime.timezone.utc
-        )
+        cls.time = datetime.datetime(year=2023, month=5, day=8, tzinfo=datetime.timezone.utc)
         with freezegun.freeze_time(cls.time):
             cls.message = Message.objects.create(
                 user=cls.user3, room=cls.room, content="testcontent", timestamp=cls.time

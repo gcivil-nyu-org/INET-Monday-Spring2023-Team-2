@@ -1,8 +1,9 @@
+from datetime import timedelta
 import json
 import re
-from datetime import timedelta
 
 from django.core.management.base import BaseCommand
+
 from profiles.models import Badge
 
 regex = re.compile(r"((?P<hours>\d+):)((?P<minutes>\d+):)(?P<seconds>\d+)")

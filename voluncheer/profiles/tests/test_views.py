@@ -1,5 +1,6 @@
 from django.test.client import RequestFactory
 from django.urls import reverse
+
 from opportunityboard.unittest_setup import TestCase
 from profiles.views.profile import confirm_attendance
 

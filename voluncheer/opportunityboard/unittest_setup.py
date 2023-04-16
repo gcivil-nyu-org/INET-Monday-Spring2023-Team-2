@@ -1,8 +1,15 @@
 import datetime as dt
 
 from django import test
-from opportunityboard.models import Category, Opportunity, Subcategory, Subsubcategory
-from profiles.models import Organization, User, UserType, Volunteer
+
+from opportunityboard.models import Category
+from opportunityboard.models import Opportunity
+from opportunityboard.models import Subcategory
+from opportunityboard.models import Subsubcategory
+from profiles.models import Organization
+from profiles.models import User
+from profiles.models import UserType
+from profiles.models import Volunteer
 
 
 class TestCase(test.TestCase):
@@ -31,9 +38,7 @@ class TestCase(test.TestCase):
             name="Jedi Council",
         )
         self.category = Category.objects.create(name="Environment")
-        self.subcategory = Subcategory.objects.create(
-            name="Conservation", parent=self.category
-        )
+        self.subcategory = Subcategory.objects.create(name="Conservation", parent=self.category)
         self.subsubcategory = Subsubcategory.objects.create(
             name="Reforestation", parent=self.subcategory
         )

@@ -2,7 +2,10 @@ from io import StringIO
 
 from django.core.management import call_command
 from django.test import TestCase
-from opportunityboard.models import Category, Subcategory, Subsubcategory
+
+from opportunityboard.models import Category
+from opportunityboard.models import Subcategory
+from opportunityboard.models import Subsubcategory
 
 _TEST_DATA = "opportunityboard/testdata/categories.json"
 
@@ -28,15 +31,9 @@ class TestLoadCategories(TestCase):
         with self.subTest("test_already_exist_does_not_create_new_categories"):
             exists_out = StringIO()
             call_command("load_categories", category_data=_TEST_DATA, stdout=exists_out)
-            self.assertNotIn(
-                "Successfully created 'Test Category'.", exists_out.getvalue()
-            )
-            self.assertNotIn(
-                "Successfully created 'Test Sub Category'.", exists_out.getvalue()
-            )
-            self.assertNotIn(
-                "Successfully created 'Test Sub Sub Category'.", exists_out.getvalue()
-            )
+            self.assertNotIn("Successfully created 'Test Category'.", exists_out.getvalue())
+            self.assertNotIn("Successfully created 'Test Sub Category'.", exists_out.getvalue())
+            self.assertNotIn("Successfully created 'Test Sub Sub Category'.", exists_out.getvalue())
 
             self.assertEqual(len(Category.objects.all()), 1)
             self.assertEqual(len(Subcategory.objects.all()), 1)
