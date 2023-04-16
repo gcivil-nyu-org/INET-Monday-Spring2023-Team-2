@@ -1,11 +1,9 @@
-from datetime import datetime
 from datetime import timedelta
 from io import StringIO
 
 from django.core.management import call_command
 from django.test import TestCase
-from django.utils import timezone
-import pytz
+import datetime as dt
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
@@ -61,7 +59,7 @@ class TestArchiveOpportunities(TestCase):
             name="Jedi Council",
         )
 
-        self.now = datetime.now(pytz.utc)
+        today = dt.datetime(year=2023, month=4, day=16, tzinfo=dt.timezone.utc)
         description = "Please help us support our community at this week's soup kitchen"
 
         self.opportunity1 = Opportunity.objects.create(
@@ -69,8 +67,8 @@ class TestArchiveOpportunities(TestCase):
             category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 1",
             description=description,
-            date=timezone.now() - timedelta(days=1),
-            end=timezone.now() - timedelta(hours=1),
+            date=today - timedelta(days=1),
+            end=today - timedelta(hours=1),
             is_archived=False,
             is_published=True,
             address_1="200 Calrissian Av.",
@@ -86,8 +84,8 @@ class TestArchiveOpportunities(TestCase):
             category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 2",
             description=description,
-            date=timezone.now() + timedelta(days=1),
-            end=timezone.now() + timedelta(hours=2),
+            date=today + timedelta(days=1),
+            end=today + timedelta(hours=2),
             is_archived=False,
             is_published=True,
             address_1="200 Calrissian Av.",
@@ -103,8 +101,8 @@ class TestArchiveOpportunities(TestCase):
             category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 3",
             description=description,
-            date=timezone.now() - timedelta(days=1),
-            end=timezone.now() + timedelta(hours=1),
+            date=today - timedelta(days=1),
+            end=today + timedelta(hours=1),
             is_archived=False,
             is_published=True,
             address_1="200 Calrissian Av.",
@@ -119,8 +117,8 @@ class TestArchiveOpportunities(TestCase):
             category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 4",
             description=description,
-            date=timezone.now() - timedelta(days=1),
-            end=timezone.now() - timedelta(hours=1),
+            date=today - timedelta(days=1),
+            end=today - timedelta(hours=1),
             is_archived=False,
             is_published=False,
             address_1="200 Calrissian Av.",
@@ -135,8 +133,8 @@ class TestArchiveOpportunities(TestCase):
             category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 5",
             description=description,
-            date=timezone.now() - timedelta(days=1),
-            end=timezone.now() - timedelta(hours=1),
+            date=today - timedelta(days=1),
+            end=today - timedelta(hours=1),
             is_archived=False,
             is_published=False,
             address_1="200 Calrissian Av.",

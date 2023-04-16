@@ -10,9 +10,16 @@ from opportunityboard.models import Opportunity
 class Command(BaseCommand):
     help = "Archive opportunities that have ended"
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--datetime",
+            default=datetime.now(pytz.utc),
+            help="The date before which all opportunities are archived",
+        )
+
     @transaction.atomic
-    def handle(self, **kwargs):
-        now = datetime.now(pytz.utc)
+    def handle(self, *args, **options):
+        now = options["datetime"]
 
         opportunities = Opportunity.objects.filter(
             date__lte=now,
