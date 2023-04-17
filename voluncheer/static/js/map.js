@@ -3,8 +3,9 @@ let map;
 async function initMap() {
   const nyc = { lat: 40.7504877, lng: -73.9839238 };
 
-  const { Map } = await google.maps.importLibrary("maps");
-  const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
+  const { Point } = await google.maps.importLibrary("core");
+  const { InfoWindow, Map } = await google.maps.importLibrary("maps");
+  const { AdvancedMarkerView, Marker } = await google.maps.importLibrary("marker");
 
   map = new Map(document.getElementById("map"), {
     center: nyc,
@@ -18,17 +19,18 @@ async function initMap() {
   );
 
   const input = document.getElementById("address");
-  const {AutocompleteService} = await google.maps.importLibrary("places")  
-  autocomplete = new AutocompleteService.bindTo("bounds", map);
+  const { Autocomplete } = await google.maps.importLibrary("places");
+  const autocomplete = new Autocomplete(input);
+  autocomplete.bindTo("bounds", map);
 
-  const infowindow = new google.maps.InfoWindow();
+  const infowindow = new InfoWindow();
   const infowindowContent = document.getElementById("infowindow-content");
 
   infowindow.setContent(infowindowContent);
 
-  const marker = new google.maps.Marker({
+  const marker = new Marker({
     map,
-    anchorPoint: new google.maps.Point(0, -29),
+    anchorPoint: new Point(0, -29),
   });
 
   autocomplete.addListener("place_changed", () => {
@@ -53,7 +55,21 @@ async function initMap() {
       map.setCenter(place.geometry.location);
       map.setZoom(15);
     }
+    // If the place has a geometry, then present it on a map.
+    if (place.geometry.viewport) {
+      map.fitBounds(place.geometry.viewport);
+    } else {
+      map.setCenter(place.geometry.location);
+      map.setZoom(15);
+    }
 
+    marker.setPosition(place.geometry.location);
+    marker.setVisible(true);
+    infowindowContent.children["place-name"].textContent = place.name;
+    infowindowContent.children["place-address"].textContent =
+      place.formatted_address;
+    infowindow.open(map, marker);
+  });
     marker.setPosition(place.geometry.location);
     marker.setVisible(true);
     infowindowContent.children["place-name"].textContent = place.name;
