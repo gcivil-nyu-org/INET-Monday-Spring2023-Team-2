@@ -1,5 +1,6 @@
 import datetime as dt
 
+from django.contrib.auth import get_user_model
 from django.test.client import RequestFactory
 from django.urls import reverse
 
@@ -9,6 +10,8 @@ from opportunityboard.views.opportunityboard import deregister_volunteer
 from opportunityboard.views.opportunityboard import opportunityboard
 from opportunityboard.views.opportunityboard import signup_volunteer
 from opportunityboard.views.search import Filter
+from profiles.models import UserType
+from profiles.models import Volunteer
 
 
 class OpportunityboardTestCase(TestCase):
@@ -112,6 +115,21 @@ class OpportunityboardTestCase(TestCase):
             opp_list = filters.search()
             self.assertFalse(opp_list.filter(pk=opp_pk).exists())
 
+    def test_search_by_distance(self):
+        filters = Filter(latitude=40.752133, longitude=-73.984776)
+
+        with self.subTest("within_distance"):
+            filters.distance = 3
+            self.opp.save()
+            opp_list = filters.search()
+            self.assertEqual(len(opp_list), 1)
+
+        with self.subTest("outside_distance"):
+            filters.distance = 2
+            self.opp.save()
+            opp_list = filters.search()
+            self.assertEqual(len(opp_list), 0)
+
 
 class VolunteerSignUpView(TestCase):
     """This is the test case for Volunteer signup and other volunteer centric behaviors"""
@@ -140,3 +158,37 @@ class VolunteerSignUpView(TestCase):
         deregister_volunteer(test_request, self.opp.pk)
         self.opp.refresh_from_db()
         self.assertEqual(self.opp.staffing, 9)
+
+
+class OrganizationViewTestCase(TestCase):
+    """This is the test case for Volunteer-side Organization view"""
+
+    def setUp(self):
+        super().setUp()
+        self.user = get_user_model().objects.create_user(
+            email="test@voluncheer.com",
+            password="secret",
+            type=UserType.VOLUNTEER,
+        )
+        self.user.save()
+        self.client.login(email="test@voluncheer.com", password="secret")
+        self.vol2 = Volunteer.objects.create(
+            user=self.user,
+            first_name="Luke",
+            last_name="Skywalker",
+            date_of_birth="1955-09-25",
+        ).save()
+
+    def test_organization_view(self):
+        """test volunteer can visit organization profiles"""
+        response = self.client.get(reverse("organization_view", args=[self.org.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "volunteer/vol_org_view.html")
+        self.assertEqual(response.context["user"], self.user)
+        self.assertEqual(response.context["organization"], self.org)
+        self.assertQuerysetEqual(
+            response.context["opportunity_lists"],
+            ["Cloud City Soup Kitchen"],
+            transform=lambda x: str(x),
+            ordered=False,
+        )

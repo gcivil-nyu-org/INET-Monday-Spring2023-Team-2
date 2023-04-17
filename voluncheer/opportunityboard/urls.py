@@ -2,6 +2,7 @@ from django.urls import path
 
 from opportunityboard.views.opportunityboard import deregister_volunteer
 from opportunityboard.views.opportunityboard import opportunityboard
+from opportunityboard.views.opportunityboard import organization_view
 from opportunityboard.views.opportunityboard import signup_volunteer
 from opportunityboard.views.postanopportunity import load_subcategories
 from opportunityboard.views.postanopportunity import load_subsubcategories
@@ -29,4 +30,5 @@ urlpatterns = [
         deregister_volunteer,
         name="deregister_volunteer",
     ),
+    path("profile/<int:userid>", organization_view, name="organization_view"),
 ]

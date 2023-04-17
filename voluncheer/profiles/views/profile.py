@@ -17,6 +17,7 @@ from django.views.generic import DetailView
 from opportunityboard.models import Opportunity
 from profiles.forms.organizations import OrganizationChangeForm
 from profiles.forms.volunteers import VolunteerChangeForm
+from profiles.models import GalleryPost
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
@@ -28,18 +29,22 @@ from voluncheer.settings import DEFAULT_FROM_EMAIL
 class ProfileView(DetailView):
     """Displays a user's profile and additional type specific information."""
 
+    # id = User.pk
     model = User
     context_object_name = "user"
     template_name = "profiles/profile.html"
+    pk_url_kwarg = "user_id"
 
     def get_object(self, *args, **kwargs):
         """Returns the user object for display."""
-        del args, kwargs  # Unused.
-        return self.request.user
+        pk = self.kwargs["pk"]
+        return get_object_or_404(User, pk=pk)
 
     def get_context_data(self, **kwargs):
         """Returns additional contextual information for display."""
-        user = self.request.user
+        pk = self.kwargs["pk"]
+        user = get_object_or_404(User, pk=pk)
+        kwargs["curr_user"] = self.request.user
         if user.is_organization:
             organization_profile = Organization.objects.get(pk=user)
             kwargs["organization"] = organization_profile
@@ -55,6 +60,8 @@ class ProfileView(DetailView):
             kwargs["hours_volunteered"] = round(
                 volunteer_profile.hours_volunteered.total_seconds() / 3600, 2
             )
+            gallery_post = GalleryPost.objects.filter(volunteer=volunteer_profile)
+            kwargs["gallery_post"] = gallery_post
 
         return super().get_context_data(**kwargs)
 
@@ -79,7 +86,6 @@ class ProfileView(DetailView):
                         },
                     )
                     try:
-                        print()
                         send_mail(
                             subject,
                             message,
@@ -98,8 +104,13 @@ class ProfileView(DetailView):
         )
 
 
-def profile_update(request):
+def profile_update(request, userid):
     """Get profile update POST and call save function on ChangeForms."""
+
+    userid = request.user.pk
+    userid = userid
+    profile = get_object_or_404(User, pk=request.user.pk)
+
     if request.user.is_volunteer:
         profile = get_object_or_404(Volunteer, pk=request.user)
         form = VolunteerChangeForm(
@@ -113,7 +124,7 @@ def profile_update(request):
     else:
         raise ValueError("profile_update: user must either a volunteer or an organizaiton.")
     form.save()
-    return redirect("profile")
+    return redirect("home")
 
 
 # This part is for Volunteer specified features.
@@ -157,4 +168,4 @@ def confirm_attendance(request, opportunity_id):
             volunteer.hours_volunteered += opportunity.duration
             volunteer.save()
 
-    return redirect("profile")
+    return redirect("home")

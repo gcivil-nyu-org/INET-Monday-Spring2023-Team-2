@@ -1,8 +1,9 @@
 import json
 
-from django.apps import apps
+# from django.apps import apps
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -11,9 +12,11 @@ from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
 from opportunityboard.views.search import parse_search_filter
+from profiles.models import Organization
+from profiles.models import User
 from profiles.models import Volunteer
 
-Organization = apps.get_model("profiles", "Organization")
+# Organization = apps.get_model("profiles", "Organization")
 OPPORTUNITY_PER_PAGE = 5
 
 
@@ -70,7 +73,7 @@ def signup_volunteer(request, opportunity_id):
         opportunity.volunteers.add(volunteer)
         opportunity.staffing -= 1
         opportunity.save()
-    return HttpResponseRedirect(reverse("opportunityboard", args=[1]))
+    return redirect("saved_events")
 
 
 def deregister_volunteer(request, opportunity_id):
@@ -85,3 +88,19 @@ def deregister_volunteer(request, opportunity_id):
         opportunity.staffing += 1
         opportunity.save()
     return HttpResponseRedirect(reverse("opportunityboard", args=[1]))
+
+
+def organization_view(request, userid):
+    organization = Organization.objects.get(pk=userid)
+    user = get_object_or_404(User, pk=request.user.pk)
+    if user.is_organization:
+        return redirect("home")
+    volunteer = get_object_or_404(Volunteer, pk=user)
+    opportunity_lists = organization.opportunity_set.all()
+    context = {
+        "user": user,
+        "organization": organization,
+        "opportunity_lists": opportunity_lists,
+        "volunteer": volunteer,
+    }
+    return render(request, "volunteer/vol_org_view.html", context)

@@ -2,308 +2,337 @@
 {% load static %}
 {% block content %}
 
-    <head>
-        <meta charset="utf-8" />
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'css/opportunityboard.css' %}">
-        <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-        <!--[if lt IE 9]>
+<head>
+  <meta charset="utf-8" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/opportunityboard.css' %}">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet" />
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <!--[if lt IE 9]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
-        <title>VolunCheer - Opportunities</title>
-    </head>
-    <!--[if IE 6 ]><body class="ie6 old_ie"><![endif]-->
-    <!--[if IE 7 ]><body class="ie7 old_ie"><![endif]-->
-    <!--[if IE 8 ]><body class="ie8"><![endif]-->
-    <!--[if IE 9 ]><body class="ie9"><![endif]-->
-    <!--[if !IE]><!--><body><!--<![endif]-->
-		</header>
-        <div id="opportunitysearch">
-            <div class="s007">
-              <form id="searchbox" method="get" action="{% url 'opportunityboard' 1%}">
-                <div class="inner-form">
-                  <div class="basic-search">
-                    <div class="input-field">
-                      <div class="icon-wrap">
-                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" viewBox="0 0 20 20">
-                          <path d="M18.869 19.162l-5.943-6.484c1.339-1.401 2.075-3.233 2.075-5.178 0-2.003-0.78-3.887-2.197-5.303s-3.3-2.197-5.303-2.197-3.887 0.78-5.303 2.197-2.197 3.3-2.197 5.303 0.78 3.887 2.197 5.303 3.3 2.197 5.303 2.197c1.726 0 3.362-0.579 4.688-1.645l5.943 6.483c0.099 0.108 0.233 0.162 0.369 0.162 0.121 0 0.242-0.043 0.338-0.131 0.204-0.187 0.217-0.503 0.031-0.706zM1 7.5c0-3.584 2.916-6.5 6.5-6.5s6.5 2.916 6.5 6.5-2.916 6.5-6.5 6.5-6.5-2.916-6.5-6.5z"></path>
-                        </svg>
-                      </div>
-                      <input id="search" type="text" placeholder="Search..." />
-                      <div class="result-count">
-                        <span>108 </span>results</div>
-                    </div>
-                  </div>
-                  <div class="advance-search">
-                    <span class="desc">Advanced Search</span>
-                    <div class="row">
-                      <div class="nested-dropdowns">
-                        <li class="select-box">
-                          <div id="nested-dropdowns-placeholder-category">
-                            {{ category_placeholder }}
-                          </div>
-                          {% csrf_token %}
-                          <ul>
-                          {% for category, subcategories in categories.items %}
-                            <li><input class="category" type="checkbox" name="category" value="{{ category }}">{{ category }}
-                              <ul>
-                              {% for subcategory, subsubcategories in subcategories.items %}
-                                <li><input class="category" type="checkbox" name="category" value="{{ subcategory }}">{{ subcategory }}
-                                  <ul>
-                                    {% for subsubcategory in subsubcategories %}
-                                    <li><input class="category" type="checkbox" name="category" value="{{ subsubcategory }}">{{ subsubcategory }}</li>
-                                    {% endfor %}
-                                  </ul>
-                                </li>
-                              {% endfor %}
-                              </ul>
-                            </li>
-                          {% endfor %}
-                          </ul>
-                        </li>
-                      </div>
-                      <div class="nested-dropdowns">
-                        <li class="select-box">
-                          <div id="nested-dropdowns-placeholder-duration">
-                            {{ duration_placeholder }}
-                          </div>
-                          {% csrf_token %}
-                          <ul>
-                          {% for type, durations in durations.items %}
-                            <li>{{ type }}
-                              <ul>
-                              {% for duration in durations %}
-                                <li><input class="duration" type="checkbox" name="duration" value="{{ duration }}">{{ duration }}</li>
-                              {% endfor %}
-                              </ul>
-                            </li>
-                          {% endfor %}
-                          </ul>
-                        </li>
-                      </div>
-                      <div class="input-field">
-                        <div class="input-select">
-                          <select data-trigger="" name="choices-single-defaul">
-                            <option placeholder="" value="">WORK PLACE</option>
-                            <option>IN-PERSON</option>
-                            <option>REMOTE</option>
-                            <option>FUSION</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row second">
-                      <div class="slidecontainer">
-                        <label for="formControlRange">Distance (within)</label><br>
-                        <input type="range" name="distance" class="form-control-range" min="0" max="10" step="0.1" value="0" id="formControlRange" onInput="$('#rangeval-distance').html($(this).val())">
-                        <span id="rangeval-distance">0<!-- Default value --></span> miles
-                      </div>
-                      <div class="slidecontainer">
-                        <label for="date-range">Date Range</label><br>
-                        <input type="text" id="date-range" name="startdates">
-                      </div>
-                    </div>
-                    <div class="row third"></div>
-                    <div class="input-field">
-                      <button type="submit" class="btn-search">Search</button>
-                      <button class="btn-delete" id="delete">Delete</button>
-                    </div>
-                  </div>
-                </div>
-              </form>
+  <title>VolunCheer - Opportunities</title>
+</head>
+<!--[if IE 6 ]><body class="ie6 old_ie"><![endif]-->
+<!--[if IE 7 ]><body class="ie7 old_ie"><![endif]-->
+<!--[if IE 8 ]><body class="ie8"><![endif]-->
+<!--[if IE 9 ]><body class="ie9"><![endif]-->
+<!--[if !IE]><!-->
+
+<body><!--<![endif]-->
+  </header>
+  <div id="opportunitysearch">
+    <div class="s007">
+      <form id="searchbox" method="get" action="{% url 'opportunityboard' 1%}">
+        <div class="inner-form">
+          <div class="basic-search">
+            <div class="input-field">
+              <div class="icon-wrap">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                  width="20" height="20" viewBox="0 0 20 20">
+                  <path
+                    d="M18.869 19.162l-5.943-6.484c1.339-1.401 2.075-3.233 2.075-5.178 0-2.003-0.78-3.887-2.197-5.303s-3.3-2.197-5.303-2.197-3.887 0.78-5.303 2.197-2.197 3.3-2.197 5.303 0.78 3.887 2.197 5.303 3.3 2.197 5.303 2.197c1.726 0 3.362-0.579 4.688-1.645l5.943 6.483c0.099 0.108 0.233 0.162 0.369 0.162 0.121 0 0.242-0.043 0.338-0.131 0.204-0.187 0.217-0.503 0.031-0.706zM1 7.5c0-3.584 2.916-6.5 6.5-6.5s6.5 2.916 6.5 6.5-2.916 6.5-6.5 6.5-6.5-2.916-6.5-6.5z">
+                  </path>
+                </svg>
+              </div>
+              <input id="search" type="text" placeholder="Search..." />
+              <div class="result-count">
+                <span>108 </span>results
+              </div>
             </div>
+          </div>
+          <div class="advance-search">
+            <span class="desc">Advanced Search</span>
+            <div class="row">
+              <div class="nested-dropdowns">
+                <li class="select-box">
+                  <div id="nested-dropdowns-placeholder-category">
+                    {{ category_placeholder }}
+                  </div>
+                  {% csrf_token %}
+                  <ul>
+                    {% for category, subcategories in categories.items %}
+                    <li><input class="category" type="checkbox" name="category" value="{{ category }}">{{ category }}
+                      <ul>
+                        {% for subcategory, subsubcategories in subcategories.items %}
+                        <li><input class="category" type="checkbox" name="category" value="{{ subcategory }}">{{ subcategory }}
+                          <ul>
+                            {% for subsubcategory in subsubcategories %}
+                            <li><input class="category" type="checkbox" name="category" value="{{ subsubcategory }}">{{ subsubcategory }}</li>
+                            {% endfor %}
+                          </ul>
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </li>
+              </div>
+              <div class="nested-dropdowns">
+                <li class="select-box">
+                  <div id="nested-dropdowns-placeholder-duration">
+                    {{ duration_placeholder }}
+                  </div>
+                  {% csrf_token %}
+                  <ul>
+                    {% for type, durations in durations.items %}
+                    <li>{{ type }}
+                      <ul>
+                        {% for duration in durations %}
+                        <li><input class="duration" type="checkbox" name="duration" value="{{ duration }}">{{ duration }}</li>
+                        {% endfor %}
+                      </ul>
+                    </li>
+                    {% endfor %}
+                  </ul>
+                </li>
+              </div>
+              <div class="input-field">
+                <div class="input-select">
+                  <select data-trigger="" name="choices-single-defaul">
+                    <option placeholder="" value="">WORK PLACE</option>
+                    <option>IN-PERSON</option>
+                    <option>REMOTE</option>
+                    <option>FUSION</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row second">
+              <div class="slidecontainer">
+                <label for="formControlRange">Distance (within)</label><br>
+                <input type="range" name="distance" class="form-control-range" min="0" max="50" step="1" value="0"
+                  id="formControlRange" onInput="$('#rangeval-distance').html($(this).val())">
+                <span id="rangeval-distance">0</span> miles
+              </div>
+              <div id="divLocation" class="hidden">
+                <input type="hidden" id="latitude" name="latitude" value="0">
+                <input type="hidden" id="longitude" name="longitude" value="0">
+              </div>
+              <div class="slidecontainer">
+                <label for="date-range">Date Range</label><br>
+                <input type="text" id="date-range" name="startdates">
+              </div>
+            </div>
+            <div class="row third"></div>
+            <div class="input-field">
+              <button type="submit" class="btn-search">Search</button>
+              <button class="btn-delete" id="delete">Delete</button>
+            </div>
+          </div>
         </div>
-{#		<div id="adbanner">#}
-{#			<div id="ad">#}
-{#				<a href="#"><p>Advertise Here</p></a>#}
-{#			</div>#}
-{#		</div>#}
-		<div id="secwrapper">
-			<section>
-{#      django script goes here       #}
-            <form class="opportunities-showcase" action="" method="post">
-				<article id="photobox">
-					<h1>Badges You Can Earn</h1>
-					<img src="../../static/images/badge-1.png" alt=""/>
-                    <img src="../../static/images/badge-2.png" alt=""/>
-                    <img src="../../static/images/badge-3.png" alt=""/>
-                    <img src="../../static/images/badge-4.png" alt=""/>
-                    <img src="../../static/images/badge-5.png" alt=""/>
-                    <img src="../../static/images/badge-6.png" alt=""/>
-				</article>
-{#				<article>#}
-{#					<a href="#"><img src="../../static/images/5.jpg" alt=""/></a>#}
-{#					<h1>Aenean Quis Dignissim Diam</h1>#}
-{#					<p>Vulputate ac sit aenean quis dignissim diam. Etiam venenatis congue velit, varius gravida mi volutpat ac. Sed ut pretium dolor. Etiam tempor felis ac eros dictum quis consectetur dolor tristique. Aliquam scelerisque, odio vel luctus commodo, nisl nisl vehicula metus, ut lobortis eros sem blandit est.</p>#}
-{#					<a href="#" class="readmore">Read more</a>#}
-{#				</article>#}
-{#      django script goes here       #}
-                {% csrf_token %}
-                {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-                {% for opportunity in opportunity_lists %}
-                  {% if opportunity.is_published and opportunity.staffing > 0 %}
-                    <article name="article">
-                    {% if opportunity.photo %}
-                    <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
-                    {% endif %}
-                      <p class="vol-position-disciption-h1">{{ opportunity.title }}</p>
-                      <p class="vol-position-disciption-h3">Pubdate: {{ opportunity.pubdate }}</p>
-                      <p class="vol-position-disciption-h2">Address: {{ opportunity.address_1 }}</p>
-                      <p class="vol-position-disciption-h2">Date: {{ opportunity.date }}</p>
-                      <p class="vol-position-disciption-h2">End: {{ opportunity.end }}</p>
-                      <p>{{ opportunity.description }}</p>
-                      {% if user.is_volunteer %}
-                        {% if volunteer not in opportunity.volunteers.all %}
-                        <a href="{% url 'signup_volunteer' opportunity.pk %}">
-                          <button type="button" id="register-opportunity" value="false" class="readmore" onclick="toggleButton()">Register?</button>
-                        </a>
-                        {% else %}
-                        <button type="button" id="register-opportunity" value="false" class="readmore" onclick="toggleButton()">Registered!</button>
-                        {% endif %}
-                      {% endif %}
-                    </article>
-                    {% endif %}
-                {% endfor %}
-                <article id="sponsors">
-					<h1>Sponsors</h1>
-					<a href="#"><p>Advertise here</p></a><a href="#"><p>Advertise here</p></a><a href="#"><p>Advertise here</p></a><a href="#"><p>Advertise here</p></a>
-				</article>
-            </form>
-{#      django script ends here       #}
-			</section>
-		</div>
-    <div class="pagination">
-      {% load mathfilters %}
-      {% if curr_page != 1 %}
-        {% with prev_page=curr_page|sub:1 %}
-          <a method="get" class="page-button" href="{% url 'opportunityboard' prev_page %}">&laquo;</a>
-        {% endwith %}
-      {% endif %}
-      {% for page_number in range_of_pages %}
-      {% if curr_page == page_number %}
-      <a method="get" class="page-button active" href="{% url 'opportunityboard' page_number%}">{{ page_number }}</a>
-      {% else %}
-      <a method="get" class="page-button" href="{% url 'opportunityboard' page_number%}">{{ page_number }}</a>
-      {% endif %}
-      {% endfor %}
-      {% if curr_page != range_of_pages|last  %}
-        {% with next_page=curr_page|add:1 %}
-          <a method="get" class="page-button" href="{% url 'opportunityboard' next_page %}">&raquo;</a>
-        {% endwith %}
-      {% endif %}  
+      </form>
     </div>
-		<footer>
-			<p>Copyright &copy 2023 VolunCheer, org.  All Rights Reserved.</p>
-		</footer>
-	</body>
+  </div>
+  {# <div id="adbanner">#}
+    {# <div id="ad">#}
+      {# <a href="#"><p>Advertise Here</p></a>#}
+      {# </div>#}
+    {# </div>#}
+  <div id="secwrapper">
+    <section>
+      {# django script goes here #}
+      <form class="opportunities-showcase" action="" method="post">
+        <article id="photobox">
+          <h1>Badges You Can Earn</h1>
+          <img src="../../static/images/badge-1.png" alt="" />
+          <img src="../../static/images/badge-2.png" alt="" />
+          <img src="../../static/images/badge-3.png" alt="" />
+          <img src="../../static/images/badge-4.png" alt="" />
+          <img src="../../static/images/badge-5.png" alt="" />
+          <img src="../../static/images/badge-6.png" alt="" />
+        </article>
+
+        {# django script goes here #}
+        {% csrf_token %}
+        {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+        {% for opportunity in opportunity_lists %}
+        {% if opportunity.is_published and opportunity.staffing > 0 %}
+        <article name="article">
+          {% if opportunity.photo %}
+          <a href="{%url 'organization_view' opportunity.organization.pk%}"><img src="{{opportunity.photo.url}}" alt=""
+              class="vol-position-image" width="275px" /></a>
+          {% endif %}
+          <p class="vol-position-description-h1">{{ opportunity.title }}</p>
+          {%if user.is_volunteer%}
+          <p class="vol-position-description-h3">
+            Published by: <a href="{%url 'organization_view' opportunity.organization.pk%}">{{ opportunity.organization }}</a>
+          </p>
+          {%endif%}
+          <p class="vol-position-description-h3">Pubdate: {{ opportunity.pubdate }}</p>
+          <p class="vol-position-description-h2">Address: {{ opportunity.address_1 }}</p>
+          <p class="vol-position-description-h2">Date: {{ opportunity.date }}</p>
+          <p class="vol-position-description-h2">End: {{ opportunity.end }}</p>
+          <p>{{ opportunity.description }}</p>
+          {% if user.is_volunteer %}
+          {% if volunteer in opportunity.volunteers.all %}
+          <button type="button" id="register-opportunity" value="false" class="readmore"
+            onclick="toggleButton()">Registered!</button>
+          {% else %}
+          <a href="{% url 'signup_volunteer' opportunity.pk %}">
+            <button type="button" id="register-opportunity" value="false" class="readmore"
+              onclick="toggleButton()">Register?</button>
+          </a>
+          {% endif %}
+          {% endif %}
+        </article>
+        {% endif %}
+        {% endfor %}
+        <article id="sponsors">
+          <h1>Sponsors</h1>
+          <a href="#">
+            <p>Advertise here</p>
+          </a><a href="#">
+            <p>Advertise here</p>
+          </a><a href="#">
+            <p>Advertise here</p>
+          </a><a href="#">
+            <p>Advertise here</p>
+          </a>
+        </article>
+      </form>
+      {# django script ends here #}
+    </section>
+  </div>
+  <div class="pagination">
+    {% load mathfilters %}
+    {% if curr_page != 1 %}
+    {% with prev_page=curr_page|sub:1 %}
+    <a method="get" class="page-button" href="{% url 'opportunityboard' prev_page %}">&laquo;</a>
+    {% endwith %}
+    {% endif %}
+    {% for page_number in range_of_pages %}
+    {% if curr_page == page_number %}
+    <a method="get" class="page-button active" href="{% url 'opportunityboard' page_number%}">{{ page_number }}</a>
+    {% else %}
+    <a method="get" class="page-button" href="{% url 'opportunityboard' page_number%}">{{ page_number }}</a>
+    {% endif %}
+    {% endfor %}
+    {% if curr_page != range_of_pages|last %}
+    {% with next_page=curr_page|add:1 %}
+    <a method="get" class="page-button" href="{% url 'opportunityboard' next_page %}">&raquo;</a>
+    {% endwith %}
+    {% endif %}
+  </div>
+  <footer>
+    <p>Copyright &copy 2023 VolunCheer, org. All Rights Reserved.</p>
+  </footer>
+</body>
 
 
 
-    <script src="{% static 'js/extention/choices.js' %}"></script>
-    <script>
-      function toggleButton() {
-        const button = document.getElementById("register-opportunity");
-        var value = button.innerHTML
-        if (value == "Register?") {
-          alert('You are successfully registered for the event!');
-        } else {
-          alert('You already registered this event!');
-        }
-      };
-    </script>
-   
-    <script>
-      const customSelects = document.querySelectorAll("select");
-      const deleteBtn = document.getElementById('delete')
-      const choices = new Choices('select',
-      {
-        searchEnabled: false,
-        removeItemButton: true,
-        itemSelectText: '',
-      });
-      for (let i = 0; i < customSelects.length; i++)
-      {
-        customSelects[i].addEventListener('addItem', function(event)
-        {
-          if (event.detail.value)
-          {
-            let parent = this.parentNode.parentNode
-            parent.classList.add('valid')
-            parent.classList.remove('invalid')
-          }
-          else
-          {
-            let parent = this.parentNode.parentNode
-            parent.classList.add('invalid')
-            parent.classList.remove('valid')
-          }
-        }, false);
+<script src="{% static 'js/extention/choices.js' %}"></script>
+<script>
+  function success(event) {
+    console.log(`Lat: ${event.coords.latitude}, Lon: ${event.coords.longitude}.`);
+    document.getElementById("latitude").value = event.coords.latitude;
+    document.getElementById("longitude").value = event.coords.longitude;
+  }
+  function error(event) {
+    console.log("Failed to get current position.");
+    document.getElementById("latitude").value = 0;
+    document.getElementById("longitude").value = 0;
+  }
+  if ((navigator.geolocation) && (window.location.protocol == 'https:')) {
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+</script>
+<script>
+  function toggleButton() {
+    const button = document.getElementById("register-opportunity");
+    var value = button.innerHTML
+    if (value == "Register?") {
+      alert('You are successfully registered for the event!');
+    } else {
+      alert('You already registered this event!');
+    }
+  };
+</script>
+
+<script>
+  const customSelects = document.querySelectorAll("select");
+  const deleteBtn = document.getElementById('delete')
+  const choices = new Choices('select',
+    {
+      searchEnabled: false,
+      removeItemButton: true,
+      itemSelectText: '',
+    });
+  for (let i = 0; i < customSelects.length; i++) {
+    customSelects[i].addEventListener('addItem', function (event) {
+      if (event.detail.value) {
+        let parent = this.parentNode.parentNode
+        parent.classList.add('valid')
+        parent.classList.remove('invalid')
       }
-      deleteBtn.addEventListener("click", function(e)
-      {
-        e.preventDefault()
-        const deleteAll = document.querySelectorAll('.choices__button')
-        for (let i = 0; i < deleteAll.length; i++)
-        {
-          deleteAll[i].click();
-        }
-        var isChecked = $("input.category:checked");
-        for (let i = 0; i < isChecked.length; i++) {
-          isChecked[i].checked = false;
-        }
-        document.getElementById("nested-dropdowns-placeholder-category").innerHTML = "CATEGORY";
-        isChecked = $("input.duration:checked");
-        for (let i = 0; i < isChecked.length; i++) {
-          isChecked[i].checked = false;
-        }
-        document.getElementById("nested-dropdowns-placeholder-duration").innerHTML = "DURATION";
-        searchbox
-        document.getElementById("searchbox").reset();
-        document.getElementById("rangeval-distance").innerHTML = "5"
-      });
-      var limit = 1;
-      $('input.category').on('change', function(evt) {
-        var placeholder = document.getElementById("nested-dropdowns-placeholder-category");
-        var len = $("input.category:checked").length;
-        if(this.checked == false) {
-          placeholder.innerHTML = "CATEGORY";
-          return;
-        }
-        if(len > limit) {
-          this.checked = false;
-        } else {
-          placeholder.innerHTML = this.value;
-        }
-      });
-      $('input.duration').on('change', function(evt) {
-        var placeholder = document.getElementById("nested-dropdowns-placeholder-duration");
-        var len = $("input.duration:checked").length;
-        if(this.checked == false) {
-          placeholder.innerHTML = "DURATION";
-          return;
-        }
-        if(len > limit) {
-          this.checked = false;
-        } else {
-          placeholder.innerHTML = this.value;
-        }
-      });
-      $('input[name="startdates"]').daterangepicker();
-      $(document).ready(function() {
-        var categories = $("input.category");
-        var filter = JSON.parse('{{ filter|escapejs }}');
-        for (let i = 0; i < categories.length; i++) {
-          if (categories[i].value == filter.category) {
-            categories[i].checked = true;
-          }
-        }
-      });
-    </script>
-		
-{% endblock %}		
-			
-    
-    
+      else {
+        let parent = this.parentNode.parentNode
+        parent.classList.add('invalid')
+        parent.classList.remove('valid')
+      }
+    }, false);
+  }
+  deleteBtn.addEventListener("click", function (e) {
+    e.preventDefault()
+    const deleteAll = document.querySelectorAll('.choices__button')
+    for (let i = 0; i < deleteAll.length; i++) {
+      deleteAll[i].click();
+    }
+    var isChecked = $("input.category:checked");
+    for (let i = 0; i < isChecked.length; i++) {
+      isChecked[i].checked = false;
+    }
+    document.getElementById("nested-dropdowns-placeholder-category").innerHTML = "CATEGORY";
+    isChecked = $("input.duration:checked");
+    for (let i = 0; i < isChecked.length; i++) {
+      isChecked[i].checked = false;
+    }
+    document.getElementById("nested-dropdowns-placeholder-duration").innerHTML = "DURATION";
+    searchbox
+    document.getElementById("searchbox").reset();
+    document.getElementById("rangeval-distance").innerHTML = "5"
+  });
+  var limit = 1;
+  $('input.category').on('change', function (evt) {
+    var placeholder = document.getElementById("nested-dropdowns-placeholder-category");
+    var len = $("input.category:checked").length;
+    if (this.checked == false) {
+      placeholder.innerHTML = "CATEGORY";
+      return;
+    }
+    if (len > limit) {
+      this.checked = false;
+    } else {
+      placeholder.innerHTML = this.value;
+    }
+  });
+  $('input.duration').on('change', function (evt) {
+    var placeholder = document.getElementById("nested-dropdowns-placeholder-duration");
+    var len = $("input.duration:checked").length;
+    if (this.checked == false) {
+      placeholder.innerHTML = "DURATION";
+      return;
+    }
+    if (len > limit) {
+      this.checked = false;
+    } else {
+      placeholder.innerHTML = this.value;
+    }
+  });
+  $('input[name="startdates"]').daterangepicker();
+  $(document).ready(function () {
+    var categories = $("input.category");
+    var filter = JSON.parse('{{ filter|escapejs }}');
+    for (let i = 0; i < categories.length; i++) {
+      if (categories[i].value == filter.category) {
+        categories[i].checked = true;
+      }
+    }
+  });
+</script>
+
+{% endblock %}
