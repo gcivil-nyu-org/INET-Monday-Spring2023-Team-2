@@ -101,10 +101,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "voluncheer.wsgi.application"
 ASGI_APPLICATION = "voluncheer.asgi.application"
 
-if environment.is_aws:
-    REDIS_CHATROOM_PORT = os.getenv("REDIS_CHATROOM_PORT")
-else:
-    REDIS_CHATROOM_PORT = "127.0.0.1"
+
+REDIS_CHATROOM_PORT = os.getenv("REDIS_CHATROOM_PORT", "127.0.0.1")
 
 
 CHANNEL_LAYERS = {

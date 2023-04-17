@@ -1,4 +1,5 @@
 [flake8]
 max-line-length = 100
-exclude = */migrations/*,*/asgi.py
+exclude = */migrations/*
 ignore = E203
+per-file-ignores =*/asgi.py:E402
