@@ -18,8 +18,8 @@ async function initMap() {
   );
 
   const input = document.getElementById("address");
-  const autocomplete = new google.maps.places.Autocomplete(input);
-  autocomplete.bindTo("bounds", map);
+  const {AutocompleteService} = await google.maps.importLibrary("places")  
+  autocomplete = new AutocompleteService.bindTo("bounds", map);
 
   const infowindow = new google.maps.InfoWindow();
   const infowindowContent = document.getElementById("infowindow-content");
@@ -46,21 +46,21 @@ async function initMap() {
       return;
     }
 
-  // If the place has a geometry, then present it on a map.
-  if (place.geometry.viewport) {
-    map.fitBounds(place.geometry.viewport);
-  } else {
-    map.setCenter(place.geometry.location);
-    map.setZoom(15);
-  }
+    // If the place has a geometry, then present it on a map.
+    if (place.geometry.viewport) {
+      map.fitBounds(place.geometry.viewport);
+    } else {
+      map.setCenter(place.geometry.location);
+      map.setZoom(15);
+    }
 
-  marker.setPosition(place.geometry.location);
-  marker.setVisible(true);
-  infowindowContent.children["place-name"].textContent = place.name;
-  infowindowContent.children["place-address"].textContent =
-    place.formatted_address;
-  infowindow.open(map, marker);
-});
+    marker.setPosition(place.geometry.location);
+    marker.setVisible(true);
+    infowindowContent.children["place-name"].textContent = place.name;
+    infowindowContent.children["place-address"].textContent =
+      place.formatted_address;
+    infowindow.open(map, marker);
+  });
 
   const total = organizations.length;
   const observer = new IntersectionObserver((entries) => {
