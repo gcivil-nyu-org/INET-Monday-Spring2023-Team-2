@@ -251,7 +251,7 @@
     document.getElementById("latitude").value = 0;
     document.getElementById("longitude").value = 0;
   }
-  if (navigator.geolocation) {
+  if ((navigator.geolocation) && (window.location.protocol == 'https:')) {
     navigator.geolocation.getCurrentPosition(success, error);
   }
 </script>
