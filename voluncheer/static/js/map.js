@@ -56,6 +56,7 @@ async function initMap() {
       map.setZoom(15);
     }
 
+
     marker.setPosition(place.geometry.location);
     marker.setVisible(true);
     infowindowContent.children["place-name"].textContent = place.name;
@@ -63,6 +64,7 @@ async function initMap() {
       place.formatted_address;
     infowindow.open(map, marker);
   });
+
 
   const total = organizations.length;
   const observer = new IntersectionObserver((entries) => {
