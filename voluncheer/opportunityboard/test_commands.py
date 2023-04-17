@@ -3,6 +3,7 @@ from io import StringIO
 
 from django.core.management import call_command
 from django.test import TestCase
+import freezegun
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
@@ -58,7 +59,7 @@ class TestArchiveOpportunities(TestCase):
             name="Jedi Council",
         )
 
-        today = dt.datetime(year=2023, month=4, day=16, tzinfo=dt.timezone.utc)
+        self.today = dt.datetime(year=2023, month=4, day=16, tzinfo=dt.timezone.utc)
         description = "Please help us support our community at this week's soup kitchen"
 
         self.opportunity1 = Opportunity.objects.create(
@@ -66,8 +67,8 @@ class TestArchiveOpportunities(TestCase):
             category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 1",
             description=description,
-            date=today - dt.timedelta(days=1),
-            end=today - dt.timedelta(hours=1),
+            date=self.today - dt.timedelta(days=1),
+            end=self.today - dt.timedelta(hours=1),
             is_archived=False,
             is_published=True,
             address_1="200 Calrissian Av.",
@@ -83,8 +84,8 @@ class TestArchiveOpportunities(TestCase):
             category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 2",
             description=description,
-            date=today + dt.timedelta(days=1),
-            end=today + dt.timedelta(hours=2),
+            date=self.today + dt.timedelta(days=1),
+            end=self.today + dt.timedelta(hours=2),
             is_archived=False,
             is_published=True,
             address_1="200 Calrissian Av.",
@@ -100,8 +101,8 @@ class TestArchiveOpportunities(TestCase):
             category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 3",
             description=description,
-            date=today - dt.timedelta(days=1),
-            end=today + dt.timedelta(hours=1),
+            date=self.today - dt.timedelta(days=1),
+            end=self.today + dt.timedelta(hours=1),
             is_archived=False,
             is_published=True,
             address_1="200 Calrissian Av.",
@@ -116,8 +117,8 @@ class TestArchiveOpportunities(TestCase):
             category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 4",
             description=description,
-            date=today - dt.timedelta(days=1),
-            end=today - dt.timedelta(hours=1),
+            date=self.today - dt.timedelta(days=1),
+            end=self.today - dt.timedelta(hours=1),
             is_archived=False,
             is_published=False,
             address_1="200 Calrissian Av.",
@@ -132,8 +133,8 @@ class TestArchiveOpportunities(TestCase):
             category=Category.objects.filter(name=_CATEGORY).first(),
             title="Test opportunity 5",
             description=description,
-            date=today - dt.timedelta(days=1),
-            end=today - dt.timedelta(hours=1),
+            date=self.today - dt.timedelta(days=1),
+            end=self.today - dt.timedelta(hours=1),
             is_archived=False,
             is_published=False,
             address_1="200 Calrissian Av.",
@@ -145,18 +146,20 @@ class TestArchiveOpportunities(TestCase):
         )
 
     def test_archive_opportunities(self):
-        # Call the archive_opportunities command
-        call_command("archive_opportunities")
+        # freeze time when calling command:
+        with freezegun.freeze_time(self.today):
+            # Call the archive_opportunities command
+            call_command("archive_opportunities")
 
-        # Check if the opportunity is archived
-        self.opportunity1.refresh_from_db()
-        self.opportunity2.refresh_from_db()
-        self.opportunity3.refresh_from_db()
-        self.opportunity4.refresh_from_db()
-        self.opportunity5.refresh_from_db()
+            # Check if the opportunity is archived
+            self.opportunity1.refresh_from_db()
+            self.opportunity2.refresh_from_db()
+            self.opportunity3.refresh_from_db()
+            self.opportunity4.refresh_from_db()
+            self.opportunity5.refresh_from_db()
 
-        self.assertTrue(self.opportunity1.is_archived)
-        self.assertFalse(self.opportunity2.is_archived)
-        self.assertTrue(self.opportunity3.is_archived)
-        self.assertFalse(self.opportunity4.is_archived)
-        self.assertFalse(self.opportunity5.is_archived)
+            self.assertTrue(self.opportunity1.is_archived)
+            self.assertFalse(self.opportunity2.is_archived)
+            self.assertTrue(self.opportunity3.is_archived)
+            self.assertFalse(self.opportunity4.is_archived)
+            self.assertFalse(self.opportunity5.is_archived)
