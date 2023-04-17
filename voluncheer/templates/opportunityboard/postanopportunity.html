@@ -115,5 +115,21 @@
             </div>
         </div>
     </div>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}&libraries=places&callback=initMap&v=weekly"
+      defer
+    ></script>
+    <script>
+      function initMap(){
+        const input = document.getElementById('id_address_1');
+        console.log(input)
+        const autocomplete = new google.maps.places.Autocomplete(input);
+
+        autocomplete.addListener('place_changed', () => {
+          const place = autocomplete.getPlace();
+          console.log(place);
+        });
+      }
+    </script>
     {% endif %}
 {% endblock %}
