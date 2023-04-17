@@ -1,36 +1,45 @@
 /* Import Font Dancing Script */
 @import url(https://fonts.googleapis.com/css?family=Dancing+Script);
+
 @font-face {
     font-family: 'Zenkaku';
-    src: url('../fonts/ZenKakuGothicNew-Light.ttf'); format('truetype');
+    src: url('../fonts/ZenKakuGothicNew-Light.ttf');
+    format('truetype');
     font-weight: normal;
     font-style: normal;
 }
+
 @font-face {
     font-family: 'Zenkaku';
-    src: url('../fonts/ZenKakuGothicNew-Bold.ttf'); format('truetype');
+    src: url('../fonts/ZenKakuGothicNew-Bold.ttf');
+    format('truetype');
     font-weight: bold;
     font-style: normal;
 }
+
 @font-face {
     font-family: 'Zenkaku';
-    src: url('../fonts/ZenKakuGothicNew-Regular.ttf'); format('truetype');
+    src: url('../fonts/ZenKakuGothicNew-Regular.ttf');
+    format('truetype');
     font-weight: auto;
     font-style: normal;
 }
+
 @font-face {
     font-family: 'Caveat';
-    src: url('../fonts/Caveat-Regular.ttf'); format('truetype');
+    src: url('../fonts/Caveat-Regular.ttf');
+    format('truetype');
     font-weight: auto;
     font-style: normal;
 }
+
 * {
     margin: 0;
 }
 
 body {
     background-color: #fff;
-        font-family: Zenkaku, sans-serif;
+    font-family: Zenkaku, sans-serif;
     overflow: auto;
 }
 
@@ -121,7 +130,8 @@ body {
     padding-top: 10px;
 }
 
-.url, hr {
+.url,
+hr {
     text-align: center;
 }
 
@@ -140,7 +150,8 @@ body {
     text-decoration: none;
 }
 
-.url a:hover, .url .active {
+.url a:hover,
+.url .active {
     background-color: #e8f5ff;
     border-radius: 28px;
     color: #000;
@@ -239,14 +250,17 @@ body {
     font-weight: bold;
     margin-bottom: 3px;
 }
+
 .vol-position-description-h2 {
     font-size: 15px;
     margin-bottom: 3px;
 }
+
 .vol-position-description-h3 {
     font-size: 13px;
     margin-bottom: 3px;
 }
+
 .vol-position-description-p {
     font-size: 14px;
 }
@@ -276,12 +290,15 @@ td {
     font-size: 16px;
     width: 90%;
 }
+
 .edit-form input {
     width: 100%;
 }
+
 .edit-form textarea {
     width: 100%;
 }
+
 #edit-form-edit {
     display: none;
 }
@@ -290,10 +307,12 @@ td {
     width: 100px;
     margin-top: 10px;
 }
+
 #photo-clear_id {
     display: none;
     width: 15px;
 }
+
 label[for=photo-clear_id] {
     display: none;
 }
@@ -309,20 +328,22 @@ label[for=photo-clear_id] {
     margin-left: 20%;
     font-weight: bold;
 }
-  
+
 .pagination a {
     color: black;
     float: left;
     padding: 8px 16px;
     text-decoration: none;
 }
-  
+
 .pagination a.active {
     background-color: #57b846;
     color: white;
 }
-  
-.pagination a:hover:not(.active) {background-color: #ddd;}
+
+.pagination a:hover:not(.active) {
+    background-color: #ddd;
+}
 
 
 .opportunities-detail-form {
@@ -331,6 +352,7 @@ label[for=photo-clear_id] {
     font-size: 16px;
     width: 90%;
 }
+
 .opportunities-detail-form input {
     width: 20px;
 }
@@ -342,17 +364,17 @@ label[for=photo-clear_id] {
 }
 
 .sticky-note {
-  text-decoration:none;
-  color:#000;
-  background:#ffc;
-  display:inline-block;
-  width:10em;
-  padding:1em;
-  box-shadow: 0 5px 2px #aaa;
+    text-decoration: none;
+    color: #000;
+    background: #ffc;
+    display: inline-block;
+    width: 10em;
+    padding: 1em;
+    box-shadow: 0 5px 2px #aaa;
 }
 
 .sticky-note.green {
-    background:rgb(222,255,180);
+    background: rgb(222, 255, 180);
 }
 
 .org-details {
@@ -365,12 +387,12 @@ label[for=photo-clear_id] {
 
 .gallery-post {
     font-family: Caveat, sans-serif;
-    text-decoration:none;
-    color:#000;
-    background:#ffc;
-    display:inline-block;
-    width:230px;
-    padding:5px;
+    text-decoration: none;
+    color: #000;
+    background: #ffc;
+    display: inline-block;
+    width: 230px;
+    padding: 5px;
     box-shadow: 0 5px 2px #aaa;
     transform: rotate(-6deg);
 }
@@ -393,30 +415,38 @@ label[for=photo-clear_id] {
     font-weight: bold;
     margin-bottom: 0px;
 }
+
 .gallery-post-description-h2 {
     font-size: 15px;
     margin-bottom: 0px;
 }
 
-.gallery-post:nth-child(even){
-    transform:rotate(4deg);
-    position:relative;
-    top:5px;
+.gallery-post:nth-child(even) {
+    transform: rotate(4deg);
+    position: relative;
+    top: 5px;
 }
-.gallery-post:nth-child(3n) a{
-    transform:rotate(-3deg);
-    position:relative;
-    top:-5px;
+
+.gallery-post:nth-child(3n) a {
+    transform: rotate(-3deg);
+    position: relative;
+    top: -5px;
 }
-.gallery-post:nth-child(5n) a{
-    transform:rotate(5deg);
-    position:relative;
-    top:-10px;
+
+.gallery-post:nth-child(5n) a {
+    transform: rotate(5deg);
+    position: relative;
+    top: -10px;
 }
-.gallery-post:hover,.gallery-post:focus{
-    box-shadow:10px 10px 7px rgba(0,0,0,.7);
+
+.gallery-post:hover,
+.gallery-post:focus {
+    box-shadow: 10px 10px 7px rgba(0, 0, 0, .7);
     transform: scale(1.75);
-    position:relative;
-    z-index:5;
+    position: relative;
+    z-index: 5;
 }
-/* End */
+
+.hidden {
+    display: none;
+}

@@ -1,5 +1,7 @@
 import datetime as dt
 
+from geopy import distance
+
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
@@ -15,6 +17,8 @@ class Filter:
         duration=None,
         distance=0,
         start_date=None,
+        latitude=None,
+        longitude=None,
     ) -> None:
         self.category = category
         self.subcategory = subcategory
@@ -22,6 +26,8 @@ class Filter:
         self.duration = duration
         self.distance = distance
         self.start_date = start_date
+        self.latitude = latitude
+        self.longitude = longitude
 
     def gen_dict(self):
         output = {
@@ -74,7 +80,19 @@ class Filter:
             filtered_opportunity = filter_by_duration(filtered_opportunity, 4)
         if self.duration == "Full-day":
             filtered_opportunity = filter_by_duration(filtered_opportunity, 8)
+        if self.latitude and self.longitude and self.distance > 0:
+            filtered_opportunity = filter_by_distance(
+                filtered_opportunity, (self.latitude, self.longitude), self.distance
+            )
         return filtered_opportunity
+
+
+def filter_by_distance(queryset, location, max_distance):
+    for opportunity in queryset:
+        opportunity_location = (opportunity.latitude, opportunity.longitude)
+        if max_distance < distance.distance(location, opportunity_location).miles:
+            queryset = queryset.exclude(pk=opportunity.pk)
+    return queryset
 
 
 def filter_by_duration(queryset, max):
@@ -103,6 +121,9 @@ def parse_search_filter(post):
         subcategory=subcategory_is_valid(value),
         subsubcategory=subsubcategory_is_valid(value),
         duration=selected_duration,
+        distance=int(float(post.get("distance", 0))),
+        latitude=post.get("latitude"),
+        longitude=post.get("longitude"),
     )
     return filter
 
