@@ -93,6 +93,8 @@ def deregister_volunteer(request, opportunity_id):
 def organization_view(request, userid):
     organization = Organization.objects.get(pk=userid)
     user = get_object_or_404(User, pk=request.user.pk)
+    if user.is_organization:
+        return redirect("home")
     volunteer = get_object_or_404(Volunteer, pk=user)
     opportunity_lists = organization.opportunity_set.all()
     context = {
