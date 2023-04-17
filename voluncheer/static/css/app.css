@@ -377,6 +377,14 @@ label[for=photo-clear_id] {
     background: rgb(222, 255, 180);
 }
 
+.sticky-note:hover,
+.sticky-note:focus {
+    box-shadow: 10px 10px 7px rgba(0, 0, 0, .7);
+    transform: scale(1.25);
+    position: relative;
+    z-index: 5;
+}
+
 .org-details {
     font-size: 20px;
 }
