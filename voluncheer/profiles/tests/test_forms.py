@@ -1,8 +1,6 @@
 import datetime as dt
 
-from django.contrib.auth import get_user_model
 from django.test import TestCase
-from django.core.exceptions import ValidationError
 
 from profiles.forms.organizations import OrganizationChangeForm
 from profiles.forms.organizations import OrganizationCreationForm

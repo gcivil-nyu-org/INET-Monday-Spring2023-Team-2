@@ -1,17 +1,16 @@
+from datetime import date
 import logging
 
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.forms import UserCreationForm
-from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.db import transaction
-from datetime import date
 
 from profiles.models import User
 from profiles.models import UserType
 from profiles.models import Volunteer
-
 
 _is_alpha = RegexValidator(
     regex=r"^[a-zA-Z]+$",
