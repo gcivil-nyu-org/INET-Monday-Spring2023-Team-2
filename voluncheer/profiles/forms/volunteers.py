@@ -44,7 +44,6 @@ class VolunteerCreationForm(UserCreationForm):
                 date_of_birth=self.cleaned_data.get("date_of_birth"),
                 photo=self.cleaned_data.get("photo"),
             )
-
         return user
 
     def clean(self):
@@ -53,7 +52,6 @@ class VolunteerCreationForm(UserCreationForm):
         today = date.today()
         if date_of_birth > today:
             raise ValidationError("Date of birth must be in the past")
-
         return self.cleaned_data
 
 
@@ -99,5 +97,4 @@ class VolunteerChangeForm(UserChangeForm):
         today = date.today()
         if date_of_birth > today:
             raise ValidationError("Date of birth must be in the past")
-
         return self.cleaned_data
