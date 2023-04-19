@@ -4,11 +4,14 @@ from django import forms
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
 from django.db import transaction
+from datetime import date
 
 from profiles.models import User
 from profiles.models import UserType
 from profiles.models import Volunteer
+
 
 _is_alpha = RegexValidator(
     regex=r"^[a-zA-Z]+$",
@@ -19,7 +22,10 @@ _is_alpha = RegexValidator(
 class VolunteerCreationForm(UserCreationForm):
     first_name = forms.CharField(required=True, validators=[_is_alpha])
     last_name = forms.CharField(required=True, validators=[_is_alpha])
-    date_of_birth = forms.DateField(required=True)
+    date_of_birth = forms.DateField(
+        required=True,
+        widget=forms.DateInput(attrs={"type": "date", "max": date.today()}),
+    )
     photo = forms.ImageField(required=False)
 
     class Meta(UserCreationForm.Meta):
@@ -42,6 +48,15 @@ class VolunteerCreationForm(UserCreationForm):
 
         return user
 
+    def clean(self):
+        super(VolunteerCreationForm, self).clean()
+        date_of_birth = self.cleaned_data.get("date_of_birth")
+        today = date.today()
+        if date_of_birth > today:
+            raise ValidationError("Date of birth must be in the past")
+
+        return self.cleaned_data
+
 
 """ VolunteerChangeForm
 
@@ -61,6 +76,7 @@ class VolunteerChangeForm(UserChangeForm):
             "photo",
             "description",
         )
+        widgets = {"date_of_birth": forms.DateInput(attrs={"type": "date", "max": date.today()})}
 
     @transaction.atomic
     def save(self, commit=True):
@@ -77,3 +93,12 @@ class VolunteerChangeForm(UserChangeForm):
         else:
             logger = logging.getLogger(__name__)
             logger.error(self.errors)
+
+    def clean(self):
+        super(VolunteerChangeForm, self).clean()
+        date_of_birth = self.cleaned_data.get("date_of_birth")
+        today = date.today()
+        if date_of_birth > today:
+            raise ValidationError("Date of birth must be in the past")
+
+        return self.cleaned_data

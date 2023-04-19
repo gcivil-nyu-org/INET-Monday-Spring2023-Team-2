@@ -1,6 +1,8 @@
-from datetime import datetime
+import datetime as dt
 
+from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.core.exceptions import ValidationError
 
 from profiles.forms.organizations import OrganizationChangeForm
 from profiles.forms.organizations import OrganizationCreationForm
@@ -143,6 +145,27 @@ class VolunteerCreationFormTest(TestCase):
         # assert that the photo has been changed
         self.assertEqual(form2.data["photo"], "sith-lord.jpg")
 
+    def test_date_of_birth_validation(self):
+        """Test that date of birth must be today or earlier."""
+        today = dt.date.today()
+        tomorrow = today + dt.timedelta(days=1)
+        data = {
+            "email": "luke2@jedi.com",
+            "password1": "NOOOOOOOOOOOOOOOOOOO",
+            "password2": "NOOOOOOOOOOOOOOOOOOO",
+            "first_name": "Luke",
+            "last_name": "Skywalker",
+            "date_of_birth": tomorrow,
+        }
+        with self.subTest("date of birth is in future"):
+            form = VolunteerCreationForm(data=data)
+            self.assertFalse(form.is_valid())
+
+        with self.subTest("date of birth is today"):
+            data["date_of_birth"] = today - dt.timedelta(days=1)
+            form = VolunteerCreationForm(data=data)
+            self.assertTrue(form.is_valid())
+
 
 class VolunteerChangeFormTest(TestCase):
     """Test cases for Volunteer Change form"""
@@ -168,7 +191,7 @@ class VolunteerChangeFormTest(TestCase):
         self.assertNotEqual(self.user.first_name, "R2D2")
         self.assertNotEqual(self.user.last_name, "Robot")
         self.assertNotEqual(
-            self.user.date_of_birth, datetime.strptime("2000-01-01", "%Y-%m-%d").date()
+            self.user.date_of_birth, dt.datetime.strptime("2000-01-01", "%Y-%m-%d").date()
         )
         self.assertNotEqual(self.user.description, "beep_boop")
         data = {
@@ -182,9 +205,28 @@ class VolunteerChangeFormTest(TestCase):
         self.assertEqual(self.user.first_name, "R2D2")
         self.assertEqual(self.user.last_name, "Robot")
         self.assertEqual(
-            self.user.date_of_birth, datetime.strptime("2000-01-01", "%Y-%m-%d").date()
+            self.user.date_of_birth, dt.datetime.strptime("2000-01-01", "%Y-%m-%d").date()
         )
         self.assertEqual(self.user.description, "beep_boop")
+
+    def test_date_of_birth_validation(self):
+        "Test that date of birth must be today or earlier."
+        today = dt.date.today()
+        tomorrow = today + dt.timedelta(days=1)
+        data = {
+            "first_name": "Luke",
+            "last_name": "Skywalker",
+            "date_of_birth": tomorrow,
+            "description": "Hi I'm Luke Skywalker",
+        }
+        with self.subTest("date of birth is in future"):
+            form = VolunteerChangeForm(data=data, instance=self.user)
+            self.assertFalse(form.is_valid())
+
+        with self.subTest("date of birth is today"):
+            data["date_of_birth"] = today
+            form = VolunteerChangeForm(data=data, instance=self.user)
+            self.assertTrue(form.is_valid())
 
 
 class OrganizationChangeFormTest(TestCase):
