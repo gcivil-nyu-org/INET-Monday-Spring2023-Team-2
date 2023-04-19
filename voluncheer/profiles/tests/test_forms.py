@@ -160,7 +160,7 @@ class VolunteerCreationFormTest(TestCase):
             self.assertFalse(form.is_valid())
 
         with self.subTest("date of birth is today"):
-            data["date_of_birth"] = today - dt.timedelta(days=1)
+            data["date_of_birth"] = today
             form = VolunteerCreationForm(data=data)
             self.assertTrue(form.is_valid())
 
