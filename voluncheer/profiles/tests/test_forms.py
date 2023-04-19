@@ -153,9 +153,9 @@ class VolunteerCreationFormTest(TestCase):
             "password2": "NOOOOOOOOOOOOOOOOOOO",
             "first_name": "Luke",
             "last_name": "Skywalker",
-            "date_of_birth": tomorrow,
         }
-        with self.subTest("date of birth is in future"):
+        with self.subTest("date of birth is tomorrow"):
+            data["date_of_birth"] = tomorrow
             form = VolunteerCreationForm(data=data)
             self.assertFalse(form.is_valid())
 
@@ -214,10 +214,10 @@ class VolunteerChangeFormTest(TestCase):
         data = {
             "first_name": "Luke",
             "last_name": "Skywalker",
-            "date_of_birth": tomorrow,
             "description": "Hi I'm Luke Skywalker",
         }
-        with self.subTest("date of birth is in future"):
+        with self.subTest("date of birth is tomorrow"):
+            data["date_of_birth"] = tomorrow
             form = VolunteerChangeForm(data=data, instance=self.user)
             self.assertFalse(form.is_valid())
 
