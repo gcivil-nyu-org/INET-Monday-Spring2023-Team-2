@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.db import transaction
 from django.shortcuts import redirect
 from django.views.generic import CreateView
@@ -30,15 +29,8 @@ class OrganizationSignUpView(CreateView):
             activateEmail(self.request, user, form.cleaned_data.get("email"))
         except Exception:
             # Delete the user if an error occurs
-            print("here!")
+            # print("here!")
             user.delete()
-
-            #  Show an error message to the user
-            messages.error(
-                self.request,
-                "We encountered an error while sending the activation email."
-                "Please try again soon.",
-            )
 
             return redirect("signup")
 

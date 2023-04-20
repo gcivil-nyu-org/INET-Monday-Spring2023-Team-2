@@ -57,6 +57,13 @@ def activateEmail(request, user, to_email):
         return HttpResponse("Invalid header found.")
     except Exception as e:
         # Handle internal server error
+        messages.error(
+            request,
+            (
+                "It seems we encountered an error while sending the activation email."
+                "Please try again soon."
+            ),
+        )
         logger.exception(e)
         raise ActivationError()
 
