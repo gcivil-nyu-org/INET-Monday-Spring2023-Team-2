@@ -43,6 +43,9 @@ if _ALLOWED_HOSTS_CSV:
 
 # Application definition
 INSTALLED_APPS = [
+    # Run server application
+    "daphne",
+    "gunicorn",
     # Django built-ins
     "django.contrib.admin",
     "django.contrib.auth",
@@ -55,6 +58,7 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "storages",
     "channels",
+    "supervisor",  # Not sure if supervisor is needed here.
     "channels_redis",
     "mathfilters",
     # Local applications
@@ -97,26 +101,18 @@ TEMPLATES = [
 WSGI_APPLICATION = "voluncheer.wsgi.application"
 ASGI_APPLICATION = "voluncheer.asgi.application"
 
-REDIS_CHATROOM_PORT = os.getenv("REDIS_CHATROOM_PORT")
-if environment.is_aws:
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": REDIS_CHATROOM_PORT,
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            },
-        }
-    }
-else:
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [("127.0.0.1", 6379)],
-            },
+
+REDIS_CHATROOM_PORT = os.getenv("REDIS_CHATROOM_PORT", "127.0.0.1")
+
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(REDIS_CHATROOM_PORT, 6379)],
         },
     }
+}
 
 
 # Database
