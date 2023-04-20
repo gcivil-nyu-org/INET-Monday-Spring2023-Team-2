@@ -1,3 +1,5 @@
+from venv import logger
+
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
@@ -15,8 +17,13 @@ from voluncheer.settings import AWS_SES_DOMAIN
 from voluncheer.settings import DEFAULT_FROM_EMAIL
 
 
+class ActivationError(Exception):
+    pass
+
+
 def activateEmail(request, user, to_email):
     """Creates activation link and sends email to user"""
+
     subject = "Account Activation"
     message = render_to_string(
         "registration/template_activate_account.html",
@@ -41,14 +48,17 @@ def activateEmail(request, user, to_email):
         messages.success(
             request,
             (
-                f"Dear <b>{user}</b>, please go to your email <b>{to_email}</b> inbox and click on "
+                f"Dear {user}, please go to your email inbox and click on "
                 "the received activation link to confirm and complete the registration. "
-                "<b>Note:</b> Check your spam folder."
+                "Note: Check your spam folder."
             ),
         )
     except BadHeaderError:
         return HttpResponse("Invalid header found.")
-    return redirect("login")
+    except Exception as e:
+        # Handle internal server error
+        logger.exception(e)
+        raise ActivationError()
 
 
 def activate(request, uidb64, token):

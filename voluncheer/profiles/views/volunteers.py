@@ -1,4 +1,5 @@
-# from django.contrib.auth import get_user_model
+from django.contrib import messages
+from django.db import transaction
 from django.shortcuts import redirect
 from django.views.generic import CreateView
 
@@ -20,10 +21,26 @@ class VolunteerSignUpView(CreateView):
         kwargs["user_type"] = "Volunteer"
         return super().get_context_data(**kwargs)
 
+    @transaction.atomic
     def form_valid(self, form):
         """Saves the new user and logs them in."""
         user = form.save()
         user.is_active = False
         user.save()
-        activateEmail(self.request, user, form.cleaned_data.get("email"))
+        try:
+            activateEmail(self.request, user, form.cleaned_data.get("email"))
+        except Exception:
+            # Delete the user if an error occurs
+            print("here!")
+            user.delete()
+
+            #  Show an error message to the user
+            messages.error(
+                self.request,
+                "We encountered an error while sending the activation email."
+                "Please try again soon.",
+            )
+
+            return redirect("signup")
+
         return redirect("login")

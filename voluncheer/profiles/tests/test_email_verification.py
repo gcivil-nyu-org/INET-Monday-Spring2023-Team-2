@@ -48,3 +48,11 @@ class activateEmailTest(TestCase):
             reverse("activate", args=[uidb64, token]),
             mail.outbox[0].body,
         )
+
+    # @patch.object(mail, "send_mail")
+    # def test_organization_signup_view_email_error(self, mock_send_mail):
+    #     mock_send_mail.side_effect = Exception("Internal Server Error")
+    #     self.response = self.client.post(reverse("organization_signup"), data=self.form1.data)
+    #     self.assertEqual(self.response.status_code, 302)
+    #     # self.assertTrue(response.context_data["form"].errors)
+    #     self.assertFalse(User.objects.filter(email="test_org@testing.org").exists())
