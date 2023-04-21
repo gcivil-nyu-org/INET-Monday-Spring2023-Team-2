@@ -65,7 +65,6 @@ INSTALLED_APPS = [
     "opportunityboard.apps.OpportunityboardConfig",
     "map.apps.MapConfig",
     "profiles.apps.ProfilesConfig",
-    "chatroom.apps.ChatroomConfig",
 ]
 
 
@@ -113,6 +112,12 @@ CHANNEL_LAYERS = {
         },
     }
 }
+
+
+
+
+
+
 
 
 # Database
