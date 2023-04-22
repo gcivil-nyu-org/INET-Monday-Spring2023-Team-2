@@ -27,6 +27,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("map/", include("map.urls")),
     path("opportunityboard/", include("opportunityboard.urls")),
+    path("chatroom/", include("chatroom.urls")),
 ]
 
 if not environment.is_aws:
