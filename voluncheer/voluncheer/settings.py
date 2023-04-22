@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "storages",
     "channels",
-    "supervisor",  # Not sure if supervisor is needed here.
     "channels_redis",
     "mathfilters",
     # Local applications
