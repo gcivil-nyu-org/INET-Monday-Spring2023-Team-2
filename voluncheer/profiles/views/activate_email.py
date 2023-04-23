@@ -59,7 +59,7 @@ def activateEmail(request, user, to_email):
         messages.error(
             request,
             (
-                f"It seems we encountered an error while sending the activation email."
+                "It seems we encountered an error while sending the activation email."
                 "Please try again soon."
             ),
         )
