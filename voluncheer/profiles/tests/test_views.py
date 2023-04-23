@@ -248,3 +248,18 @@ class ProfileViewTest(TestCase):
                 response,
                 """<div class="card" id="saved_opportunities">""",
             )
+
+    def test_volunteer_can_see_past_opportunities(self):
+        """Tests that volunteers can see archived opportunities they attended."""
+        self.opp.volunteers.add(self.vol)
+        self.opp.is_archived = True
+        self.opp.save()
+        self.client.login(email="luke@jedi.com", password="NOOOOOOOOOOOOOOOOOOO")
+        with self.subTest("volunteer_did_attend"):
+            self.opp.attended_volunteers.add(self.vol)
+            response = self.client.get(reverse("saved_events"))
+            self.assertIn(self.opp, response.context["opportunity_attended"])
+        with self.subTest("volunteer_did_not_attend"):
+            self.opp.attended_volunteers.remove(self.vol)
+            response = self.client.get(reverse("saved_events"))
+            self.assertNotIn(self.opp, response.context["opportunity_attended"])
