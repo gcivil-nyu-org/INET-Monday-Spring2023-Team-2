@@ -29,8 +29,6 @@ class VolunteerSignUpView(CreateView):
         try:
             activateEmail(self.request, user, form.cleaned_data.get("email"))
         except Exception:
-            # Delete the user if an error occurs
-            print("here!")
             user.delete()
 
             return redirect("signup")
