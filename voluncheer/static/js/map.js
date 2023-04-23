@@ -31,6 +31,7 @@ async function initMap() {
   const marker = new Marker({
     map,
     anchorPoint: new Point(0, -29),
+    zoom: 11
   });
 
   autocomplete.addListener("place_changed", () => {
@@ -48,14 +49,8 @@ async function initMap() {
       return;
     }
 
-    // If the place has a geometry, then present it on a map.
-    if (place.geometry.viewport) {
-      map.fitBounds(place.geometry.viewport);
-    } else {
-      map.setCenter(place.geometry.location);
-      map.setZoom(15);
-    }
-
+    map.setCenter(place.geometry.location);
+    map.setZoom(16);
 
     marker.setPosition(place.geometry.location);
     marker.setVisible(true);
