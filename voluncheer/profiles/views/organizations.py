@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.shortcuts import redirect
 from django.views.generic import CreateView
 
@@ -18,10 +19,17 @@ class OrganizationSignUpView(CreateView):
         kwargs["user_type"] = "Organization"
         return super().get_context_data(**kwargs)
 
+    @transaction.atomic
     def form_valid(self, form):
         """Saves the new user and logs them in."""
         user = form.save()
         user.is_active = False
         user.save()
-        activateEmail(self.request, user, form.cleaned_data.get("email"))
+        try:
+            activateEmail(self.request, user, form.cleaned_data.get("email"))
+        except Exception:
+            user.delete()
+
+            return redirect("signup")
+
         return redirect("login")

@@ -73,9 +73,15 @@
         <div class="card">
             {% for opportunity in opportunity_attended %}
                 <article>
+                    {% if opportunity.photo %}
+                        <a href="{%url 'organization_view' opportunity.organization.pk%}"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
+                    {% endif %}
 				    <p class="vol-position-description-h1">{{ opportunity.title }}</p>
+                    <p class="vol-position-description-h3">
+                        Published by: <a href="{%url 'organization_view' opportunity.organization.pk%}">{{ opportunity.organization }}</a>
+                    </p>
                     <p class="vol-position-description-h2">Address: {{ opportunity.address_1 }}</p>
-                    <p class="vol-position-description-h2">Hours: {{ opportunity.date }}</p>
+                    <p class="vol-position-description-h2">Date: {{ opportunity.date }}</p>
                     <p class="vol-position-description-h2">End: {{ opportunity.end }}</p>
                     <p class="vol-position-description-h2">{{ opportunity.description }}</p>
                     <hr align="center">

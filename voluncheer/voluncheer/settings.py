@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 import os
 from pathlib import Path
 
+from django.contrib.messages import constants as messages
+
 from voluncheer.environment import environment
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -54,14 +56,11 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "storages",
-    "channels",
-    "channels_redis",
     "mathfilters",
     # Local applications
     "opportunityboard.apps.OpportunityboardConfig",
     "map.apps.MapConfig",
     "profiles.apps.ProfilesConfig",
-    "chatroom.apps.ChatroomConfig",
 ]
 
 
@@ -95,29 +94,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "voluncheer.wsgi.application"
-ASGI_APPLICATION = "voluncheer.asgi.application"
-
-REDIS_CHATROOM_PORT = os.getenv("REDIS_CHATROOM_PORT")
-if environment.is_aws:
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "django_redis.cache.RedisCache",
-            "LOCATION": REDIS_CHATROOM_PORT,
-            "OPTIONS": {
-                "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            },
-        }
-    }
-else:
-    CHANNEL_LAYERS = {
-        "default": {
-            "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": {
-                "hosts": [("127.0.0.1", 6379)],
-            },
-        },
-    }
-
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -140,6 +116,13 @@ else:
         },
     }
 
+MESSAGE_TAGS = {
+    messages.DEBUG: "alert-secondary",
+    messages.INFO: "alert-info",
+    messages.SUCCESS: "alert-success",
+    messages.WARNING: "alert-warning",
+    messages.ERROR: "alert-danger",
+}
 # Storage
 # https://django-storages.readthedocs.io/en/latest
 if environment.is_aws:
