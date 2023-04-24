@@ -32,5 +32,5 @@ runs:
       working-directory: voluncheer
       run: |
         eb init ${{ inputs.app-name }} --region ${{ inputs.region }} --platform ${{ inputs.platform }}
-        eb deploy ${{ inputs.app-name }}-${{ github.ref_name }} --label ${{ inputs.app-name}}_${{ github.ref_name }}_${{ steps.timestamp.outputs.TIMESTAMP }}
+        eb deploy ${{ inputs.app-name }}-${{ github.ref_name }}-v2 --label ${{ inputs.app-name}}_${{ github.ref_name }}_${{ steps.timestamp.outputs.TIMESTAMP }}
         
