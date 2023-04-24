@@ -132,14 +132,19 @@ def profile_update(request, userid):
 
 def saved_events(request):
     volunteer = get_object_or_404(Volunteer, pk=request.user.pk)
-    opportunity_selected = volunteer.opportunity_set.all()
+    opportunity_selected = volunteer.opportunity_set.filter(is_archived=False)
+    past_opportunities = []
+    archived = volunteer.opportunity_set.filter(is_archived=True)
+    for opportunity in archived:
+        if volunteer in opportunity.attended_volunteers.all():
+            past_opportunities.append(opportunity)
     return render(
         request=request,
         template_name="profiles/savedevents.html",
         context={
             "opportunity_selected": opportunity_selected,
             "volunteer": volunteer,
-            "opportunity_attended": [],
+            "opportunity_attended": past_opportunities,
         },
     )
 
