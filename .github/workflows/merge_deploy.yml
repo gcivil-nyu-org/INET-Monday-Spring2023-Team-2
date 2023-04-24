@@ -3,7 +3,7 @@ run-name: ${{ github.workflow }} run for ${{ github.actor }} in ${{ github.ref_n
 
 on:
   push:
-    branches: [develop, main]
+    branches: [develop, main,main-v2]
 
 defaults:
   run:
