@@ -12,6 +12,7 @@ from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
 from opportunityboard.views.search import parse_search_filter
+from profiles.models import Badge
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
@@ -41,6 +42,7 @@ def opportunityboard(request, page_number):
         "filter": json.dumps(filter.gen_dict()),
         "category_placeholder": filter.gen_category_placeholder(),
         "duration_placeholder": filter.gen_duration_placeholder(),
+        "badges": Badge.objects.all(),
     }
     if not request.user.is_anonymous and request.user.is_volunteer:
         context["volunteer"] = Volunteer.objects.get(pk=request.user)
