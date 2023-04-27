@@ -55,6 +55,8 @@ def update_an_opportunity(request, opportunity_id):
         if form.is_valid():
             if "delete" in request.POST:
                 form.delete(opportunity_id)
+            elif "delete_recurrences" in request.POST:
+                form.delete_recurrences(opportunity_id)
             else:
                 form.save()
         else:

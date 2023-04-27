@@ -134,11 +134,11 @@ class PostAnOpportunityForm(forms.ModelForm):
             sibling.recurrence_siblings.add(*siblings)
 
     def delete(self, opportunity_id):
+        Opportunity.objects.filter(pk=opportunity_id).delete()
+
+    def delete_recurrences(self, opportunity_id):
         opportunity = Opportunity.objects.get(pk=opportunity_id)
-        if opportunity.is_recurring:
-            opportunity.delete_recurrences()
-        else:
-            Opportunity.objects.filter(pk=opportunity_id).delete()
+        opportunity.delete_recurrences()
 
     def clean(self):
         super(PostAnOpportunityForm, self).clean()
