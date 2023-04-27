@@ -112,6 +112,23 @@
                     });
                   });
                 </script>
+                <script>
+                  $("#id_date").change(function() {
+                    var date = $(this).val();
+                    var date = new Date(date);
+                    var dd = date.getDate();
+                    var mm = date.getMonth() + 4; //January is 0, restrain to 3 month!
+                    var yyyy = date.getFullYear();
+                    if (dd < 10) {
+                      dd = '0' + dd;
+                    }
+                    if (mm < 10) {
+                      mm = '0' + mm;
+                    } 
+                    limit = yyyy + '-' + mm + '-' + dd;
+                    document.getElementById("id_end_date").setAttribute("max", limit);
+                  })
+                </script>
             </div>
         </div>
     </div>

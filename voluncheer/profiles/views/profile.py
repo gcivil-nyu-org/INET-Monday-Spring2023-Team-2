@@ -51,8 +51,22 @@ class ProfileView(DetailView):
             organization_profile = Organization.objects.get(pk=user)
             kwargs["organization"] = organization_profile
             kwargs["user_form"] = OrganizationChangeForm(instance=organization_profile)
-            opportunity_lists = organization_profile.opportunity_set.all()
-            kwargs["opportunity_lists"] = opportunity_lists
+            # opportunity_lists = organization_profile.opportunity_set.all()
+            # POSTED OPPORTUNITIES
+            posted_opportunity_lists = organization_profile.opportunity_set.filter(
+                is_published=True, is_archived=False, recurrence_siblings__isnull=False
+            )
+            # SAVED OPPORTUNITIES
+            saved_opportunity_lists = organization_profile.opportunity_set.filter(
+                is_published=False, is_archived=False
+            )
+            # PAST OPPORTUNITIES
+            past_opportunity_lists = organization_profile.opportunity_set.filter(
+                is_published=False, is_archived=True
+            )
+            kwargs["posted_opportunity_lists"] = posted_opportunity_lists
+            kwargs["saved_opportunity_lists"] = saved_opportunity_lists
+            kwargs["past_opportunity_lists"] = past_opportunity_lists
         if user.is_volunteer:
             volunteer_profile = Volunteer.objects.get(pk=user)
             kwargs["volunteer"] = volunteer_profile

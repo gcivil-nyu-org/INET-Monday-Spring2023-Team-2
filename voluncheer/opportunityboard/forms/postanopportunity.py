@@ -109,10 +109,36 @@ class PostAnOpportunityForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         if self.is_valid():
-            super().save(*args, **kwargs)
+            if self.cleaned_data.get("is_recurring"):
+                date = self.cleaned_data.get("date")
+                end_date = self.cleaned_data.get("end_date")
+                for i in range(12):
+                    if date.date() > end_date:
+                        break
+                    self.instance.pk = None
+                    self.instance.save()
+                    date += datetime.timedelta(days=7)
+                    self.instance.date = date
+                self.find_siblings()
+            else:
+                super().save(*args, **kwargs)
+
+    def find_siblings(self):
+        siblings = Opportunity.objects.filter(
+            title=self.instance.title,
+            is_recurring=self.instance.is_recurring,
+            end_date=self.instance.end_date,
+            is_archived=False,
+        )
+        for sibling in siblings:
+            sibling.recurrence_siblings.add(*siblings)
 
     def delete(self, opportunity_id):
-        Opportunity.objects.filter(pk=opportunity_id).delete()
+        opportunity = Opportunity.objects.get(pk=opportunity_id)
+        if opportunity.is_recurring:
+            opportunity.delete_recurrences()
+        else:
+            Opportunity.objects.filter(pk=opportunity_id).delete()
 
     def clean(self):
         super(PostAnOpportunityForm, self).clean()

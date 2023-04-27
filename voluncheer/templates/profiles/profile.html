@@ -68,9 +68,7 @@
         <h2>POSTED OPPORTUNITIES</h2>
         <div class="card">
             {% csrf_token %}
-                {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-                {% for opportunity in opportunity_lists %}
-                    {% if opportunity.is_published and not opportunity.is_archived %}
+                {% for opportunity in posted_opportunity_lists %}
                     <article>
                         {% if user.pk is curr_user.pk %}
                         <a href="{% url 'update_an_opportunity' opportunity.pk %}"><i id="opportunity-edit-{{opportunity.pk}}" class="fa fa-pen fa-xs edit"></i></a>
@@ -110,7 +108,6 @@
                         {% endif %}
                         <hr align="center">
 				    </article>
-                    {% endif %}
                 {% endfor %}
         </div>
 
@@ -118,8 +115,7 @@
         <h2>SAVED OPPORTUNITIES</h2>
         <div class="card" id="saved_opportunities">
             {% csrf_token %}
-                {% for opportunity in opportunity_lists %}
-                    {% if not opportunity.is_published %}
+                {% for opportunity in saved_opportunity_lists %}
                     <article>
                         <a href="{% url 'update_an_opportunity' opportunity.pk %}"><i id="opportunity-edit-{{opportunity.pk}}" class="fa fa-pen fa-xs edit"></i></a>
 					    {% if opportunity.photo %}
@@ -134,14 +130,12 @@
                         <div class="url"><a href="#" id="{{opportunity.pk}}" class="opportunities-detail-btn">Details</a></div>
                         <hr align="center">
 				    </article>
-                    {% endif %}
                 {% endfor %}
         </div>
 
         <h2>PAST OPPORTUNITIES</h2>
         <div class="card" id="past_opportunities">
-                {% for opportunity in opportunity_lists %}
-                    {% if opportunity.is_archived %}
+                {% for opportunity in past_opportunity_lists %}
                     <article>
 					    {% if opportunity.photo %}
 					    <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
@@ -154,7 +148,6 @@
                         <p class="vol-position-description-h2">{{ opportunity.description }}</p>
                         <hr align="center">
 				    </article>
-                    {% endif %}
                 {% endfor %}
         </div>
         {% endif %}
