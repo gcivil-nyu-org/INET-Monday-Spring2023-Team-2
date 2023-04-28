@@ -131,7 +131,7 @@ class PostAnOpportunityForm(forms.ModelForm):
             is_archived=False,
         )
         for sibling in siblings:
-            sibling.recurrence_siblings.add(*siblings)
+            sibling.recurrence_siblings.add(*siblings.exclude(pk=sibling.pk))
 
     def delete(self, opportunity_id):
         Opportunity.objects.filter(pk=opportunity_id).delete()

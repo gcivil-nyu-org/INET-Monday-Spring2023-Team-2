@@ -28,3 +28,16 @@ function ShowDetail(element) {
     form.style.display = "none";
   }
 };
+
+function ShowSibling(element) {
+  var id = element.id;
+  var form = document.getElementById(id+"-siblings");
+  console.log(form.style.display);
+  if (form.style.display != "inline-block") {
+    form.style.display = "inline-block";
+    element.innerHTML = "Hide All Recurrings"
+  } else {
+    form.style.display = "none";
+    element.innerHTML = "Show All Recurrings"
+  }
+};
