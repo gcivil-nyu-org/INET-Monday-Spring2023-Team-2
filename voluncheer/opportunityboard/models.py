@@ -123,4 +123,4 @@ class Opportunity(models.Model):
 
     def delete_recurrences(self):
         self.recurrence_siblings.all().delete()
-        # self.delete()
+        self.delete()

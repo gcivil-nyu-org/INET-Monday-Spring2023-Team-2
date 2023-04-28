@@ -29,6 +29,7 @@ def opportunityboard(request, page_number):
     opportunity_lists = opportunity_lists.order_by("-pubdate")[
         (page_number - 1) * OPPORTUNITY_PER_PAGE : page_number * OPPORTUNITY_PER_PAGE
     ]
+    print(opportunity_lists)
     cate_output_dict = category_dict_gen()
     durations = {
         "One-day": ["2 hours or less", "4 hours or less", "Full-day"],
