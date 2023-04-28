@@ -4,6 +4,12 @@ from django.contrib.auth import get_user_model
 from django.test.client import RequestFactory
 from django.urls import reverse
 
+<<<<<<< HEAD
+=======
+from opportunityboard import unittest_setup  # noqa:F401
+from opportunityboard.forms.postanopportunity import PostAnOpportunityForm
+from opportunityboard.models import Opportunity
+>>>>>>> deeee2b (add testcases)
 from opportunityboard.unittest_setup import TestCase
 from profiles.models import GalleryPost
 from profiles.models import UserType
@@ -265,6 +271,7 @@ class ProfileViewTest(TestCase):
             response = self.client.get(reverse("saved_events"))
             self.assertNotIn(self.opp, response.context["opportunity_attended"])
 
+<<<<<<< HEAD
     def test_badge_progression(self):
         with self.subTest("hours_until_first_badge"):
             self.vol.hours_volunteered = datetime.timedelta(hours=10)
@@ -284,3 +291,31 @@ class ProfileViewTest(TestCase):
             progress, hours_remaining, _ = profile.badge_progression(self.vol)
             self.assertEqual(progress, 0)
             self.assertEqual(hours_remaining, 0)
+=======
+    def test_delete_recurring_opportunities(self):
+        """test deleting the recurring opportunities.
+        first add a serie of opportunities, first delete one, then delete all siblings
+        """
+        data = {
+            "organization": self.org,
+            "category": self.category,
+            "title": "Recurr",
+            "description": "Let's surfing",
+            "staffing": "1",
+            "date": self.date,
+            "end": self.end,
+            "address_1": "New York, NY",
+            "address_2": "Down st",
+            "is_published": True,
+            "is_recurring": True,
+            "recurrence": "weekly",
+            "end_date": self.end_date,
+        }
+        form = PostAnOpportunityForm(data=data)
+        form.save()
+        self.assertEqual(Opportunity.objects.filter(title="Recurr").count(), 5)
+        form.delete(Opportunity.objects.filter(title="Recurr")[0].pk)
+        self.assertEqual(Opportunity.objects.filter(title="Recurr").count(), 4)
+        form.delete_recurrences(Opportunity.objects.filter(title="Recurr")[0].pk)
+        self.assertEqual(Opportunity.objects.filter(title="Recurr").count(), 0)
+>>>>>>> deeee2b (add testcases)
