@@ -95,7 +95,7 @@
                                     {% else %}
                                     <div class="sticky-note">
                                         <input type="checkbox" class="volunteer-attandence" name="volunteer-attended" value="{{volunteer.pk}}">Did Not Attend
-                                    {% endif %} 
+                                    {% endif %}
                                         <br>
                                         Name: <a href="{%url 'profile' volunteer.pk%}">{{volunteer.first_name}} {{volunteer.last_name}}</a>
                                         {% if volunteer.photo %}
@@ -233,7 +233,7 @@
                         {{ user_form }}
                         <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>
                     </form>
-                {% else %} 
+                {% else %}
                 <div class="vol-details" id="vol-details-view">
                     <p>Name: {{ volunteer.first_name }} {{ volunteer.last_name }}</p>
                     <p>Date of birth: {{ volunteer.date_of_birth }}</p>
@@ -252,10 +252,18 @@
                     </span>
                 {% endfor %}
             </div>
-            <p class="total-hours"> Total Volunteer Hours: {{ hours_volunteered }}</p>
-            {% if hours_required %}
-                <p class="hours-required"> You have {{ hours_required }} hours to go until your next badge!</p>
-            {% endif %}
+            <div class="next-badge">
+                <p class="total-hours"> Total Volunteer Hours: {{ hours_volunteered }}</p>
+                {% if hours_required %}
+                    <label for="badge-progress">Next Badge Progress:</label>
+                    <br>
+                    <p class="hours-required"> You have {{ hours_required }} hours to go until your next badge!</p>
+                    <progress id="badge-progress" value="{{ progress }}" max="100"> {{ progress }}% </progress>
+                    <span class="fa-stack fa-sm">
+                        <img src="{{ next_badge.img.url }}" alt="{{ next_badge }}" title = "{{ next_badge }}" width="78px" height="78px"/>
+                    </span>
+                {% endif %}
+            </div>
         </div>
 
         <h2>MY GALLERY</h2>

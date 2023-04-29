@@ -17,6 +17,8 @@ from django.views.generic import DetailView
 from opportunityboard.models import Opportunity
 from profiles.forms.organizations import OrganizationChangeForm
 from profiles.forms.volunteers import VolunteerChangeForm
+from profiles.models import Badge
+from profiles.models import BadgeType
 from profiles.models import GalleryPost
 from profiles.models import Organization
 from profiles.models import User
@@ -62,6 +64,10 @@ class ProfileView(DetailView):
             )
             gallery_post = GalleryPost.objects.filter(volunteer=volunteer_profile)
             kwargs["gallery_post"] = gallery_post
+            progress, hours_remaining, next_badge = badge_progression(volunteer_profile)
+            kwargs["progress"] = progress
+            kwargs["hours_remaining"] = hours_remaining
+            kwargs["next_badge"] = next_badge
 
         return super().get_context_data(**kwargs)
 
@@ -174,3 +180,32 @@ def confirm_attendance(request, opportunity_id):
             volunteer.save()
 
     return redirect("home")
+
+
+def badge_progression(volunteer):
+    """Returns the progress and hours remaining to the next progression badge and the badge.
+
+    Args:
+        volunteer: the volunteer for whose progress to compute.
+
+    Returns:
+        A three item tuple containing the progress percentage (represented as an integer between 0
+        and 100), the hours that remain until the next badge, and the next badge the volunteer can
+        earn.
+    """
+    badges = Badge.objects.filter(type=BadgeType.VOLUNTEER_HOURS_BADGE).order_by("hours_required")
+    volunteer_badges = volunteer.badges.order_by("hours_required")
+    for i, badge in enumerate(badges):
+        if badge in volunteer_badges:
+            continue
+        hours_required = badge.hours_required.total_seconds() / 3600
+        hours_accumulated = volunteer.hours_volunteered.total_seconds() / 3600
+        if i > 0:
+            previous_badge_hours = badges[i - 1].hours_required.total_seconds() / 3600
+            hours_required = hours_required - previous_badge_hours
+            hours_accumulated = hours_accumulated - previous_badge_hours
+
+        progress = hours_accumulated / hours_required * 100
+        hours_remaining = hours_required - hours_accumulated
+        return progress, hours_remaining, badge
+    return 0, 0, badges[0]
