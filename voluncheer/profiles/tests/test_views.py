@@ -289,7 +289,7 @@ class ProfileViewTest(TestCase):
 
     def test_delete_recurring_opportunities(self):
         """test deleting the recurring opportunities.
-        first add a serie of opportunities, first delete one, then delete all siblings
+        first add a series of opportunities, first delete one, then delete all siblings
         """
         data = {
             "organization": self.org,
