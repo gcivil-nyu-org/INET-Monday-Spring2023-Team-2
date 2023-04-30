@@ -122,5 +122,5 @@ class Opportunity(models.Model):
         return duration_seconds
 
     def delete_recurrences(self):
-        self.recurrence_siblings.all().delete()
+        self.recurrence_siblings.all().filter(is_archived=False).delete()
         self.delete()

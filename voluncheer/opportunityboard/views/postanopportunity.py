@@ -58,7 +58,7 @@ def update_an_opportunity(request, opportunity_id):
             elif "delete_recurrences" in request.POST:
                 form.delete_recurrences(opportunity_id)
             else:
-                form.save()
+                form.edit()
         else:
             return render(
                 request,

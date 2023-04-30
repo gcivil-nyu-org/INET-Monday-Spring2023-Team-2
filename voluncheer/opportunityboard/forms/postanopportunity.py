@@ -123,6 +123,10 @@ class PostAnOpportunityForm(forms.ModelForm):
             else:
                 super().save(*args, **kwargs)
 
+    def edit(self, *args, **kwargs):
+        if self.is_valid():
+            super().save(*args, **kwargs)
+
     def find_siblings(self):
         siblings = Opportunity.objects.filter(
             title=self.instance.title,
