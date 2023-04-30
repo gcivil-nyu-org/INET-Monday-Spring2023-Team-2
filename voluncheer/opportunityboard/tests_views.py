@@ -194,7 +194,7 @@ class OrganizationViewTestCase(TestCase):
         self.assertEqual(response.context["user"], self.user)
         self.assertEqual(response.context["organization"], self.org)
         self.assertQuerysetEqual(
-            response.context["recurring_posted_opportunity_lists"],
+            response.context["opportunity_lists"],
             ["Cloud City Soup Kitchen"],
             transform=lambda x: str(x),
             ordered=False,

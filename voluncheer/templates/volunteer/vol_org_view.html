@@ -43,7 +43,7 @@
     <div class="card">
         {% csrf_token %}
         {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-        {% for opportunity in recurring_posted_opportunity_lists %}
+        {% for opportunity in opportunity_lists %}
         <article>
             {% if opportunity.photo %}
             <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px" /></a>

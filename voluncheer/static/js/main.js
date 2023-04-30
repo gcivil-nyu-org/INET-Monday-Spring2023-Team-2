@@ -21,7 +21,6 @@ function EditProfile() {
 function ShowDetail(element) {
   var id = element.id;
   var form = document.getElementById(id+"-form");
-  console.log(form.style.display);
   if (form.style.display != "inline-block") {
     form.style.display = "inline-block";
   } else {
@@ -32,7 +31,6 @@ function ShowDetail(element) {
 function ShowSibling(element) {
   var id = element.id;
   var form = document.getElementById(id+"-siblings");
-  console.log(form.style.display);
   if (form.style.display != "inline-block") {
     form.style.display = "inline-block";
     element.innerHTML = "Hide All Recurrings"
