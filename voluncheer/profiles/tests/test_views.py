@@ -1,13 +1,14 @@
+import datetime
+
 from django.contrib.auth import get_user_model
 from django.test.client import RequestFactory
 from django.urls import reverse
 
-from opportunityboard import unittest_setup  # noqa:F401
 from opportunityboard.unittest_setup import TestCase
 from profiles.models import GalleryPost
 from profiles.models import UserType
+from profiles.views import profile
 from profiles.views.gallery import create_post
-from profiles.views.profile import confirm_attendance
 
 
 class SignupViewTest(TestCase):
@@ -101,16 +102,16 @@ class OrganizationProfileTest(TestCase):
         )
         get_request.user = self.org
 
-        confirm_attendance(get_request, self.opp.pk)
+        profile.confirm_attendance(get_request, self.opp.pk)
         self.assertEqual(self.opp.attended_volunteers.count(), 0)
 
         self.opp.volunteers.add(self.vol)
         self.opp.refresh_from_db()
-        confirm_attendance(get_request, self.opp.pk)
+        profile.confirm_attendance(get_request, self.opp.pk)
         self.opp.refresh_from_db()
         self.assertEqual(self.opp.attended_volunteers.count(), 1)
 
-        confirm_attendance(get_request, self.opp.pk)
+        profile.confirm_attendance(get_request, self.opp.pk)
         self.opp.refresh_from_db()
         self.assertEqual(self.opp.attended_volunteers.count(), 0)
 
@@ -263,3 +264,23 @@ class ProfileViewTest(TestCase):
             self.opp.attended_volunteers.remove(self.vol)
             response = self.client.get(reverse("saved_events"))
             self.assertNotIn(self.opp, response.context["opportunity_attended"])
+
+    def test_badge_progression(self):
+        with self.subTest("hours_until_first_badge"):
+            self.vol.hours_volunteered = datetime.timedelta(hours=10)
+            progress, hours_remaining, _ = profile.badge_progression(self.vol)
+            self.assertEqual(progress, 20)
+            self.assertEqual(hours_remaining, 40)
+        with self.subTest("hours_until_next_badge"):
+            self.vol.hours_volunteered = datetime.timedelta(hours=51)
+            self.vol.badges.add(self.silver_badge)
+            progress, hours_remaining, _ = profile.badge_progression(self.vol)
+            self.assertEqual(progress, 2)
+            self.assertEqual(hours_remaining, 49)
+        with self.subTest("no_more_badges_to_earn"):
+            self.vol.hours_volunteered = datetime.timedelta(hours=101)
+            self.vol.badges.add(self.silver_badge)
+            self.vol.badges.add(self.gold_badge)
+            progress, hours_remaining, _ = profile.badge_progression(self.vol)
+            self.assertEqual(progress, 0)
+            self.assertEqual(hours_remaining, 0)

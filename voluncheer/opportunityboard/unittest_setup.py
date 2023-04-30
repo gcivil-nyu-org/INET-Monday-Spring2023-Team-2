@@ -1,4 +1,4 @@
-import datetime as dt
+import datetime
 
 from django import test
 from django.contrib.auth import get_user_model
@@ -7,6 +7,8 @@ from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
+from profiles.models import Badge
+from profiles.models import BadgeType
 from profiles.models import Organization
 from profiles.models import UserType
 from profiles.models import Volunteer
@@ -43,9 +45,9 @@ class TestCase(test.TestCase):
             name="Reforestation", parent=self.subcategory
         )
         description = "Please help us support our community at this week's soup kitchen"
-        self.end = dt.time(1, 30, 0)
-        self.date = dt.datetime(year=2023, month=5, day=8, tzinfo=dt.timezone.utc)
-        delta = dt.timedelta(days=30)
+        self.end = datetime.time(1, 30, 0)
+        self.date = datetime.datetime(year=2023, month=5, day=8, tzinfo=datetime.timezone.utc)
+        delta = datetime.timedelta(days=30)
         self.end_date = self.date + delta
         self.opp = Opportunity.objects.create(
             organization=self.org,
@@ -79,3 +81,16 @@ class TestCase(test.TestCase):
             description="I want to come with you to Alderaan.",
         )
         self.vol.save()
+
+        self.gold_badge = Badge.objects.create(
+            name="Gold",
+            type=BadgeType.VOLUNTEER_HOURS_BADGE,
+            hours_required=datetime.timedelta(hours=100),
+            img="gold_badge.png",
+        )
+        self.silver_badge = Badge.objects.create(
+            name="Silver",
+            type=BadgeType.VOLUNTEER_HOURS_BADGE,
+            hours_required=datetime.timedelta(hours=50),
+            img="silver_badge.jpg",
+        )
