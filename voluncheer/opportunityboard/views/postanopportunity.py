@@ -22,7 +22,6 @@ def geocode_address(address):
             return location["lat"], location["lng"]
     return None, None
 
-
 def post_an_opportunity(request):
     """create a new Opportunity and save it to the database."""
     user = request.user
@@ -31,7 +30,6 @@ def post_an_opportunity(request):
     if user.is_organization:
         organization_profile = Organization.objects.get(pk=user)
 
-    # opportunity = Opportunity.objects.get(pk=opportunity_id)
     if request.method == "POST":
         # Set Organization based on current user
         post = request.POST.copy()
@@ -42,6 +40,7 @@ def post_an_opportunity(request):
         if form.is_valid():
             address = form.cleaned_data["address_1"]
             latitude, longitude = geocode_address(address)
+            print(address,latitude,longitude)
             form.instance.latitude = latitude
             form.instance.longitude = longitude
             form.save()
@@ -79,8 +78,8 @@ def update_an_opportunity(request, opportunity_id):
             else:
                 address = form.cleaned_data["address_1"]
                 latitude, longitude = geocode_address(address)
-                form.instance.latitude = latitude
-                form.instance.longitude = longitude
+                opportunity_to_update.latitude = latitude
+                opportunity_to_update.longitude = longitude
                 form.save()
         else:
             return render(

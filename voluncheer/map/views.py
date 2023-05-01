@@ -26,16 +26,17 @@ def map(request):
 
     opportunities = []
     for opportunity in Opportunity.objects.all():
-        opportunities.append(
-            {
-                "latitude": opportunity.latitude,
-                "longitude": opportunity.longitude,
-                "title": opportunity.title,
-                "address": opportunity.address_1,
-                "type": opportunity.category.name,
-                "name": opportunity.organization.name,
-            }
-        )
+        if (opportunity.is_published == True and opportunity.is_archived == False):
+            opportunities.append(
+                {
+                    "latitude": opportunity.latitude,
+                    "longitude": opportunity.longitude,
+                    "title": opportunity.title,
+                    "address": opportunity.address_1,
+                    "type": opportunity.category.name,
+                    "name": opportunity.organization.name,
+                }
+            )
 
     context = {
         "key": settings.GOOGLE_MAPS_API_KEY,
