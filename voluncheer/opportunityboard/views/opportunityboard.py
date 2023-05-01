@@ -98,7 +98,18 @@ def organization_view(request, userid):
     if user.is_organization:
         return redirect("home")
     volunteer = get_object_or_404(Volunteer, pk=user)
-    opportunity_lists = organization.opportunity_set.all()
+    opportunity_lists = organization.opportunity_set.filter(
+        is_published=True, is_archived=False
+    ).order_by("date")
+
+    # RECURRING OPPORTUNITIES
+    recurrences_to_show = []
+    for opportunity in opportunity_lists:
+        if opportunity.pk in recurrences_to_show:
+            opportunity_lists = opportunity_lists.exclude(pk=opportunity.pk)
+        else:
+            for sibling in opportunity.recurrence_siblings.all():
+                recurrences_to_show.append(sibling.pk)
     context = {
         "user": user,
         "organization": organization,

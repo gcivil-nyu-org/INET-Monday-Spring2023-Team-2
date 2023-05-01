@@ -41,6 +41,7 @@
                     {{ opportunity_form.as_p }}
                     <button type="submit" id="edit-form-edit-btn" class="edit-form">Post</button>
                     <button type="submit" name="delete" id="edit-form-edit-btn" class="edit-form">Delete</button>
+                    <button type="submit" name="delete_recurrences" id="edit-form-edit-btn" class="edit-form">Delete Recurrences</button>
                 </form>
                 
                 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -116,7 +117,7 @@
         </div>
     </div>
     <script
-      src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}&libraries=places&callback=initMap&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key={{key}}&libraries=places&callback=initMap&v=weekly"
       defer
     ></script>
     <script>
