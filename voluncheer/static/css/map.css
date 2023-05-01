@@ -1,6 +1,24 @@
 :root {
-    --heart-color: #d10202;
+    --org-color: #d10202;
+    --opp-color: #0034f0;
 }
+
+/* .search {
+    width: 100%;
+    position: relative;
+    display: flex;
+}
+  
+.searchTerm {
+    width: 100%;
+    border: 3px solid black;
+    border-right: none;
+    padding: 5px;
+    height: 20px;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    color: #9DBFAF;
+} */
 
 /*
  * Always set the map height explicitly to define the size of the div element
@@ -155,19 +173,139 @@ body {
     height: 50px;
 }
 
+.opp {
+    background-color: #4285F4;
+    border-radius: 8px;
+    color: #FFFFFF;
+    font-size: 14px;
+    padding: 10px 15px;
+    position: relative;
+}
+
+.opp::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, 0);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #4285F4;
+}
+
+/*
+ * Organization styles in unhighlighted state.
+ */
+.opp {
+    align-items: center;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+    color: #263238;
+    display: flex;
+    font-size: 14px;
+    gap: 15px;
+    height: 30px;
+    justify-content: center;
+    padding: 4px;
+    position: relative;
+    position: relative;
+    transition: all 0.3s ease-out;
+    width: 30px;
+}
+
+.opp::after {
+    border-left: 9px solid transparent;
+    border-right: 9px solid transparent;
+    border-top: 9px solid #FFFFFF;
+    content: "";
+    height: 0;
+    left: 50%;
+    position: absolute;
+    top: 95%;
+    transform: translate(-50%, 0);
+    transition: all 0.3s ease-out;
+    width: 0;
+    z-index: 1;
+}
+
+.opp .icon {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    color: #FFFFFF;
+}
+
+.opp .icon svg {
+    height: 20px;
+    width: auto;
+}
+
+.opp .details {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    white-space: pre-wrap;
+}
+
+.opp .address {
+    color: #9E9E9E;
+    font-size: 10px;
+    margin-bottom: 10px;
+    margin-top: 5px;
+}
+
+/*
+ * Organization styles in highlighted state.
+ */
+.opp.highlight {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.2);
+    height: 80px;
+    padding: 8px 15px;
+    width: auto;
+}
+
+.opp.highlight::after {
+    border-top: 9px solid #FFFFFF;
+}
+
+.opp.highlight .details {
+    display: flex;
+}
+
+.opp.highlight .icon svg {
+    width: 50px;
+    height: 50px;
+}
+
 /*
  * Heart icon colors.
  */
-.org.highlight:has(.fa-heart) .icon {
-    color: var(--heart-color);
+ .org.highlight:has(.fa-heart) .icon {
+    color: var(--org-color);
 }
 
 .org:not(.highlight):has(.fa-heart) {
-    background-color: var(--heart-color);
+    background-color: var(--org-color);
 }
 
 .org:not(.highlight):has(.fa-heart)::after {
-    border-top: 9px solid var(--heart-color);
+    border-top: 9px solid var(--org-color);
+}
+
+.opp.highlight:has(.fa-handshake-angle) .icon {
+    color: var(--opp-color);
+}
+
+.opp:not(.highlight):has(.fa-handshake-angle) {
+    background-color: var(--opp-color);
+}
+
+.opp:not(.highlight):has(.fa-handshake-angle)::after {
+    border-top: 9px solid var(--opp-color);
 }
 
 @keyframes drop {

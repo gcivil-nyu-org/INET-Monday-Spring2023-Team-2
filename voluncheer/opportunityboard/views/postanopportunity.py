@@ -1,12 +1,26 @@
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
+import requests
 
 from opportunityboard.forms.postanopportunity import PostAnOpportunityForm
 from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
 from profiles.models import Organization
+
+
+def geocode_address(address):
+    url = "https://maps.googleapis.com/maps/api/geocode/json?address={}&key=AIzaSyBzE-wnZ_7yuWH3c6kRTPyIBwTSYJG1VzI".format(
+        address
+    )
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        if data["status"] == "OK":
+            location = data["results"][0]["geometry"]["location"]
+            return location["lat"], location["lng"]
+    return None, None
 
 
 def post_an_opportunity(request):
@@ -16,6 +30,8 @@ def post_an_opportunity(request):
         return redirect("home")
     if user.is_organization:
         organization_profile = Organization.objects.get(pk=user)
+
+    # opportunity = Opportunity.objects.get(pk=opportunity_id)
     if request.method == "POST":
         # Set Organization based on current user
         post = request.POST.copy()
@@ -24,7 +40,12 @@ def post_an_opportunity(request):
         form = PostAnOpportunityForm(request.POST, request.FILES)
         # Save
         if form.is_valid():
+            address = form.cleaned_data["address_1"]
+            latitude, longitude = geocode_address(address)
+            form.instance.latitude = latitude
+            form.instance.longitude = longitude
             form.save()
+
         else:
             return render(
                 request,
@@ -56,6 +77,10 @@ def update_an_opportunity(request, opportunity_id):
             if "delete" in request.POST:
                 form.delete(opportunity_id)
             else:
+                address = form.cleaned_data["address_1"]
+                latitude, longitude = geocode_address(address)
+                form.instance.latitude = latitude
+                form.instance.longitude = longitude
                 form.save()
         else:
             return render(
