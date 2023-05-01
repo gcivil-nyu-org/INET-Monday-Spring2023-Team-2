@@ -1,5 +1,3 @@
-import datetime as dt
-
 from django.shortcuts import render
 
 from map import models
