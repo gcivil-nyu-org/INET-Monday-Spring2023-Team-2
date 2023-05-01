@@ -41,6 +41,7 @@ class PostAnOpportunityFormTest(TestCase):
         self.assertEqual(posted_opportunity.description, "Let's surfing")
 
     def test_date_validation(self):
+        self.date = self.date + datetime.timedelta(hours=1)
         data = {
             "organization": self.org,
             "category": self.healthcare,
@@ -53,9 +54,12 @@ class PostAnOpportunityFormTest(TestCase):
             "address_2": "Down st",
             "is_published": False,
         }
-        with freezegun.freeze_time(self.date + datetime.timedelta(days=1)):
+        with freezegun.freeze_time(self.date + datetime.timedelta(minutes=30)):
             form = PostAnOpportunityForm(data=data)
             self.assertFalse(form.is_valid())
+        with freezegun.freeze_time(self.date - datetime.timedelta(minutes=30)):
+            form = PostAnOpportunityForm(data=data)
+            self.assertTrue(form.is_valid())
 
     def test_update(self):
         """Test Update An Opportunity validation"""

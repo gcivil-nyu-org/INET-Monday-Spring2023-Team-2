@@ -1,4 +1,4 @@
-import datetime as dt
+import datetime
 
 from geopy import distance
 
@@ -68,6 +68,8 @@ class Filter:
         """
         filtered_opportunity = Opportunity.objects.all()
         filtered_opportunity = filtered_opportunity.exclude(staffing=0)
+        filtered_opportunity = filtered_opportunity.exclude(is_published=False)
+        filtered_opportunity = filter_opportunities_before_now(filtered_opportunity)
         if self.category is not None:
             filtered_opportunity = filtered_opportunity.filter(category=self.category)
         if self.subcategory is not None:
@@ -87,6 +89,14 @@ class Filter:
         return filtered_opportunity
 
 
+def filter_opportunities_before_now(queryset):
+    now = datetime.datetime.now().timestamp()
+    for opportunity in queryset:
+        if opportunity.date <= datetime.datetime.fromtimestamp(now, tz=opportunity.date.tzinfo):
+            queryset = queryset.exclude(pk=opportunity.pk)
+    return queryset
+
+
 def filter_by_distance(queryset, location, max_distance):
     for opportunity in queryset:
         opportunity_location = (opportunity.latitude, opportunity.longitude)
@@ -100,7 +110,7 @@ def filter_by_duration(queryset, max):
     Takes Opportunity queryset and a max number of hours.
     Returns Opportunity queryset with durations less than or equal to the max.
     """
-    max_duration = dt.timedelta(hours=max)
+    max_duration = datetime.timedelta(hours=max)
     for opportunity in queryset:
         if opportunity.duration > max_duration:
             queryset = queryset.exclude(pk=opportunity.pk)

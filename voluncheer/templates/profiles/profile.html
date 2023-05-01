@@ -68,9 +68,7 @@
         <h2>POSTED OPPORTUNITIES</h2>
         <div class="card">
             {% csrf_token %}
-                {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-                {% for opportunity in opportunity_lists %}
-                    {% if opportunity.is_published %}
+                {% for opportunity in posted_opportunity_lists %}
                     <article>
                         {% if user.pk is curr_user.pk %}
                         <a href="{% url 'update_an_opportunity' opportunity.pk %}"><i id="opportunity-edit-{{opportunity.pk}}" class="fa fa-pen fa-xs edit"></i></a>
@@ -79,6 +77,52 @@
 					    <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
                         {% endif %}
 					    <p class="vol-position-description-h1">{{ opportunity.title }}</p>
+                        <p class="vol-position-description-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                        <p class="vol-position-description-h2">Address: {{ opportunity.address_1 }}</p>
+                        <p class="vol-position-description-h2">Date: {{ opportunity.date }}</p>
+                        <p class="vol-position-description-h2">End: {{ opportunity.end }}</p>
+                        <p class="vol-position-description-h2">{{ opportunity.description }}</p>
+                        {% if user.pk is curr_user.pk %}
+                        <form method="get" id="opportunities-detail-{{opportunity.pk}}-form" class="opportunities-detail-form" action="{% url 'attendance' opportunity.pk %}">
+                            <div id="volunteer-attandence">
+                                <p class="vol-position-description-h1">Volunteer attendance:</p>
+                                {% for volunteer in opportunity.volunteers.all %}
+                                    {% if volunteer in opportunity.attended_volunteers.all %}
+                                    <div class="sticky-note green">
+                                        <input type="checkbox" class="volunteer-attandence" name="volunteer-attended" value="{{volunteer.pk}}">Attended
+                                    {% else %}
+                                    <div class="sticky-note">
+                                        <input type="checkbox" class="volunteer-attandence" name="volunteer-attended" value="{{volunteer.pk}}">Did Not Attend
+                                    {% endif %}
+                                        <br>
+                                        Name: <a href="{%url 'profile' volunteer.pk%}">{{volunteer.first_name}} {{volunteer.last_name}}</a>
+                                        {% if volunteer.photo %}
+                                        <img src="{{volunteer.photo.url}}" alt="profile pic" width="100" height="100"/>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button type="submit" id="opportunities-detail-form-btn" class="opportunities-detail-form-submit">Confirm Attendence</button>
+                        </form>
+                        <div class="url"><a href="#opportunity-edit-{{opportunity.pk}}" id="opportunities-detail-{{opportunity.pk}}" class="opportunities-detail-btn" onclick="ShowDetail(this)">Details</a></div>
+                        {% endif %}
+                        <hr align="center">
+				    </article>
+                {% endfor %}
+                
+        </div>
+        <h2>RECURRING OPPORTUNITIES</h2>
+        <div class="card">
+            {% for opportunity in recurring_posted_opportunity_lists %}
+                {% if opportunity.is_published %}
+                    <article>
+                        {% if user.pk is curr_user.pk %}
+                        <a href="{% url 'update_an_opportunity' opportunity.pk %}"><i id="opportunity-edit-{{opportunity.pk}}" class="fa fa-pen fa-xs edit"></i></a>
+                        {% endif %}
+                        {% if opportunity.photo %}
+                        <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
+                        {% endif %}
+                        <p class="vol-position-description-h1">{{ opportunity.title }}</p>
                         <p class="vol-position-description-h3">Pubdate: {{ opportunity.pubdate }}</p>
                         <p class="vol-position-description-h2">Address: {{ opportunity.address_1 }}</p>
                         <p class="vol-position-description-h2">Date: {{ opportunity.date }}</p>
@@ -108,18 +152,33 @@
                         </form>
                         <div class="url"><a href="#opportunity-edit-{{opportunity.pk}}" id="opportunities-detail-{{opportunity.pk}}" class="opportunities-detail-btn" onclick="ShowDetail(this)">Details</a></div>
                         {% endif %}
-                        <hr align="center">
-				    </article>
-                    {% endif %}
-                {% endfor %}
+                        
+                    </article>
+                    <div id="opportunity-sibling-{{opportunity.pk}}-siblings" class="opportunity-siblings">
+                    {% for sibling in opportunity.recurrence_siblings.all %}
+                    <article class="recurrings">
+                        {% if user.pk is curr_user.pk %}
+                        <a href="{% url 'update_an_opportunity' sibling.pk %}"><i id="opportunity-edit-{{sibling.pk}}" class="fa fa-pen fa-xs edit"></i></a>
+                        {% endif %}
+                        <p class="vol-position-description-h1">{{ sibling.title }}</p>
+                        <p class="vol-position-description-h2">Address: {{ sibling.address_1 }}</p>
+                        <p class="vol-position-description-h2">Date: {{ sibling.date }}</p>
+                        <p class="vol-position-description-h2">End: {{ sibling.end }}</p>
+                        <p class="vol-position-description-h2">{{ sibling.description }}</p>
+                    </article>
+                    {% endfor %}
+                    </div>
+                    <div class="url"><a href="#{{opportunity.pk}}-siblings" id="opportunity-sibling-{{opportunity.pk}}" class="opportunities-detail-btn" onclick="ShowSibling(this)">Show All Recurrings</a></div>
+                    <hr align="center">
+                {% endif %}
+            {% endfor %}
         </div>
 
         {% if user.pk is curr_user.pk %}
         <h2>SAVED OPPORTUNITIES</h2>
         <div class="card" id="saved_opportunities">
             {% csrf_token %}
-                {% for opportunity in opportunity_lists %}
-                    {% if not opportunity.is_published %}
+                {% for opportunity in saved_opportunity_lists %}
                     <article>
                         <a href="{% url 'update_an_opportunity' opportunity.pk %}"><i id="opportunity-edit-{{opportunity.pk}}" class="fa fa-pen fa-xs edit"></i></a>
 					    {% if opportunity.photo %}
@@ -131,10 +190,43 @@
                         <p class="vol-position-description-h2">Date: {{ opportunity.date }}</p>
                         <p class="vol-position-description-h2">End: {{ opportunity.end }}</p>
                         <p class="vol-position-description-h2">{{ opportunity.description }}</p>
-                        <div class="url"><a href="#" id="{{opportunity.pk}}" class="opportunities-detail-btn">Details</a></div>
                         <hr align="center">
 				    </article>
+                {% endfor %}
+                {% for opportunity in recurring_posted_opportunity_lists %}
+                    {% if not opportunity.is_published %}
+                        <article>
+                            <a href="{% url 'update_an_opportunity' opportunity.pk %}"><i id="opportunity-edit-{{opportunity.pk}}" class="fa fa-pen fa-xs edit"></i></a>
+                            {% if opportunity.photo %}
+                            <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
+                            {% endif %}
+                            <p class="vol-position-description-h1">{{ opportunity.title }}</p>
+                            <p class="vol-position-description-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                            <p class="vol-position-description-h2">Address: {{ opportunity.address_1 }}</p>
+                            <p class="vol-position-description-h2">Date: {{ opportunity.date }}</p>
+                            <p class="vol-position-description-h2">End: {{ opportunity.end }}</p>
+                            <p class="vol-position-description-h2">{{ opportunity.description }}</p>
+                            <hr align="center">
+                        </article>
                     {% endif %}
+                {% endfor %}
+        </div>
+
+        <h2>PAST OPPORTUNITIES</h2>
+        <div class="card" id="past_opportunities">
+                {% for opportunity in past_opportunity_lists %}
+                    <article>
+					    {% if opportunity.photo %}
+					    <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px"/></a>
+                        {% endif %}
+					    <p class="vol-position-description-h1">{{ opportunity.title }}</p>
+                        <p class="vol-position-description-h3">Pubdate: {{ opportunity.pubdate }}</p>
+                        <p class="vol-position-description-h2">Address: {{ opportunity.address_1 }}</p>
+                        <p class="vol-position-description-h2">Date: {{ opportunity.date }}</p>
+                        <p class="vol-position-description-h2">End: {{ opportunity.end }}</p>
+                        <p class="vol-position-description-h2">{{ opportunity.description }}</p>
+                        <hr align="center">
+				    </article>
                 {% endfor %}
         </div>
         {% endif %}
@@ -213,7 +305,7 @@
                         {{ user_form }}
                         <button type="submit" id="edit-form-edit-btn" class="edit-form">Submit</button>
                     </form>
-                {% else %} 
+                {% else %}
                 <div class="vol-details" id="vol-details-view">
                     <p>Name: {{ volunteer.first_name }} {{ volunteer.last_name }}</p>
                     <p>Date of birth: {{ volunteer.date_of_birth }}</p>
@@ -232,10 +324,18 @@
                     </span>
                 {% endfor %}
             </div>
-            <p class="total-hours"> Total Volunteer Hours: {{ hours_volunteered }}</p>
-            {% if hours_required %}
-                <p class="hours-required"> You have {{ hours_required }} hours to go until your next badge!</p>
-            {% endif %}
+            <div class="next-badge">
+                <p class="total-hours"> Total Volunteer Hours: {{ hours_volunteered }}</p>
+                {% if hours_required %}
+                    <label for="badge-progress">Next Badge Progress:</label>
+                    <br>
+                    <p class="hours-required"> You have {{ hours_required }} hours to go until your next badge!</p>
+                    <progress id="badge-progress" value="{{ progress }}" max="100"> {{ progress }}% </progress>
+                    <span class="fa-stack fa-sm">
+                        <img src="{{ next_badge.img.url }}" alt="{{ next_badge }}" title = "{{ next_badge }}" width="78px" height="78px"/>
+                    </span>
+                {% endif %}
+            </div>
         </div>
 
         <h2>MY GALLERY</h2>

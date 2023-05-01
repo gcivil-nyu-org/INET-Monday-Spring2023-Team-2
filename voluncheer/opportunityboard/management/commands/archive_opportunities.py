@@ -23,7 +23,6 @@ class Command(BaseCommand):
 
         opportunities = Opportunity.objects.filter(
             date__lte=now,
-            is_recurring=False,
             is_archived=False,
             is_published=True,
         )

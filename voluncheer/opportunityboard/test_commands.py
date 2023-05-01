@@ -136,7 +136,7 @@ class TestArchiveOpportunities(TestCase):
             date=self.today - dt.timedelta(days=1),
             end=self.today - dt.timedelta(hours=1),
             is_archived=False,
-            is_published=False,
+            is_published=True,
             address_1="200 Calrissian Av.",
             address_2="NY",
             longitude=12.34,
@@ -162,4 +162,4 @@ class TestArchiveOpportunities(TestCase):
             self.assertFalse(self.opportunity2.is_archived)
             self.assertTrue(self.opportunity3.is_archived)
             self.assertFalse(self.opportunity4.is_archived)
-            self.assertFalse(self.opportunity5.is_archived)
+            self.assertTrue(self.opportunity5.is_archived)

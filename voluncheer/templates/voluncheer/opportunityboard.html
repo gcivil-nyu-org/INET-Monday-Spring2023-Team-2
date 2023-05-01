@@ -139,12 +139,11 @@
       <form class="opportunities-showcase" action="" method="post">
         <article id="photobox">
           <h1>Badges You Can Earn</h1>
-          <img src="../../static/images/badge-1.png" alt="" />
-          <img src="../../static/images/badge-2.png" alt="" />
-          <img src="../../static/images/badge-3.png" alt="" />
-          <img src="../../static/images/badge-4.png" alt="" />
-          <img src="../../static/images/badge-5.png" alt="" />
-          <img src="../../static/images/badge-6.png" alt="" />
+          {% for badge in badges %}
+            {% if badge.img %}
+            <img src="{{badge.img.url}}" alt="" />
+            {% endif %}
+          {% endfor %}
         </article>
 
         {# django script goes here #}

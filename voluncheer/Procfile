@@ -1,0 +1,2 @@
+web: source /var/app/venv/*/bin/activate && gunicorn --bind :8000 --workers 3 --threads 2 voluncheer.wsgi:application
+websocket: source /var/app/venv/*/bin/activate && daphne --access-log daphne.log -b 0.0.0.0 -p 5000 voluncheer.asgi:application

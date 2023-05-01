@@ -1,8 +1,9 @@
-import datetime as dt
+import datetime
 
 from django.contrib.auth import get_user_model
 from django.test.client import RequestFactory
 from django.urls import reverse
+import freezegun
 
 from opportunityboard.models import Category
 from opportunityboard.unittest_setup import TestCase
@@ -49,6 +50,12 @@ class OpportunityboardTestCase(TestCase):
         response = opportunityboard(get_request, 1)
         self.assertEqual(response.status_code, 200)
 
+    def test_search_excludes_opportunities_before_now(self):
+        """Tests that opportunities before now are not returned."""
+        with freezegun.freeze_time(self.date + datetime.timedelta(days=1)):
+            filters = Filter()
+            self.assertEqual(filters.search().count(), 0)
+
     def test_search_by_categories(self):
         """Tests filter search by category/subcategory/subsubcategory functions"""
         filters = Filter()
@@ -70,13 +77,13 @@ class OpportunityboardTestCase(TestCase):
         opp_pk = self.opp.pk
 
         with self.subTest("two hours"):
-            self.opp.end = dt.time(2, 0, 0)
+            self.opp.end = datetime.time(2, 0, 0)
             self.opp.save()
             opp_list = filters.search()
             self.assertTrue(opp_list.filter(pk=opp_pk).exists())
 
         with self.subTest("over two hours"):
-            self.opp.end = dt.time(2, 1, 0)
+            self.opp.end = datetime.time(2, 1, 0)
             self.opp.save()
             opp_list = filters.search()
             self.assertFalse(opp_list.filter(pk=opp_pk).exists())
@@ -87,13 +94,13 @@ class OpportunityboardTestCase(TestCase):
         opp_pk = self.opp.pk
 
         with self.subTest("four hours"):
-            self.opp.end = dt.time(4, 0, 0)
+            self.opp.end = datetime.time(4, 0, 0)
             self.opp.save()
             opp_list = filters.search()
             self.assertTrue(opp_list.filter(pk=opp_pk).exists())
 
         with self.subTest("over four hours"):
-            self.opp.end = dt.time(4, 1, 0)
+            self.opp.end = datetime.time(4, 1, 0)
             self.opp.save()
             opp_list = filters.search()
             self.assertFalse(opp_list.filter(pk=opp_pk).exists())
@@ -104,13 +111,13 @@ class OpportunityboardTestCase(TestCase):
         opp_pk = self.opp.pk
 
         with self.subTest("eight hours"):
-            self.opp.end = dt.time(8, 0, 0)
+            self.opp.end = datetime.time(8, 0, 0)
             self.opp.save()
             opp_list = filters.search()
             self.assertTrue(opp_list.filter(pk=opp_pk).exists())
 
         with self.subTest("over eight hours"):
-            self.opp.end = dt.time(8, 1, 0)
+            self.opp.end = datetime.time(8, 1, 0)
             self.opp.save()
             opp_list = filters.search()
             self.assertFalse(opp_list.filter(pk=opp_pk).exists())
