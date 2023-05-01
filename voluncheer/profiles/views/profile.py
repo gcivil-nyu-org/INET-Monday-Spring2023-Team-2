@@ -77,7 +77,7 @@ class ProfileView(DetailView):
             )
             # PAST OPPORTUNITIES
             past_opportunity_lists = organization_profile.opportunity_set.filter(
-                is_published=False, is_archived=True
+                is_published=True, is_archived=True
             )
             kwargs["posted_opportunity_lists"] = posted_opportunity_lists
             kwargs["recurring_posted_opportunity_lists"] = recurring_posted_opportunity_lists
