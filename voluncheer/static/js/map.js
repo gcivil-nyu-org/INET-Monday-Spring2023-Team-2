@@ -18,6 +18,10 @@ async function initMap() {
     document.getElementById("organizations").textContent
   );
 
+  const opportunities = JSON.parse(
+    document.getElementById("opportunities").textContent
+  );
+
   const input = document.getElementById("address");
   const { Autocomplete } = await google.maps.importLibrary("places");
   const autocomplete = new Autocomplete(input);
@@ -81,7 +85,7 @@ async function initMap() {
 
       const marker = new AdvancedMarkerView({
         map,
-        content: buildContent(org),
+        content: buildContentOrg(org),
         position: position,
         title: org.name,
       });
@@ -113,19 +117,61 @@ async function initMap() {
       observer.observe(element);
     }
   });
+
+  google.maps.event.addListenerOnce(map, "idle", () => {
+    for (const opp of opportunities) {
+      const position = {
+        lat: parseFloat(opp.latitude),
+        lng: parseFloat(opp.longitude),
+      };
+
+      const marker = new AdvancedMarkerView({
+        map,
+        content: buildContentOpp(opp),
+        position: position,
+        title: opp.title,
+      });
+      const element = marker.content;
+
+      ["focus", "pointerenter"].forEach((event) => {
+        element.addEventListener(event, () => {
+          highlight(marker);
+        });
+      });
+      ["blur", "pointerleave"].forEach((event) => {
+        element.addEventListener(event, () => {
+          unhighlight(marker);
+        });
+      });
+      marker.addListener("click", (event) => {
+        unhighlight(marker);
+      });
+
+      element.style.opacity = "0";
+      element.addEventListener("animationend", (event) => {
+        element.classList.remove("drop");
+        element.style.opacity = "1";
+      });
+
+      const time = 1 + Math.random();
+
+      element.style.setProperty("--delay-time", time + "s");
+      observer.observe(element);
+    }
+  });
 }
 
-function highlight(marker, org) {
+function highlight(marker) {
   marker.content.classList.add("highlight");
   marker.element.style.zIndex = 1;
 }
 
-function unhighlight(marker, org) {
+function unhighlight(marker) {
   marker.content.classList.remove("highlight");
   marker.element.style.zIndex = "";
 }
 
-function buildContent(org) {
+function buildContentOrg(org) {
   const content = document.createElement("div");
 
   content.classList.add("org");
@@ -138,6 +184,24 @@ function buildContent(org) {
         <div class="name">${org.name}</div>
         <div class="address">${org.address}</div>
         <div class="type">${org.type}</div>
+    </div>
+    `;
+  return content;
+}
+
+function buildContentOpp(opp) {
+  const content = document.createElement("div");
+
+  content.classList.add("opp");
+  content.innerHTML = `
+    <div class="icon">
+        <i aria-hidden="true" class="fa fa-icon fa-handshake-angle" title="${opp.title}"></i>
+        <span class="fa-sr-only">${opp.type}</span>
+    </div>
+    <div class="details">
+        <div class="title">${opp.title}</div>
+        <div class="address">${opp.address}</div>
+        <div class="type">${opp.type}</div>
     </div>
     `;
   return content;
