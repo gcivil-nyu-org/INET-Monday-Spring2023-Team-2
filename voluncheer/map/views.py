@@ -26,7 +26,7 @@ def map(request):
 
     opportunities = []
     for opportunity in Opportunity.objects.all():
-        if opportunity.is_published == True and opportunity.is_archived == False:
+        if opportunity.is_published and not opportunity.is_archived:
             opportunities.append(
                 {
                     "latitude": opportunity.latitude,
