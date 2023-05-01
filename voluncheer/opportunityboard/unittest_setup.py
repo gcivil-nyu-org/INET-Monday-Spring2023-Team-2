@@ -63,7 +63,7 @@ class TestCase(test.TestCase):
             longitude=-73.966413,
             latitude=40.786174,
             staffing=9,
-            is_published=False,
+            is_published=True,
             is_recurring=True,
             recurrence="weekly",
             end_date=self.end_date,

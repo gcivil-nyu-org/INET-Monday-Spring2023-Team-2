@@ -28,7 +28,7 @@ class OpportunityTest(TestCase):
         self.assertEqual(self.opp.longitude, -73.966413)
         self.assertEqual(self.opp.latitude, 40.786174)
         self.assertEqual(self.opp.staffing, 9)
-        self.assertFalse(self.opp.is_published)
+        self.assertTrue(self.opp.is_published)
         self.assertTrue(self.opp.is_recurring)
         self.assertEqual(self.opp.recurrence, "weekly")
         self.assertEqual(self.opp.end_date, self.end_date)
