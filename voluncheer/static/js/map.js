@@ -35,6 +35,7 @@ async function initMap() {
   const marker = new Marker({
     map,
     anchorPoint: new Point(0, -29),
+    zoom: 11
   });
 
   autocomplete.addListener("place_changed", () => {
@@ -51,12 +52,10 @@ async function initMap() {
       );
       return;
     }
-
     
     map.setCenter(place.geometry.location);
     map.setZoom(16);
     
-
 
     marker.setPosition(place.geometry.location);
     marker.setVisible(true);

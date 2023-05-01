@@ -105,6 +105,7 @@ class Opportunity(models.Model):
         Volunteer, blank=True, related_name="attended_volunteers"
     )
     is_archived = models.BooleanField(default=False)
+    recurrence_siblings = models.ManyToManyField("Opportunity", blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -119,3 +120,7 @@ class Opportunity(models.Model):
         duration = end_datetime - start_datetime
         duration_seconds = dt.timedelta(seconds=duration.seconds)  # remove date
         return duration_seconds
+
+    def delete_recurrences(self):
+        self.recurrence_siblings.all().filter(is_archived=False).delete()
+        self.delete()

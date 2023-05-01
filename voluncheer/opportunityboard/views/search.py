@@ -68,6 +68,7 @@ class Filter:
         """
         filtered_opportunity = Opportunity.objects.all()
         filtered_opportunity = filtered_opportunity.exclude(staffing=0)
+        filtered_opportunity = filtered_opportunity.exclude(is_published=False)
         filtered_opportunity = filter_opportunities_before_now(filtered_opportunity)
         if self.category is not None:
             filtered_opportunity = filtered_opportunity.filter(category=self.category)
