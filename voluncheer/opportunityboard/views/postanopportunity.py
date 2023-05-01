@@ -81,7 +81,7 @@ def update_an_opportunity(request, opportunity_id):
                 latitude, longitude = geocode_address(address)
                 opportunity_to_update.latitude = latitude
                 opportunity_to_update.longitude = longitude
-                form.save()
+                form.edit()
         else:
             return render(
                 request,
