@@ -25,7 +25,7 @@ def map(request):
                 "type": organization_type,
             },
         )
-        
+
     opportunities = []
     for opportunity in Opportunity.objects.all():
         opportunities.append(
@@ -34,11 +34,11 @@ def map(request):
                 "longitude": opportunity.longitude,
                 "title": opportunity.title,
                 "address": opportunity.address_1,
-                "type":opportunity.category.name,
-                "name":opportunity.organization.name
+                "type": opportunity.category.name,
+                "name": opportunity.organization.name,
             }
         )
-        
+
     context = {
         "key": settings.GOOGLE_MAPS_API_KEY,
         "organizations": organizations,
