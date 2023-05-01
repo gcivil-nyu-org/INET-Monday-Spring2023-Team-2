@@ -22,6 +22,7 @@ def geocode_address(address):
             return location["lat"], location["lng"]
     return None, None
 
+
 def post_an_opportunity(request):
     """create a new Opportunity and save it to the database."""
     user = request.user
@@ -40,7 +41,7 @@ def post_an_opportunity(request):
         if form.is_valid():
             address = form.cleaned_data["address_1"]
             latitude, longitude = geocode_address(address)
-            print(address,latitude,longitude)
+            print(address, latitude, longitude)
             form.instance.latitude = latitude
             form.instance.longitude = longitude
             form.save()
