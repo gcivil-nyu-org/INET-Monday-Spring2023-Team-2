@@ -20,12 +20,18 @@ document.querySelector("#roomConnect").onclick = function () {
 }
 
 // redirect to '/room/<roomSelect>/'
-document.querySelector("#roomSelect").onchange = function () {
-    let roomName = document.querySelector("#roomSelect").value.split(" (")[0];
+// document.querySelector("#roomSelect").onchange = function () {
+//     let roomName = document.querySelector("#roomSelect").value.split(" (")[0];
+//     window.location.pathname = "chatroom/" + roomName + "/";
+// }
+
+$('.chat_list').on('click', function (evt) {
+    console.log(this.id);
+    var roomName = this.id.split(" (")[0];
     if (roomName != "") {
         window.location.pathname = "chatroom/" + roomName + "/";
     } else {
         let err = document.querySelector('#room-error');
         err.innerHTML = "Room name is required.<br/>";
     }
-}
+});

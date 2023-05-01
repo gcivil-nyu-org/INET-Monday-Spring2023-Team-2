@@ -4,6 +4,13 @@ let chatLog = document.querySelector("#chatLog");
 let chatMessageInput = document.querySelector("#chatMessageInput");
 let chatMessageSend = document.querySelector("#chatMessageSend");
 let onlineUsersSelector = document.querySelector("#onlineUsersSelector");
+let msgContainer = document.getElementById("msg_history")
+
+$('.chat_list').on('click', function (evt) {
+    console.log(this.id);
+    var roomName = this.id.split(" (")[0];
+    window.location.pathname = "chatroom/" + roomName + "/";
+});
 
 // adds a new option to 'onlineUsersSelector'
 function onlineUsersSelectorAdd(value) {
@@ -59,10 +66,23 @@ function connect() {
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
         console.log(data);
-
         switch (data.type) {
             case "chat_message":
-                chatLog.value += data.message + "\n";
+                var date = new Date(Date.now());
+                var incoming_template = `<div class="incoming_msg">
+                <div class="incoming_msg_img"> <img src="{% static "images/organize_image_0.png" %}" alt="TestOrg"> </div>
+                <div class="received_msg">
+                  <div class="received_withd_msg">
+                    <p>` + data.message + `</p>
+                    <span class="time_date">` + date.toGMTString() + `</span></div>
+                    </div>
+                  </div>`;
+                var outgoing_template = `<div class="outgoing_msg">
+                <div class="sent_msg">
+                  <p>` + data.message + `</p>
+                  <span class="time_date">` + date.toGMTString() + `</span> </div>
+                  </div>`
+                msgContainer.innerHTML += outgoing_template + "\n";
                 break;
             default:
                 console.error("Unknown message type!");
