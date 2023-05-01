@@ -43,7 +43,6 @@ def post_an_opportunity(request):
         if form.is_valid():
             address = form.cleaned_data["address_1"]
             latitude, longitude = geocode_address(address)
-            print(address, latitude, longitude)
             form.instance.latitude = latitude
             form.instance.longitude = longitude
             form.save()
