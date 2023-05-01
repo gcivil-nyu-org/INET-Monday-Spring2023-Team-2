@@ -4,6 +4,7 @@ from io import StringIO
 from django.core.management import call_command
 from django.test import TestCase
 import freezegun
+import pytz
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
@@ -12,6 +13,7 @@ from opportunityboard.models import Subsubcategory
 from profiles.models import Organization
 from profiles.models import User
 from profiles.models import UserType
+from voluncheer.settings import TIME_ZONE
 
 _TEST_DATA = "opportunityboard/testdata/categories.json"
 
@@ -59,7 +61,7 @@ class TestArchiveOpportunities(TestCase):
             name="Jedi Council",
         )
 
-        self.today = dt.datetime(year=2023, month=4, day=16, tzinfo=dt.timezone.utc)
+        self.today = dt.datetime(year=2023, month=4, day=16, tzinfo=pytz.timezone(TIME_ZONE))
         description = "Please help us support our community at this week's soup kitchen"
 
         self.opportunity1 = Opportunity.objects.create(
