@@ -7,11 +7,13 @@ from opportunityboard.models import Opportunity
 from opportunityboard.models import Subcategory
 from opportunityboard.models import Subsubcategory
 from profiles.models import Organization
+from voluncheer import settings
 
 
 def post_an_opportunity(request):
     """create a new Opportunity and save it to the database."""
     user = request.user
+    key = settings.GOOGLE_MAPS_API_KEY
     if user.is_anonymous:
         return redirect("home")
     if user.is_organization:
@@ -27,9 +29,7 @@ def post_an_opportunity(request):
             form.save()
         else:
             return render(
-                request,
-                "opportunityboard/postanopportunity.html",
-                {"opportunity_form": form},
+                request, "opportunityboard/postanopportunity.html", {"opportunity_form": form}
             )
         return redirect("home")
 
@@ -38,7 +38,11 @@ def post_an_opportunity(request):
         return render(
             request,
             "opportunityboard/postanopportunity.html",
-            {"opportunity_form": opportunity_form, "organization": organization_profile},
+            {
+                "opportunity_form": opportunity_form,
+                "organization": organization_profile,
+                "key": key,
+            },
         )
 
 
@@ -46,6 +50,7 @@ def update_an_opportunity(request, opportunity_id):
     """Get opportunity update POST and call save function on ChangeForms."""
     opportunity_to_update = get_object_or_404(Opportunity, pk=opportunity_id)
     user = request.user
+    key = settings.GOOGLE_MAPS_API_KEY
     if user.is_anonymous:
         return redirect("home")
     if user.is_organization:
@@ -75,6 +80,7 @@ def update_an_opportunity(request, opportunity_id):
                 "opportunity_form": opportunity_form,
                 "organization": organization_profile,
                 "opportunity_id": opportunity_id,
+                "key": key,
             },
         )
 
