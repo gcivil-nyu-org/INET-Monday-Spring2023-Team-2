@@ -5,6 +5,7 @@ from django.db import transaction
 import pytz
 
 from opportunityboard.models import Opportunity
+from voluncheer.settings import TIME_ZONE
 
 
 class Command(BaseCommand):
@@ -13,7 +14,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             "--datetime",
-            default=datetime.now(pytz.utc),
+            default=datetime.now(pytz.timezone(TIME_ZONE)),
             help="The date before which all opportunities are archived",
         )
 
@@ -30,7 +31,7 @@ class Command(BaseCommand):
         for opportunity in opportunities:
             # Set is_archived to True if end date and time has passed
             end_datetime = datetime.combine(opportunity.date.date(), opportunity.end).replace(
-                tzinfo=pytz.utc
+                tzinfo=pytz.timezone(TIME_ZONE)
             )
             if end_datetime <= now:
                 opportunity.is_archived = True
