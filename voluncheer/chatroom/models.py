@@ -1,6 +1,8 @@
 from django.db import models
 
 from profiles.models import User
+from profiles.models import Volunteer
+from profiles.models import Organization
 
 
 class Room(models.Model):
@@ -39,6 +41,10 @@ class Message(models.Model):
     room = models.ForeignKey(to=Room, on_delete=models.CASCADE)
     content = models.CharField(max_length=512)
     timestamp = models.DateTimeField(auto_now_add=True)
+    volunteer = models.ForeignKey(to=Volunteer, blank=True, null=True, on_delete=models.SET_NULL)
+    organization = models.ForeignKey(
+        to=Organization, blank=True, null=True, on_delete=models.SET_NULL
+    )
 
     def __str__(self):
         return f"{self.user.email}: {self.content} [{self.timestamp}]"

@@ -3,6 +3,8 @@ from django.shortcuts import render
 
 from chatroom.models import Message
 from chatroom.models import Room
+from profiles.models import Volunteer
+from profiles.models import Organization
 
 # To be changed after UI is designed.
 
@@ -22,6 +24,12 @@ def chat_homepage_view(request):
 def room_view(request, room_name):
     room, _ = Room.objects.get_or_create(name=room_name)
     message = Message.objects.filter(room=room)
+    user = request.user
+    organization, volunteer = None, None
+    if user.is_organization:
+        organization = Organization.objects.get(pk=user)
+    elif user.is_volunteer:
+        volunteer = Volunteer.objects.get(pk=user)
 
     return render(
         request,
@@ -30,5 +38,8 @@ def room_view(request, room_name):
             "message": message,
             "rooms": Room.objects.all(),
             "room": room,
+            "user": user,
+            "organization": organization,
+            "volunteer": volunteer,
         },
     )
