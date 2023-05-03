@@ -52,10 +52,10 @@ async function initMap() {
       );
       return;
     }
-    
+
     map.setCenter(place.geometry.location);
     map.setZoom(16);
-    
+
 
     marker.setPosition(place.geometry.location);
     marker.setVisible(true);
@@ -101,7 +101,7 @@ async function initMap() {
           unhighlight(marker, org);
         });
       });
-      marker.addListener("click", (event) => {
+      marker.addEventListener("gmp-click", (event) => {
         unhighlight(marker, org);
       });
 
@@ -143,7 +143,8 @@ async function initMap() {
           unhighlight(marker);
         });
       });
-      marker.addListener("click", (event) => {
+
+      marker.addEventListener("gmp-click", (event) => {
         unhighlight(marker);
       });
 
