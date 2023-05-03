@@ -3,8 +3,8 @@ from django.shortcuts import render
 
 from chatroom.models import Message
 from chatroom.models import Room
-from profiles.models import Volunteer
 from profiles.models import Organization
+from profiles.models import Volunteer
 
 # To be changed after UI is designed.
 

@@ -1,13 +1,12 @@
 import json
 
 from asgiref.sync import async_to_sync
-from asgiref.sync import sync_to_async
 from channels.generic.websocket import WebsocketConsumer
 
 from chatroom.models import Message
 from chatroom.models import Room
-from profiles.models import User
 from profiles.models import Organization
+from profiles.models import User
 from profiles.models import Volunteer
 
 

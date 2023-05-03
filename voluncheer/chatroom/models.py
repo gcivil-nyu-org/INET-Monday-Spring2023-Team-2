@@ -1,8 +1,8 @@
 from django.db import models
 
+from profiles.models import Organization
 from profiles.models import User
 from profiles.models import Volunteer
-from profiles.models import Organization
 
 
 class Room(models.Model):
