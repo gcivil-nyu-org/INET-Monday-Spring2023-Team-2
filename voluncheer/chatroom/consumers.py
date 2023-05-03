@@ -66,6 +66,7 @@ class ChatConsumer(WebsocketConsumer):
         user = test_data_json["user"]
         room = test_data_json["room"]
         timestamp = test_data_json["timestamp"]
+        photo = test_data_json["photo"]
         self.save_message(user, room, content, timestamp)
         # send chat message event to the room
         async_to_sync(self.channel_layer.group_send)(
@@ -73,6 +74,7 @@ class ChatConsumer(WebsocketConsumer):
             {
                 "type": "chat_message",
                 "message": content,
+                "photo": photo,
             },
         )
 

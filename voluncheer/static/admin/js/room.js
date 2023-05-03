@@ -43,11 +43,18 @@ chatMessageInput.onkeyup = function (e) {
 function sendChatMsg() {
     if (chatMessageInput.value.length === 0) return;
     var date = new Date(Date.now()); 
+    var photo;
+    if (Object.keys(volunteerJson).length) {
+        photo = volunteerJson;
+    } else if (Object.keys(organizationJson).length) {
+        photo = organizationJson;
+    }
     var msg = JSON.stringify({
         "user": userPK,
         "message": chatMessageInput.value,
         "room": roomName,
         "timestamp": date.toGMTString(),
+        "photo": photo,
     });
     chatSocket.send(msg);
 
@@ -79,21 +86,12 @@ function connect() {
 
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
-        console.log(e);
-        console.log(Object.keys(volunteerJson).length);
-        console.log(Object.keys(organizationJson).length);
         switch (data.type) {
             case "chat_message":
                 var date = new Date(Date.now());
                 var incoming_template = `<div class="incoming_msg">
-                <div class="incoming_msg_img"> <img src="`;
-
-                if (Object.keys(volunteerJson).length) {
-                    incoming_template = incoming_template+volunteerJson
-                } else if (Object.keys(organizationJson).length) {
-                    incoming_template = incoming_template+organizationJson
-                }
-                incoming_template = incoming_template+`" alt="TestOrg"> </div>
+                <div class="incoming_msg_img"> <img src="`+
+                data.photo+`" alt="TestOrg"> </div>
                 <div class="received_msg">
                   <div class="received_withd_msg">
                     <p>` + data.message + `</p>
