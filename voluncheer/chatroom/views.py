@@ -24,6 +24,7 @@ def room_view(request, room_name):
         request,
         "chatroom/room.html",
         {
+            "rooms": Room.objects.all(),
             "room": room,
         },
     )

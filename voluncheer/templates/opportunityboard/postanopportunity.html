@@ -44,81 +44,15 @@
                 
                 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
-                <script>
-                  const recurring_checkbox = document.getElementById("id_is_recurring")
-                  //Set to recurrence and end_date to disabled
-                  if (!recurring_checkbox.checked){
-                    $("#id_recurrence").prop('disabled', true)
-                    $("#id_end_date").prop('disabled', true)
-                  }
-
-                  //On click, enable or disable fields
-                  recurring_checkbox.addEventListener("click", enable_fields)
-
-                  function enable_fields(){
-                    if (recurring_checkbox.checked){
-                      $("#id_recurrence").prop('disabled', false)
-                      $("#id_end_date").prop('disabled', false)
-                    }
-                    else{
-                      $("#id_recurrence").prop('disabled', true)
-                      $("#id_end_date").prop('disabled', true)
-                    }
-                  }
-                </script>
-                <script>
-
-                $("#id_category").change(function () {
-                    var categoryId = $(this).val(); 
-
-                    //Update subcategory...
-                    var url = $("#opportunity_form").attr("data-subcat-url");  
-                    $.ajax({                      
-                      url: url,                    
-                      data: {
-                        'category': categoryId       
-                      },
-                      success: function (data) {   
-                        $("#id_subcategory").html(data);
-                      }
-                    });
-
-                    //...then update subsubcategory
-                    url = $("#opportunity_form").attr("data-subsubcat-url");
-                    $.ajax({                      
-                      url: url,                    
-                      data: {
-                        'category': categoryId       
-                      },
-                      success: function (data) {   
-                        $("#id_subsubcategory").html(data);
-                      }
-                    });
-                  });
-
-                $("#id_subcategory").change(function () {
-                    var subcategoryId = $(this).val();
-                    
-                    //Update subcategory only
-                    var url = $("#opportunity_form").attr("data-subsubcat-url");  
-                    $.ajax({                       
-                      url: url,                    
-                      data: {
-                        'subcategory': subcategoryId       
-                      },
-                      success: function (data) {   
-                        $("#id_subsubcategory").html(data);  
-                      }
-                    });
-                  });
-                </script>
+                <script src="{% static 'js/postanopportunity.js' %}"></script>
             </div>
         </div>
     </div>
     <script
-      src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}&libraries=places&callback=initMap&v=weekly"
+      src="https://maps.googleapis.com/maps/api/js?key={{key}}&libraries=places&callback=initMap&v=weekly"
       defer
     ></script>
+    
     <script>
       function initMap(){
         const input = document.getElementById('id_address_1');
@@ -128,7 +62,7 @@
         autocomplete.addListener('place_changed', () => {
           const place = autocomplete.getPlace();
           console.log(place);
-        });
+              });
       }
     </script>
     {% endif %}

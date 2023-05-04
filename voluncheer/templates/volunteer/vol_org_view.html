@@ -44,7 +44,6 @@
         {% csrf_token %}
         {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
         {% for opportunity in opportunity_lists %}
-        {% if opportunity.is_published and not opportunity.is_archived %}
         <article>
             {% if opportunity.photo %}
             <a href="#"><img src="{{opportunity.photo.url}}" alt="" class="vol-position-image" width="275px" /></a>
@@ -66,7 +65,6 @@
             {% endif %}
             <hr align="center">
         </article>
-        {% endif %}
         {% endfor %}
     </div>
 </div>

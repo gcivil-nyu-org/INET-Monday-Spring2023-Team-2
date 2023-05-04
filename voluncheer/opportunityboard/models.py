@@ -95,8 +95,8 @@ class Opportunity(models.Model):
     end_date = models.DateField(null=True, blank=True)
     address_1 = models.CharField(max_length=255)
     address_2 = models.CharField(null=True, blank=True, max_length=255)
-    longitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
-    latitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
+    longitude = models.FloatField(null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
     staffing = models.PositiveIntegerField(null=True, blank=True)
     is_published = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=_opportunity_photo_path, blank=True, null=True)
@@ -105,6 +105,7 @@ class Opportunity(models.Model):
         Volunteer, blank=True, related_name="attended_volunteers"
     )
     is_archived = models.BooleanField(default=False)
+    recurrence_siblings = models.ManyToManyField("Opportunity", blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -119,3 +120,7 @@ class Opportunity(models.Model):
         duration = end_datetime - start_datetime
         duration_seconds = dt.timedelta(seconds=duration.seconds)  # remove date
         return duration_seconds
+
+    def delete_recurrences(self):
+        self.recurrence_siblings.all().filter(is_archived=False).delete()
+        self.delete()
