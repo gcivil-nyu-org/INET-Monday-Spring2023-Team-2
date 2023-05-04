@@ -30,7 +30,6 @@ def room_view(request, room_name):
         organization = Organization.objects.get(pk=user)
     elif user.is_volunteer:
         volunteer = Volunteer.objects.get(pk=user)
-
     return render(
         request,
         "chatroom/room.html",

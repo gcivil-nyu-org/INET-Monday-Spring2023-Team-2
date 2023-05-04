@@ -2,26 +2,17 @@ import random
 import string
 
 from django.contrib.auth import get_user_model
-from django.test import TestCase
 from django.urls import reverse
-
+from django.test import Client
+from opportunityboard.unittest_setup import TestCase
 from profiles.models import UserType
+from profiles.models import Volunteer
 
 
 class ChatroomViewTest(TestCase):
     def setUp(self):
         super().setUp()
-        self.password = "".join(random.choices(string.ascii_uppercase + string.digits, k=8))
-        self.user = get_user_model().objects.create_user(
-            email="test@voluncheer.com",
-            password="secret",
-            type=UserType.VOLUNTEER,
-        )
-        self.user.save()
-        self.client.login(email="test@voluncheer.com", password="secret")
-
-    def tearDown(self):
-        self.user.delete()
+        self.client.login(email="luke@jedi.com", password="NOOOOOOOOOOOOOOOOOOO")
 
     def test_chat_homepage_redirects(self):
         """Tests chat homepage redirects to login."""
