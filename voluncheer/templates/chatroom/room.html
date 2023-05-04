@@ -56,10 +56,14 @@
                             {% for msg in message %}
                             <div class="incoming_msg">
                               {% if msg.volunteer %}
+                                {% if msg.volunteer.photo %}
                                 <div class="incoming_msg_img"> <img src="{{ msg.volunteer.photo.url }}" alt="{{ msg.volunteer }}"> </div>
+                                {% endif %}
                               {% endif %}
                               {% if msg.organization %}
+                                {% if msg.organization.photo %}
                                 <div class="incoming_msg_img"> <img src="{{ msg.organization.photo.url }}" alt="{{ msg.organization }}"> </div>
+                                {% endif %}
                               {% endif %}
                               <div class="received_msg">
                                 <div class="received_withd_msg">
