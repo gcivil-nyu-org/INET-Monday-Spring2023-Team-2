@@ -13,8 +13,9 @@ from voluncheer import settings
 
 def geocode_address(address):
     key = settings.GOOGLE_MAPS_API_KEY
-    url = "https://maps.googleapis.com/maps/api/geocode/json?address={}&key={}".format(address, key)
-
+    url = "https://maps.googleapis.com/maps/api/geocode/json?address={}&key={}".format(
+        address, key
+    )
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
@@ -83,10 +84,12 @@ def update_an_opportunity(request, opportunity_id):
             elif "delete_recurrences" in request.POST:
                 form.delete_recurrences(opportunity_id)
             else:
+
                 address = form.cleaned_data["address_1"]
                 latitude, longitude = geocode_address(address)
                 opportunity_to_update.latitude = latitude
                 opportunity_to_update.longitude = longitude
+                
 
                 form.edit()
 
