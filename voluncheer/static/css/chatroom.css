@@ -103,7 +103,7 @@ img{ max-width:100%;}
   font-size: 14px;
   margin: 0;
   padding: 5px 10px 5px 12px;
-  width: 100%;
+  width: max-content;
 }
 .time_date {
   color: #747474;
@@ -111,7 +111,7 @@ img{ max-width:100%;}
   font-size: 12px;
   margin: 8px 0 0;
 }
-.received_withd_msg { width: 57%;}
+.received_withd_msg { max-width: 80%;}
 .mesgs {
   float: left;
   padding: 30px 15px 0 25px;
@@ -124,7 +124,7 @@ img{ max-width:100%;}
   font-size: 14px;
   margin: 0; color:white;
   padding: 5px 10px 5px 12px;
-  width:100%;
+  width:max-content;
 }
 .outgoing_msg{ overflow:hidden; margin:26px 0 26px;}
 .sent_msg {
@@ -158,4 +158,7 @@ img{ max-width:100%;}
 .msg_history {
   height: 516px;
   overflow-y: auto;
+}
+.incoming_msg {
+  padding-top: 10px;
 }
