@@ -143,6 +143,7 @@ async function initMap() {
           unhighlight(marker);
         });
       });
+
       marker.addEventListener("gmp-click", (event) => {
         unhighlight(marker);
       });
