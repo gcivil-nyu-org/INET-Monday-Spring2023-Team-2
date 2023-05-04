@@ -18,7 +18,6 @@ class ChatConsumer(WebsocketConsumer):
         self.room = None
 
     def save_message(self, user, room, content, timestamp):
-        print(user, room, content, timestamp)
         user = User.objects.get(pk=user)
         volunteer = None
         organization = None
@@ -60,7 +59,6 @@ class ChatConsumer(WebsocketConsumer):
 
     def receive(self, text_data, bytes_data=None):
         test_data_json = json.loads(text_data)
-        print(test_data_json)
         content = test_data_json["message"]
         user = test_data_json["user"]
         room = test_data_json["room"]

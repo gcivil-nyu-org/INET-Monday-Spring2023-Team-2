@@ -60,12 +60,6 @@ function sendChatMsg() {
 
     chatMessageInput.value = "";
 }
-// clear the 'chatMessageInput' and forward the message
-// chatMessageSend.onclick = function () {
-//     if (chatMessageInput.value.length === 0) return;
-//     sendChatMsg();
-//     chatMessageInput.value = "";
-// };
 
 let chatSocket = null;
 
