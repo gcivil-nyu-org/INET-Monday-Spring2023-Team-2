@@ -26,22 +26,18 @@ def map(request):
 
     opportunities = []
     for opportunity in Opportunity.objects.all():
-        if (
-            opportunity.is_published
-            and not opportunity.is_archived
-            and opportunity.latitude
-            and opportunity.longitude
-        ):
-            opportunities.append(
-                {
-                    "latitude": opportunity.latitude,
-                    "longitude": opportunity.longitude,
-                    "title": opportunity.title,
-                    "address": opportunity.address_1,
-                    "type": opportunity.category.name,
-                    "name": opportunity.organization.name,
-                }
-            )
+        if opportunity.is_published and not opportunity.is_archived:
+            if opportunity.latitude and opportunity.longitude:
+                opportunities.append(
+                    {
+                        "latitude": opportunity.latitude,
+                        "longitude": opportunity.longitude,
+                        "title": opportunity.title,
+                        "address": opportunity.address_1,
+                        "type": opportunity.category.name,
+                        "name": opportunity.organization.name,
+                    }
+                )
 
     context = {
         "key": settings.GOOGLE_MAPS_API_KEY,
