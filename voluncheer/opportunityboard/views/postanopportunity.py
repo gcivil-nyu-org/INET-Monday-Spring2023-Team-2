@@ -76,12 +76,12 @@ def update_an_opportunity(request, opportunity_id):
         organization_profile = Organization.objects.get(pk=user)
     if request.method == "POST":
         form = PostAnOpportunityForm(request.POST, request.FILES, instance=opportunity_to_update)
-        if form.is_valid():
-            if "delete" in request.POST:
-                form.delete(opportunity_id)
-            elif "delete_recurrences" in request.POST:
-                form.delete_recurrences(opportunity_id)
-            else:
+        if "delete" in request.POST:
+            form.delete(opportunity_id)
+        elif "delete_recurrences" in request.POST:
+            form.delete_recurrences(opportunity_id)
+        else:
+            if form.is_valid():
                 address = form.cleaned_data["address_1"]
                 latitude, longitude = geocode_address(address)
                 opportunity_to_update.latitude = latitude
@@ -89,12 +89,12 @@ def update_an_opportunity(request, opportunity_id):
 
                 form.edit()
 
-        else:
-            return render(
-                request,
-                "opportunityboard/postanopportunity.html",
-                {"opportunity_form": form},
-            )
+            else:
+                return render(
+                    request,
+                    "opportunityboard/postanopportunity.html",
+                    {"opportunity_form": form},
+                )
         return redirect("home")
     else:
         opportunity_form = PostAnOpportunityForm(instance=opportunity_to_update)

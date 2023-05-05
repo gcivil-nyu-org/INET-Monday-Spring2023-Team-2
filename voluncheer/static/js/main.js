@@ -39,3 +39,22 @@ function ShowSibling(element) {
     element.innerHTML = "Show All Recurrings"
   }
 };
+
+function toggleChatOrg() {
+  const currUser = JSON.parse(document.getElementById('currUser').textContent)
+      .replace(/[^\w\s\']|_/g, "")
+      .replace(/\s+/g, " ");
+  const profileUser = JSON.parse(document.getElementById('profileUser').textContent)
+      .replace(/[^\w\s\']|_/g, "")
+      .replace(/\s+/g, " ");
+  window.location.pathname = "chatroom/" + profileUser+"_"+currUser+ "/";
+}
+function toggleChatVol() {
+  const currUser = JSON.parse(document.getElementById('currUser').textContent)
+      .replace(/[^\w\s\']|_/g, "")
+      .replace(/\s+/g, " ");
+  const profileUser = JSON.parse(document.getElementById('profileUser').textContent)
+      .replace(/[^\w\s\']|_/g, "")
+      .replace(/\s+/g, " ");
+  window.location.pathname = "chatroom/" + currUser+"_"+profileUser+ "/";
+}
