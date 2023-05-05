@@ -11,7 +11,7 @@ let msgContainer = document.getElementById("msg_history")
 
 $('.chat_list').on('click', function (evt) {
     console.log(this.id);
-    var roomName = this.id.split(" (")[0];
+    var roomName = this.id;
     window.location.pathname = "chatroom/" + roomName + "/";
 });
 

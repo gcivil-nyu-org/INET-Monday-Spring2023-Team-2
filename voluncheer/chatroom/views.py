@@ -36,7 +36,7 @@ def room_view(request, room_name):
         {
             "message": message,
             "rooms": Room.objects.all(),
-            "room": room,
+            "room": room.name,
             "user": user,
             "organization": organization,
             "volunteer": volunteer,

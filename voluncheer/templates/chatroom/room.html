@@ -31,12 +31,12 @@
                       </div>
                       <div class="inbox_chat">
                       {% for room in rooms %}
-                        <div class="chat_list active_chat" id="{{ room }}">
+                        <div class="chat_list active_chat" id="{{ room.name }}">
                           <div class="chat_people">
                             <div class="chat_img"> <img src="{% static 'images/organize_image_0.png' %}" alt="TestOrg"> </div>
                             <div class="chat_ib">
-                              <h5>{{ room }} <span class="chat_date">Feb 5</span></h5>
-                              <p>Congratulations, you've been selected as a volunteer, see you on your first day this Friday!</p>
+                              <h5>{{ room.name }}</h5>
+                              <p>{{room.message_set.first}}</p>
                             </div>
                           </div>
                         </div>
@@ -89,7 +89,7 @@
                         </select>
                     </div>
                 </div> -->
-                {{ room.name|json_script:"roomName" }}
+                {{ room|json_script:"roomName" }}
                 {{ user.pk|json_script:"userPK" }}
                 {{ volunteer.photo.url|json_script:"volunteerJson" }}
                 {{ organization.photo.url|json_script:"organizationJson" }}
