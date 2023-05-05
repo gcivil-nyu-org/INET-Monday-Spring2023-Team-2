@@ -77,13 +77,19 @@ class OpportunityboardTestCase(TestCase):
         opp_pk = self.opp.pk
 
         with self.subTest("two hours"):
-            self.opp.end = datetime.time(2, 0, 0)
+            custom_end = datetime.datetime.strptime("0200", "%H%M").time()
+            self.opp.end = datetime.datetime.combine(
+                self.opp.end.date(), custom_end, tzinfo=self.opp.end.tzinfo
+            )
             self.opp.save()
             opp_list = filters.search()
             self.assertTrue(opp_list.filter(pk=opp_pk).exists())
 
         with self.subTest("over two hours"):
-            self.opp.end = datetime.time(2, 1, 0)
+            custom_end = datetime.datetime.strptime("0201", "%H%M").time()
+            self.opp.end = datetime.datetime.combine(
+                self.opp.end.date(), custom_end, tzinfo=self.opp.end.tzinfo
+            )
             self.opp.save()
             opp_list = filters.search()
             self.assertFalse(opp_list.filter(pk=opp_pk).exists())
@@ -94,13 +100,19 @@ class OpportunityboardTestCase(TestCase):
         opp_pk = self.opp.pk
 
         with self.subTest("four hours"):
-            self.opp.end = datetime.time(4, 0, 0)
+            custom_end = datetime.datetime.strptime("0400", "%H%M").time()
+            self.opp.end = datetime.datetime.combine(
+                self.opp.end.date(), custom_end, tzinfo=self.opp.end.tzinfo
+            )
             self.opp.save()
             opp_list = filters.search()
             self.assertTrue(opp_list.filter(pk=opp_pk).exists())
 
         with self.subTest("over four hours"):
-            self.opp.end = datetime.time(4, 1, 0)
+            custom_end = datetime.datetime.strptime("0401", "%H%M").time()
+            self.opp.end = datetime.datetime.combine(
+                self.opp.end.date(), custom_end, tzinfo=self.opp.end.tzinfo
+            )
             self.opp.save()
             opp_list = filters.search()
             self.assertFalse(opp_list.filter(pk=opp_pk).exists())
@@ -111,13 +123,19 @@ class OpportunityboardTestCase(TestCase):
         opp_pk = self.opp.pk
 
         with self.subTest("eight hours"):
-            self.opp.end = datetime.time(8, 0, 0)
+            custom_end = datetime.datetime.strptime("0800", "%H%M").time()
+            self.opp.end = datetime.datetime.combine(
+                self.opp.end.date(), custom_end, tzinfo=self.opp.end.tzinfo
+            )
             self.opp.save()
             opp_list = filters.search()
             self.assertTrue(opp_list.filter(pk=opp_pk).exists())
 
         with self.subTest("over eight hours"):
-            self.opp.end = datetime.time(8, 1, 0)
+            custom_end = datetime.datetime.strptime("0801", "%H%M").time()
+            self.opp.end = datetime.datetime.combine(
+                self.opp.end.date(), custom_end, tzinfo=self.opp.end.tzinfo
+            )
             self.opp.save()
             opp_list = filters.search()
             self.assertFalse(opp_list.filter(pk=opp_pk).exists())

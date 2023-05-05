@@ -92,7 +92,7 @@ class Opportunity(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     date = models.DateTimeField()
-    end = models.TimeField()
+    end = models.DateTimeField()
     is_recurring = models.BooleanField(default=False)
     recurrence = models.CharField(max_length=6, choices=FREQUENCIES, null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
@@ -115,15 +115,7 @@ class Opportunity(models.Model):
 
     @property
     def duration(self):
-        if self.end_date is None:
-            end_datetime = datetime.datetime.combine(self.date.date(), self.end)
-        else:
-            end_datetime = datetime.datetime.combine(self.end_date, self.end)
-        time_zone = pytz.timezone(TIME_ZONE)
-        end_datetime = make_aware(end_datetime, timezone=time_zone)  # make end_datetime TZ aware
-        duration = end_datetime - self.date
-        duration_seconds = datetime.timedelta(seconds=duration.seconds)  # remove date
-        return duration_seconds
+        return self.end - self.date
 
     def delete_recurrences(self):
         self.recurrence_siblings.all().filter(is_archived=False).delete()

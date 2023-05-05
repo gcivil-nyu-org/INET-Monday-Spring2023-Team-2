@@ -48,9 +48,10 @@ class TestCase(test.TestCase):
             name="Reforestation", parent=self.subcategory
         )
         description = "Please help us support our community at this week's soup kitchen"
-        self.end = datetime.time(1, 30, 0)
-        self.date = datetime.datetime(year=2023, month=5, day=8)
-        self.date = make_aware(self.date, timezone=pytz.timezone(TIME_ZONE))
+        self.end = datetime.datetime(
+            year=2023, month=5, day=8, hour=1, minute=30, second=0, tzinfo=datetime.timezone.utc
+        )
+        self.date = datetime.datetime(year=2023, month=5, day=8, tzinfo=datetime.timezone.utc)
         delta = datetime.timedelta(days=30)
         self.end_date = self.date + delta
         self.opp = Opportunity.objects.create(

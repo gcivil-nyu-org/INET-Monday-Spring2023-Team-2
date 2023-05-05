@@ -200,15 +200,11 @@ def confirm_attendance(request, opportunity_id):
         volunteer = Volunteer.objects.get(pk=attendee_pk)
         if volunteer not in opportunity.volunteers.all():
             continue
-        if volunteer in opportunity.attended_volunteers.all():
-            opportunity.attended_volunteers.remove(volunteer)
-            volunteer.hours_volunteered -= opportunity.duration
-            volunteer.save()
-        else:
-            opportunity.attended_volunteers.add(volunteer)
-            volunteer.hours_volunteered += opportunity.duration
-            volunteer.save()
-
+        volunteer.hours_volunteered += opportunity.duration
+        volunteer.save()
+        opportunity.attended_volunteers.add(volunteer)
+        opportunity.volunteers.remove(volunteer)
+    opportunity.save()
     return redirect("home")
 
 

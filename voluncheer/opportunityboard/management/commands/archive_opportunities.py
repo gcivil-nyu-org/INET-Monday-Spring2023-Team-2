@@ -30,9 +30,6 @@ class Command(BaseCommand):
 
         for opportunity in opportunities:
             # Set is_archived to True if end date and time has passed
-            end_datetime = pytz.timezone(TIME_ZONE).localize(
-                datetime.combine(opportunity.date, opportunity.end)
-            )
-            if end_datetime <= datetime.now(pytz.timezone(TIME_ZONE)):
+            if opportunity.end <= datetime.now(pytz.timezone(TIME_ZONE)):
                 opportunity.is_archived = True
                 opportunity.save()

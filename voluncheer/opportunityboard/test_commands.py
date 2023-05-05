@@ -162,6 +162,6 @@ class TestArchiveOpportunities(TestCase):
 
             self.assertTrue(self.opportunity1.is_archived)
             self.assertFalse(self.opportunity2.is_archived)
-            self.assertTrue(self.opportunity3.is_archived)
+            self.assertFalse(self.opportunity3.is_archived)
             self.assertFalse(self.opportunity4.is_archived)
             self.assertTrue(self.opportunity5.is_archived)

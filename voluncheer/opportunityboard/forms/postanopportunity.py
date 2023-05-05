@@ -20,10 +20,11 @@ class PostAnOpportunityForm(forms.ModelForm):
         ),
         required=True,
     )
-    end = forms.TimeField(
-        widget=forms.TimeInput(
+    end = forms.DateTimeField(
+        input_formats=["%d/%m/%Y %H:%M"],
+        widget=forms.DateTimeInput(
             attrs={
-                "type": "time",
+                "type": "datetime-local",
             }
         ),
     )
@@ -111,6 +112,7 @@ class PostAnOpportunityForm(forms.ModelForm):
         if self.is_valid():
             if self.cleaned_data.get("is_recurring"):
                 date = self.cleaned_data.get("date")
+                end = self.cleaned_data.get("end")
                 end_date = self.cleaned_data.get("end_date")
                 for i in range(12):
                     if date.date() > end_date:
@@ -118,7 +120,9 @@ class PostAnOpportunityForm(forms.ModelForm):
                     self.instance.pk = None
                     self.instance.save()
                     date += datetime.timedelta(days=7)
+                    end += datetime.timedelta(days=7)
                     self.instance.date = date
+                    self.instance.end = end
                 self.find_siblings()
             else:
                 super().save(*args, **kwargs)
@@ -152,13 +156,12 @@ class PostAnOpportunityForm(forms.ModelForm):
         if is_recurring and not recurrence:
             raise ValidationError("Must enter recurrence if opportunity is recurring")
 
-        date = self.cleaned_data.get("date")
-        if date < datetime.datetime.now(tz=date.tzinfo):
+        start = self.cleaned_data.get("date")
+        if start < datetime.datetime.now(tz=start.tzinfo):
             raise ValidationError("Start date and time must be in the future.")
-        start_time = date.time()
-        end_time = self.cleaned_data.get("end")
+        end = self.cleaned_data.get("end")
 
-        if start_time >= end_time:
-            raise ValidationError("End time must be after start time")
+        if start >= end:
+            raise ValidationError("End date and time must be after start date and time")
 
         return self.cleaned_data

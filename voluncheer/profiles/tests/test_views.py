@@ -108,14 +108,12 @@ class OrganizationProfileTest(TestCase):
         self.assertEqual(self.opp.attended_volunteers.count(), 0)
 
         self.opp.volunteers.add(self.vol)
-        self.opp.refresh_from_db()
+        self.opp.save()
         profile.confirm_attendance(get_request, self.opp.pk)
-        self.opp.refresh_from_db()
+        self.vol.refresh_from_db()
         self.assertEqual(self.opp.attended_volunteers.count(), 1)
-
-        profile.confirm_attendance(get_request, self.opp.pk)
-        self.opp.refresh_from_db()
-        self.assertEqual(self.opp.attended_volunteers.count(), 0)
+        self.assertEqual(self.opp.volunteers.count(), 0)
+        self.assertEqual(self.vol.hours_volunteered, datetime.timedelta(hours=1, minutes=30))
 
 
 class GalleryTest(TestCase):
