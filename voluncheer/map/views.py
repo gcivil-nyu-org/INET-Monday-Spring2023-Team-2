@@ -26,18 +26,18 @@ def map(request):
 
     opportunities = []
     for opportunity in Opportunity.objects.all():
-        if opportunity.is_published and not opportunity.is_archived:
-            if opportunity.latitude and opportunity.longitude:
-                opportunities.append(
-                    {
-                        "latitude": opportunity.latitude,
-                        "longitude": opportunity.longitude,
-                        "title": opportunity.title,
-                        "address": opportunity.address_1,
-                        "type": opportunity.category.name,
-                        "name": opportunity.organization.name,
-                    }
-                )
+        if should_show_opportunity(opportunity):
+            opportunities.append(
+                {
+                    "latitude": opportunity.latitude,
+                    "longitude": opportunity.longitude,
+                    "title": opportunity.title,
+                    "address": opportunity.address_1,
+                    "type": opportunity.category.name,
+                    "name": opportunity.organization.name,
+                }
+            )
+            print(opportunities)
 
     context = {
         "key": settings.GOOGLE_MAPS_API_KEY,
@@ -45,3 +45,7 @@ def map(request):
         "opportunities": opportunities,
     }
     return render(request, "voluncheer/map.html", context)
+
+
+def should_show_opportunity(opp):
+    return opp.is_published and not opp.is_archived and opp.latitude and opp.longitude
