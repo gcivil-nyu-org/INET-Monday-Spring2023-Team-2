@@ -26,7 +26,7 @@ def opportunityboard(request, page_number):
     filter = parse_search_filter(request.GET)
     opportunity_lists = filter.search()
     number_of_pages = (opportunity_lists.count() // OPPORTUNITY_PER_PAGE) + 1
-    opportunity_lists = opportunity_lists.order_by("-pubdate")[
+    opportunity_lists = opportunity_lists.order_by("-date")[
         (page_number - 1) * OPPORTUNITY_PER_PAGE : page_number * OPPORTUNITY_PER_PAGE
     ]
     cate_output_dict = category_dict_gen()
