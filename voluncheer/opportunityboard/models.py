@@ -1,9 +1,12 @@
-import datetime as dt
+import datetime
 
 from django.db import models
+from django.utils.timezone import make_aware
+import pytz
 
 from profiles.models import Organization
 from profiles.models import Volunteer
+from voluncheer.settings import TIME_ZONE
 
 
 class Category(models.Model):
@@ -113,12 +116,13 @@ class Opportunity(models.Model):
     @property
     def duration(self):
         if self.end_date is None:
-            end_datetime = dt.datetime.combine(self.date.date(), self.end)
+            end_datetime = datetime.datetime.combine(self.date.date(), self.end)
         else:
-            end_datetime = dt.datetime.combine(self.end_date, self.end)
-        start_datetime = self.date.replace(tzinfo=None)  # make start date naive for subtraction
-        duration = end_datetime - start_datetime
-        duration_seconds = dt.timedelta(seconds=duration.seconds)  # remove date
+            end_datetime = datetime.datetime.combine(self.end_date, self.end)
+        time_zone = pytz.timezone(TIME_ZONE)
+        end_datetime = make_aware(end_datetime, timezone=time_zone)  # make end_datetime TZ aware
+        duration = end_datetime - self.date
+        duration_seconds = datetime.timedelta(seconds=duration.seconds)  # remove date
         return duration_seconds
 
     def delete_recurrences(self):
