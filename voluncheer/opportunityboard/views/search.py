@@ -1,5 +1,6 @@
 import datetime
 
+from django.db.models import Q
 from geopy import distance
 
 from opportunityboard.models import Category
@@ -19,6 +20,7 @@ class Filter:
         start_date=None,
         latitude=None,
         longitude=None,
+        keyword=None,
     ) -> None:
         self.category = category
         self.subcategory = subcategory
@@ -28,6 +30,7 @@ class Filter:
         self.start_date = start_date
         self.latitude = latitude
         self.longitude = longitude
+        self.keyword = keyword
 
     def gen_dict(self):
         output = {
@@ -86,6 +89,11 @@ class Filter:
             filtered_opportunity = filter_by_distance(
                 filtered_opportunity, (self.latitude, self.longitude), self.distance
             )
+        if self.keyword is not None:
+            filtered_opportunity = filtered_opportunity.filter(
+                Q(title__icontains=self.keyword) | Q(description__icontains=self.keyword)
+            )
+
         return filtered_opportunity
 
 
@@ -126,6 +134,7 @@ def parse_search_filter(post):
     # Category/Duration filter
     value = post.get("category")
     selected_duration = post.get("duration")
+    keyword = post.get("keyword")
     filter = Filter(
         category=category_is_valid(value),
         subcategory=subcategory_is_valid(value),
@@ -134,6 +143,7 @@ def parse_search_filter(post):
         distance=int(float(post.get("distance", 0))),
         latitude=post.get("latitude"),
         longitude=post.get("longitude"),
+        keyword=keyword,
     )
     return filter
 
