@@ -18,6 +18,14 @@
             <p>{{ user.description }}</p>
         </div>
     </div>
+    <div class="sidenav-url">
+        {% if user.pk is not organization.user.pk %}
+        <div class="url">
+            <a href="#" id="roomConnect" onclick="toggleChatOrg()">CHAT</a>
+            <hr align="center">
+        </div>
+        {% endif %}
+    </div>
 </div>
 <!-- End -->
 
@@ -68,6 +76,8 @@
         {% endfor %}
     </div>
 </div>
+{{ user.email|json_script:"currUser" }}
+{{ organization.user.email|json_script:"profileUser" }}
 <script>
     function toggleButton() {
       const button = document.getElementById("register-opportunity");

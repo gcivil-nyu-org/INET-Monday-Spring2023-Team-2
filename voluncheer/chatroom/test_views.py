@@ -1,17 +1,14 @@
-import random
-import string
-
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
 from profiles.models import UserType
+from profiles.models import Volunteer
 
 
 class ChatroomViewTest(TestCase):
     def setUp(self):
         super().setUp()
-        self.password = "".join(random.choices(string.ascii_uppercase + string.digits, k=8))
         self.user = get_user_model().objects.create_user(
             email="test@voluncheer.com",
             password="secret",
@@ -19,9 +16,13 @@ class ChatroomViewTest(TestCase):
         )
         self.user.save()
         self.client.login(email="test@voluncheer.com", password="secret")
-
-    def tearDown(self):
-        self.user.delete()
+        self.vol2 = Volunteer.objects.create(
+            user=self.user,
+            first_name="Luke",
+            last_name="Skywalker",
+            date_of_birth="1955-09-25",
+            photo="/media/images/user-0.png",
+        ).save()
 
     def test_chat_homepage_redirects(self):
         """Tests chat homepage redirects to login."""

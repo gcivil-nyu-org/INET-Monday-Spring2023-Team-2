@@ -7,11 +7,6 @@
 <link rel="stylesheet" href="{% static 'css/chatroom.css' %}">
 <!-- placeholder room file -->
 <style>
-    #chatLog {
-        height: 300px;
-        background-color: #FFFFFF;
-        resize: none;
-    }
 
     #onlineUsersSelector {
         height: 300px;
@@ -36,12 +31,12 @@
                       </div>
                       <div class="inbox_chat">
                       {% for room in rooms %}
-                        <div class="chat_list active_chat" id="{{ room }}">
+                        <div class="chat_list active_chat" id="{{ room.name }}">
                           <div class="chat_people">
-                            <div class="chat_img"> <img src="{% static "images/organize_image_0.png" %}" alt="TestOrg"> </div>
+                            <div class="chat_img"> <img src="{% static 'images/organize_image_0.png' %}" alt="TestOrg"> </div>
                             <div class="chat_ib">
-                              <h5>{{ room }} <span class="chat_date">Feb 5</span></h5>
-                              <p>Congratulations, you've been selected as a volunteer, see you on your first day this Friday!</p>
+                              <h5>{{ room.name }}</h5>
+                              <p>{{room.message_set.first}}</p>
                             </div>
                           </div>
                         </div>
@@ -58,11 +53,30 @@
                                 </div>
                               </div>
                             </div>
+                            {% for msg in message %}
+                            <div class="incoming_msg">
+                              {% if msg.volunteer %}
+                                {% if msg.volunteer.photo %}
+                                <div class="incoming_msg_img"> <img src="{{ msg.volunteer.photo.url }}" alt="{{ msg.volunteer }}"> </div>
+                                {% endif %}
+                              {% endif %}
+                              {% if msg.organization %}
+                                {% if msg.organization.photo %}
+                                <div class="incoming_msg_img"> <img src="{{ msg.organization.photo.url }}" alt="{{ msg.organization }}"> </div>
+                                {% endif %}
+                              {% endif %}
+                              <div class="received_msg">
+                                <div class="received_withd_msg">
+                                  <p>{{ msg.content }}</p>
+                                  <span class="time_date">{{ msg.timestamp }}</span></div>
+                              </div>
+                            </div>
+                            {% endfor %}
                         </div>
                         <div class="input-group">
                             <input type="text" class="form-control" id="chatMessageInput" placeholder="Enter your chat message">
                             <div class="input-group-append">
-                                <button class="btn btn-success" id="chatMessageSend" type="button">Send</button>
+                                <button class="btn btn-success" id="chatMessageSend" type="button" onclick="sendChatMsg()">Send</button>
                             </div>
                         </div>
                     </div>
@@ -75,7 +89,11 @@
                         </select>
                     </div>
                 </div> -->
-                {{ room.name|json_script:"roomName" }}
+                {{ room|json_script:"roomName" }}
+                {{ user.pk|json_script:"userPK" }}
+                {{ volunteer.photo.url|json_script:"volunteerJson" }}
+                {{ organization.photo.url|json_script:"organizationJson" }}
+
             <p class="text-center top_spac"> Copyright &copy 2023 VolunCheer, org.  All Rights Reserved.</p>
     
             </div>
