@@ -2,8 +2,8 @@ import datetime
 
 from django import test
 from django.contrib.auth import get_user_model
-import pytz
 from django.utils.timezone import make_aware
+import pytz
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity

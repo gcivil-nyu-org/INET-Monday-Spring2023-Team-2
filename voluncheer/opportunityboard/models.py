@@ -2,11 +2,11 @@ import datetime
 
 from django.db import models
 from django.utils.timezone import make_aware
+import pytz
 
 from profiles.models import Organization
 from profiles.models import Volunteer
 from voluncheer.settings import TIME_ZONE
-import pytz
 
 
 class Category(models.Model):
