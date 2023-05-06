@@ -1,8 +1,9 @@
 import datetime
-from zoneinfo import ZoneInfo
 
 from django import test
 from django.contrib.auth import get_user_model
+import pytz
+from django.utils.timezone import make_aware
 
 from opportunityboard.models import Category
 from opportunityboard.models import Opportunity
@@ -48,7 +49,8 @@ class TestCase(test.TestCase):
         )
         description = "Please help us support our community at this week's soup kitchen"
         self.end = datetime.time(1, 30, 0)
-        self.date = datetime.datetime(year=2023, month=5, day=8, tzinfo=ZoneInfo(TIME_ZONE))
+        self.date = datetime.datetime(year=2023, month=5, day=8)
+        self.date = make_aware(self.date, timezone=pytz.timezone(TIME_ZONE))
         delta = datetime.timedelta(days=30)
         self.end_date = self.date + delta
         self.opp = Opportunity.objects.create(

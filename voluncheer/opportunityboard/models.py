@@ -1,5 +1,4 @@
 import datetime
-from zoneinfo import ZoneInfo
 
 from django.db import models
 from django.utils.timezone import make_aware
@@ -7,6 +6,7 @@ from django.utils.timezone import make_aware
 from profiles.models import Organization
 from profiles.models import Volunteer
 from voluncheer.settings import TIME_ZONE
+import pytz
 
 
 class Category(models.Model):
@@ -119,9 +119,8 @@ class Opportunity(models.Model):
             end_datetime = datetime.datetime.combine(self.date.date(), self.end)
         else:
             end_datetime = datetime.datetime.combine(self.end_date, self.end)
-        end_datetime = make_aware(
-            end_datetime, timezone=ZoneInfo(TIME_ZONE)
-        )  # make end_datetime TZ aware
+        time_zone = pytz.timezone(TIME_ZONE)
+        end_datetime = make_aware(end_datetime, timezone=time_zone)  # make end_datetime TZ aware
         duration = end_datetime - self.date
         duration_seconds = datetime.timedelta(seconds=duration.seconds)  # remove date
         return duration_seconds
