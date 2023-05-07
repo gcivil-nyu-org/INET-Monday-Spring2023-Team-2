@@ -17,10 +17,6 @@
                 <a href="{% url 'post_an_opportunity' %}" class="active">POST AN OPPORTUNITY</a>
                 <hr align="center">
             </div>
-            <div class="url">
-                <a class="not-implemented-yet" href="#">IMPACT</a>
-                <hr align="center">
-            </div>
         </div>
     </div>
     <!-- End -->
@@ -62,7 +58,7 @@
         autocomplete.addListener('place_changed', () => {
           const place = autocomplete.getPlace();
           console.log(place);
-        });
+              });
       }
     </script>
     {% endif %}

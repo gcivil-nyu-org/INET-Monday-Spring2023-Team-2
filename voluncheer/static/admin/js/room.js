@@ -1,6 +1,9 @@
 const roomName = JSON.parse(document.getElementById('roomName').textContent);
+const userPK = JSON.parse(document.getElementById('userPK').textContent);
+const volunteerJson = JSON.parse(document.getElementById('volunteerJson').textContent);
+const organizationJson = JSON.parse(document.getElementById('organizationJson').textContent);
 
-let chatLog = document.querySelector("#chatLog");
+let chatLog = document.querySelector("#msg_history");
 let chatMessageInput = document.querySelector("#chatMessageInput");
 let chatMessageSend = document.querySelector("#chatMessageSend");
 let onlineUsersSelector = document.querySelector("#onlineUsersSelector");
@@ -8,7 +11,7 @@ let msgContainer = document.getElementById("msg_history")
 
 $('.chat_list').on('click', function (evt) {
     console.log(this.id);
-    var roomName = this.id.split(" (")[0];
+    var roomName = this.id;
     window.location.pathname = "chatroom/" + roomName + "/";
 });
 
@@ -37,14 +40,26 @@ chatMessageInput.onkeyup = function (e) {
     }
 };
 
-// clear the 'chatMessageInput' and forward the message
-chatMessageSend.onclick = function () {
+function sendChatMsg() {
     if (chatMessageInput.value.length === 0) return;
-    chatSocket.send(JSON.stringify({
+    var date = new Date(Date.now()); 
+    var photo;
+    if (Object.keys(volunteerJson).length) {
+        photo = volunteerJson;
+    } else if (Object.keys(organizationJson).length) {
+        photo = organizationJson;
+    }
+    var msg = JSON.stringify({
+        "user": userPK,
         "message": chatMessageInput.value,
-    }));
+        "room": roomName,
+        "timestamp": date.toGMTString(),
+        "photo": photo,
+    });
+    chatSocket.send(msg);
+
     chatMessageInput.value = "";
-};
+}
 
 let chatSocket = null;
 
@@ -65,12 +80,12 @@ function connect() {
 
     chatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
-        console.log(data);
         switch (data.type) {
             case "chat_message":
                 var date = new Date(Date.now());
                 var incoming_template = `<div class="incoming_msg">
-                <div class="incoming_msg_img"> <img src="{% static "images/organize_image_0.png" %}" alt="TestOrg"> </div>
+                <div class="incoming_msg_img"> <img src="`+
+                data.photo+`" alt="TestOrg"> </div>
                 <div class="received_msg">
                   <div class="received_withd_msg">
                     <p>` + data.message + `</p>
@@ -82,7 +97,7 @@ function connect() {
                   <p>` + data.message + `</p>
                   <span class="time_date">` + date.toGMTString() + `</span> </div>
                   </div>`
-                msgContainer.innerHTML += outgoing_template + "\n";
+                msgContainer.innerHTML += incoming_template + "\n";
                 break;
             default:
                 console.error("Unknown message type!");

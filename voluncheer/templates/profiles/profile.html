@@ -26,10 +26,12 @@
                 <hr align="center">
             </div>
             {% endif %}
-            <div class="url">
-                <a href="#impact">IMPACT</a>
-                <hr align="center">
-            </div>
+            {% if user.pk is not curr_user.pk %}
+                <div class="url">
+                    <a href="#" onclick="toggleChatOrg()">CHAT</a>
+                    <hr align="center">
+                </div>
+            {% endif %}
         </div>
     </div>
     <!-- End -->
@@ -168,7 +170,7 @@
                     </article>
                     {% endfor %}
                     </div>
-                    <div class="url"><a href="#{{opportunity.pk}}-siblings" id="opportunity-sibling-{{opportunity.pk}}" class="opportunities-detail-btn" onclick="ShowSibling(this)">Show All Recurrings</a></div>
+                    <div class="url"><a href="#{{opportunity.pk}}-siblings" id="opportunity-sibling-{{opportunity.pk}}" class="opportunities-detail-btn" onclick="ShowSibling(this)">Show All Recurrences</a></div>
                     <hr align="center">
                 {% endif %}
             {% endfor %}
@@ -211,7 +213,7 @@
                     {% endif %}
                 {% endfor %}
         </div>
-
+        {% endif %}
         <h2>PAST OPPORTUNITIES</h2>
         <div class="card" id="past_opportunities">
                 {% for opportunity in past_opportunity_lists %}
@@ -225,11 +227,34 @@
                         <p class="vol-position-description-h2">Date: {{ opportunity.date }}</p>
                         <p class="vol-position-description-h2">End: {{ opportunity.end }}</p>
                         <p class="vol-position-description-h2">{{ opportunity.description }}</p>
+                        {% if user.pk is curr_user.pk %}
+                        <form method="get" id="opportunities-detail-{{opportunity.pk}}-form" class="opportunities-detail-form" action="{% url 'attendance' opportunity.pk %}">
+                            <div id="volunteer-attandence">
+                                <p class="vol-position-description-h1">Volunteer attendance:</p>
+                                {% for volunteer in opportunity.volunteers.all %}
+                                    {% if volunteer in opportunity.attended_volunteers.all %}
+                                    <div class="sticky-note green">
+                                        <input type="checkbox" class="volunteer-attandence" name="volunteer-attended" value="{{volunteer.pk}}">Attended
+                                    {% else %}
+                                    <div class="sticky-note">
+                                        <input type="checkbox" class="volunteer-attandence" name="volunteer-attended" value="{{volunteer.pk}}">Did Not Attend
+                                    {% endif %}
+                                        <br>
+                                        Name: <a href="{%url 'profile' volunteer.pk%}">{{volunteer.first_name}} {{volunteer.last_name}}</a>
+                                        {% if volunteer.photo %}
+                                        <img src="{{volunteer.photo.url}}" alt="profile pic" width="100" height="100"/>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button type="submit" id="opportunities-detail-form-btn" class="opportunities-detail-form-submit">Confirm Attendence</button>
+                        </form>
+                        <div class="url"><a href="#opportunity-edit-{{opportunity.pk}}" id="opportunities-detail-{{opportunity.pk}}" class="opportunities-detail-btn" onclick="ShowDetail(this)">Details</a></div>
+                        {% endif %}
                         <hr align="center">
 				    </article>
                 {% endfor %}
         </div>
-        {% endif %}
     </div>
     <!-- End -->
 
@@ -238,7 +263,6 @@
 
 
   {% elif user.is_volunteer %}
-  </div>
     <!-- Side Nav -->
     <div class="sidenav">
         <div class="profile">
@@ -246,7 +270,7 @@
                 <img src="{{volunteer.photo.url}}" alt="profile pic" width="100" height="100"/>
             {% endif %}
             <div class="name">
-                {{ volunteer.first_name }}, {{ volunteer.last_name }}
+                {{ volunteer.first_name }} {{ volunteer.last_name }}
             </div>
             <div class="email">
                 {{ user.email }}
@@ -258,21 +282,25 @@
         </div>
 
         <div class="sidenav-url">
-            <div class="url">
-                <a href="{% url 'home' %}" class="active" >PROFILE</a>
-                <hr align="center">
-            </div>
             {% if user.pk is curr_user.pk %}
-            <div class="url">
-                <a class="not-implemented-yet" href="#">SETTINGS</a>
-                <hr align="center">
-            </div>
-
+                <div class="url">
+                    <a href="{% url 'home' %}" class="active" >PROFILE</a>
+                    <hr align="center">
+                </div>
+            {% endif %}
+            {% if user.pk is curr_user.pk %}
             <div class="url">
                 <a href="{% url 'saved_events' %}" >MY VOLUNCHEERS</a>
                 <hr align="center">
             </div>
             {% endif %}
+            {% if user.pk is not curr_user.pk %}
+                <div class="url">
+                    <a href="#" onclick="toggleChatVol()">CHAT</a>
+                    <hr align="center">
+                </div>
+            {% endif %}
+            
             <div class="url">
                 <a href="{% url 'create_post' %}" >CREATE POST</a>
                 <hr align="center">
@@ -352,5 +380,7 @@
     </div>
     <!-- End -->
   {% endif %}
+  {{ curr_user.email|json_script:"currUser" }}
+  {{ user.email|json_script:"profileUser" }}
   <script type="text/javascript" src="{% static 'js/jquery_appendix.js' %}"></script>
 {% endblock %}

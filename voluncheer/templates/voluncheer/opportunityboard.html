@@ -38,9 +38,9 @@
                   </path>
                 </svg>
               </div>
-              <input id="search" type="text" placeholder="Search..." />
+              <input id="search" type="text" name="keyword" placeholder="Search..." />
               <div class="result-count">
-                <span>108 </span>results
+                <span id="search-result-num">{{ opportunity_lists|length }} </span>results
               </div>
             </div>
           </div>
@@ -91,7 +91,7 @@
                   </ul>
                 </li>
               </div>
-              <div class="input-field">
+              <!-- <div class="input-field">
                 <div class="input-select">
                   <select data-trigger="" name="choices-single-defaul">
                     <option placeholder="" value="">WORK PLACE</option>
@@ -100,9 +100,7 @@
                     <option>FUSION</option>
                   </select>
                 </div>
-              </div>
-            </div>
-            <div class="row second">
+              </div> -->
               <div class="slidecontainer">
                 <label for="formControlRange">Distance (within)</label><br>
                 <input type="range" name="distance" class="form-control-range" min="0" max="50" step="1" value="0"
@@ -113,10 +111,12 @@
                 <input type="hidden" id="latitude" name="latitude" value="0">
                 <input type="hidden" id="longitude" name="longitude" value="0">
               </div>
-              <div class="slidecontainer">
+            </div>
+            <div class="row second">
+              <!-- <div class="slidecontainer">
                 <label for="date-range">Date Range</label><br>
                 <input type="text" id="date-range" name="startdates">
-              </div>
+              </div> -->
             </div>
             <div class="row third"></div>
             <div class="input-field">
@@ -153,13 +153,13 @@
         {% if opportunity.is_published and opportunity.staffing > 0 %}
         <article name="article">
           {% if opportunity.photo %}
-          <a href="{%url 'organization_view' opportunity.organization.pk%}"><img src="{{opportunity.photo.url}}" alt=""
+          <a href="{%url 'profile' opportunity.organization.pk%}"><img src="{{opportunity.photo.url}}" alt=""
               class="vol-position-image" width="275px" /></a>
           {% endif %}
           <p class="vol-position-description-h1">{{ opportunity.title }}</p>
           {%if user.is_volunteer%}
           <p class="vol-position-description-h3">
-            Published by: <a href="{%url 'organization_view' opportunity.organization.pk%}">{{ opportunity.organization }}</a>
+            Published by: <a href="{%url 'profile' opportunity.organization.pk%}">{{ opportunity.organization }}</a>
           </p>
           {%endif%}
           <p class="vol-position-description-h3">Pubdate: {{ opportunity.pubdate }}</p>

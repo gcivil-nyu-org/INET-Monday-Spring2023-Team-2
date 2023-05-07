@@ -1,9 +1,12 @@
-import datetime as dt
+import datetime
 
 from django.db import models
+from django.utils.timezone import make_aware
+import pytz
 
 from profiles.models import Organization
 from profiles.models import Volunteer
+from voluncheer.settings import TIME_ZONE
 
 
 class Category(models.Model):
@@ -95,8 +98,8 @@ class Opportunity(models.Model):
     end_date = models.DateField(null=True, blank=True)
     address_1 = models.CharField(max_length=255)
     address_2 = models.CharField(null=True, blank=True, max_length=255)
-    longitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
-    latitude = models.DecimalField(null=True, blank=True, max_digits=9, decimal_places=6)
+    longitude = models.FloatField(null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
     staffing = models.PositiveIntegerField(null=True, blank=True)
     is_published = models.BooleanField(default=False)
     photo = models.ImageField(upload_to=_opportunity_photo_path, blank=True, null=True)
@@ -113,12 +116,13 @@ class Opportunity(models.Model):
     @property
     def duration(self):
         if self.end_date is None:
-            end_datetime = dt.datetime.combine(self.date.date(), self.end)
+            end_datetime = datetime.datetime.combine(self.date.date(), self.end)
         else:
-            end_datetime = dt.datetime.combine(self.end_date, self.end)
-        start_datetime = self.date.replace(tzinfo=None)  # make start date naive for subtraction
-        duration = end_datetime - start_datetime
-        duration_seconds = dt.timedelta(seconds=duration.seconds)  # remove date
+            end_datetime = datetime.datetime.combine(self.end_date, self.end)
+        time_zone = pytz.timezone(TIME_ZONE)
+        end_datetime = make_aware(end_datetime, timezone=time_zone)  # make end_datetime TZ aware
+        duration = end_datetime - self.date
+        duration_seconds = datetime.timedelta(seconds=duration.seconds)  # remove date
         return duration_seconds
 
     def delete_recurrences(self):
