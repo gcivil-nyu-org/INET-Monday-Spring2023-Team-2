@@ -174,7 +174,7 @@
                     </article>
                     {% endfor %}
                     </div>
-                    <div class="url"><a href="#{{opportunity.pk}}-siblings" id="opportunity-sibling-{{opportunity.pk}}" class="opportunities-detail-btn" onclick="ShowSibling(this)">Show All Recurrings</a></div>
+                    <div class="url"><a href="#{{opportunity.pk}}-siblings" id="opportunity-sibling-{{opportunity.pk}}" class="opportunities-detail-btn" onclick="ShowSibling(this)">Show All Recurrences</a></div>
                     <hr align="center">
                 {% endif %}
             {% endfor %}
@@ -268,10 +268,6 @@
                 <hr align="center">
             </div>
             {% if user.pk is curr_user.pk %}
-            <div class="url">
-                <a class="not-implemented-yet" href="#">SETTINGS</a>
-                <hr align="center">
-            </div>
 
             <div class="url">
                 <a href="{% url 'saved_events' %}" >MY VOLUNCHEERS</a>
