@@ -284,10 +284,10 @@
 
         <div class="sidenav-url">
             {% if user.pk is curr_user.pk %}
-            <div class="url">
-                <a href="{% url 'home' %}" class="active" >PROFILE</a>
-                <hr align="center">
-            </div>
+                <div class="url">
+                    <a href="{% url 'home' %}" class="active" >PROFILE</a>
+                    <hr align="center">
+                </div>
             {% endif %}
             {% if user.pk is curr_user.pk %}
             <div class="url">
@@ -301,12 +301,11 @@
                     <hr align="center">
                 </div>
             {% endif %}
-            {% if user.pk is curr_user.pk %}
+            
             <div class="url">
                 <a href="{% url 'create_post' %}" >CREATE POST</a>
                 <hr align="center">
             </div>
-            {% endif %}
         </div>
     </div>
     <!-- Main -->

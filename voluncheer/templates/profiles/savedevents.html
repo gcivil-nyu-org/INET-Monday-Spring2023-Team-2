@@ -22,10 +22,12 @@
         </div>
 
         <div class="sidenav-url">
-            <div class="url">
-                <a href="{% url 'home' %}" >PROFILE</a>
-                <hr align="center">
-            </div>
+            {% if user.pk is curr_user.pk %}
+                <div class="url">
+                    <a href="{% url 'home' %}" >PROFILE</a>
+                    <hr align="center">
+                </div>
+            {% endif %}
             <div class="url">
                 <a href="{% url 'saved_events' %}" class="active">MY VOLUNCHEERS</a>
                 <hr align="center">
