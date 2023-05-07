@@ -20,6 +20,10 @@ def geocode_address(address):
         if data["status"] == "OK":
             location = data["results"][0]["geometry"]["location"]
             return location["lat"], location["lng"]
+        else:
+            raise ValueError(f"Data: {data}")
+    else:
+        raise ValueError(f"Response: {response}")
     return None, None
 
 
