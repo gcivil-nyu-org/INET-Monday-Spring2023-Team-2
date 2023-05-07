@@ -27,15 +27,11 @@
             </div>
             {% endif %}
             {% if user.pk is not curr_user.pk %}
-            <div class="url">
-                <a href="#" onclick="toggleChatOrg()">CHAT</a>
-                <hr align="center">
-            </div>
+                <div class="url">
+                    <a href="#" onclick="toggleChatOrg()">CHAT</a>
+                    <hr align="center">
+                </div>
             {% endif %}
-            <div class="url">
-                <a href="#impact">IMPACT</a>
-                <hr align="center">
-            </div>
         </div>
     </div>
     <!-- End -->
@@ -286,23 +282,25 @@
         </div>
 
         <div class="sidenav-url">
-            <div class="url">
-                <a href="{% url 'home' %}" class="active" >PROFILE</a>
-                <hr align="center">
-            </div>
             {% if user.pk is curr_user.pk %}
-
+                <div class="url">
+                    <a href="{% url 'home' %}" class="active" >PROFILE</a>
+                    <hr align="center">
+                </div>
+            {% endif %}
+            {% if user.pk is curr_user.pk %}
             <div class="url">
                 <a href="{% url 'saved_events' %}" >MY VOLUNCHEERS</a>
                 <hr align="center">
             </div>
             {% endif %}
             {% if user.pk is not curr_user.pk %}
-            <div class="url">
-                <a href="#" onclick="toggleChatVol()">CHAT</a>
-                <hr align="center">
-            </div>
+                <div class="url">
+                    <a href="#" onclick="toggleChatVol()">CHAT</a>
+                    <hr align="center">
+                </div>
             {% endif %}
+            
             <div class="url">
                 <a href="{% url 'create_post' %}" >CREATE POST</a>
                 <hr align="center">
