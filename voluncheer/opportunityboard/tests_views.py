@@ -137,6 +137,17 @@ class OpportunityboardTestCase(TestCase):
             opp_list = filters.search()
             self.assertEqual(len(opp_list), 0)
 
+    def test_search_by_keyword(self):
+        """test search by keyword"""
+        filters = Filter(keyword="soup")
+
+        opp_list = filters.search()
+        self.assertEqual(len(opp_list), 1)
+
+        filters.keyword = "Sooooooooup"
+        opp_list = filters.search()
+        self.assertEqual(len(opp_list), 0)
+
 
 class VolunteerSignUpView(TestCase):
     """This is the test case for Volunteer signup and other volunteer centric behaviors"""
