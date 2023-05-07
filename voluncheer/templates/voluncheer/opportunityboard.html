@@ -153,13 +153,13 @@
         {% if opportunity.is_published and opportunity.staffing > 0 %}
         <article name="article">
           {% if opportunity.photo %}
-          <a href="{%url 'organization_view' opportunity.organization.pk%}"><img src="{{opportunity.photo.url}}" alt=""
+          <a href="{%url 'profile' opportunity.organization.pk%}"><img src="{{opportunity.photo.url}}" alt=""
               class="vol-position-image" width="275px" /></a>
           {% endif %}
           <p class="vol-position-description-h1">{{ opportunity.title }}</p>
           {%if user.is_volunteer%}
           <p class="vol-position-description-h3">
-            Published by: <a href="{%url 'organization_view' opportunity.organization.pk%}">{{ opportunity.organization }}</a>
+            Published by: <a href="{%url 'profile' opportunity.organization.pk%}">{{ opportunity.organization }}</a>
           </p>
           {%endif%}
           <p class="vol-position-description-h3">Pubdate: {{ opportunity.pubdate }}</p>
