@@ -11,7 +11,7 @@
             <img src="{{volunteer.photo.url}}" alt="profile pic" width="100" height="100"/>
         {% endif %}
         <div class="name">
-            {{ volunteer.first_name }}, {{ volunteer.last_name }}
+            {{ volunteer.first_name }} {{ volunteer.last_name }}
         </div>
         <div class="email">
             {{ user.email }}
@@ -28,14 +28,10 @@
             <hr align="center">
         </div>
         <div class="url">
-            <a class="not-implemented-yet" href="#">SETTINGS</a>
-            <hr align="center">
-        </div>
-        <div class="url">
             <a href="{% url 'saved_events' %}" >MY VOLUNCHEERS</a>
             <hr align="center">
         </div>
-        {% if user.pk is not curr_user.pk %}
+        {% if user.pk is not volunteer.pk %}
             <div class="url">
                 <a href="#" onclick="toggleChatVol()">CHAT</a>
                 <hr align="center">
