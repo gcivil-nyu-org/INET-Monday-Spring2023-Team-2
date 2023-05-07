@@ -12,7 +12,7 @@ from voluncheer import settings
 
 
 def geocode_address(address):
-    key = settings.GOOGLE_MAPS_API_KEY
+    key = settings.GOOGLE_MAPS_SERVER_API_KEY
     url = "https://maps.googleapis.com/maps/api/geocode/json?address={}&key={}".format(address, key)
     response = requests.get(url)
     if response.status_code == 200:
