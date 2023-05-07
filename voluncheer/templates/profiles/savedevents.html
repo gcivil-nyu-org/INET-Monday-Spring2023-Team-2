@@ -30,7 +30,7 @@
                 <a href="{% url 'saved_events' %}" class="active">MY VOLUNCHEERS</a>
                 <hr align="center">
             </div>
-            {% if user.pk is not volunteer.pk %}
+            {% if user.pk is not curr_user.pk and curr_user.pk is not NULL%}
                 <div class="url">
                     <a href="#" onclick="toggleChatVol()">CHAT</a>
                     <hr align="center">

@@ -31,12 +31,6 @@
             <a href="{% url 'saved_events' %}" >MY VOLUNCHEERS</a>
             <hr align="center">
         </div>
-        {% if user.pk is not volunteer.pk %}
-            <div class="url">
-                <a href="#" onclick="toggleChatVol()">CHAT</a>
-                <hr align="center">
-            </div>
-        {% endif %}
         <div class="url">
             <a href="{% url 'create_post' %}" class="active">CREATE POST</a>
             <hr align="center">

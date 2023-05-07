@@ -20,13 +20,13 @@
             </div>
         </div>
         <div class="sidenav-url">
-            {% if user.pk is organization.pk %}
+            {% if user.pk is curr_user.pk %}
             <div class="url" id="post_an_opportunity">
                 <a href="{% url 'post_an_opportunity' %}" class="active">POST AN OPPORTUNITY</a>
                 <hr align="center">
             </div>
             {% endif %}
-            {% if user.pk is not organization.pk %}
+            {% if user.pk is not curr_user.pk %}
                 <div class="url">
                     <a href="#" onclick="toggleChatOrg()">CHAT</a>
                     <hr align="center">
@@ -283,27 +283,30 @@
         </div>
 
         <div class="sidenav-url">
+            {% if user.pk is curr_user.pk %}
             <div class="url">
                 <a href="{% url 'home' %}" class="active" >PROFILE</a>
                 <hr align="center">
             </div>
-            {% if user.pk is volunteer.pk %}
-
+            {% endif %}
+            {% if user.pk is curr_user.pk %}
             <div class="url">
                 <a href="{% url 'saved_events' %}" >MY VOLUNCHEERS</a>
                 <hr align="center">
             </div>
             {% endif %}
-            {% if user.pk is not volunteer.pk %}
+            {% if user.pk is not curr_user.pk %}
                 <div class="url">
                     <a href="#" onclick="toggleChatVol()">CHAT</a>
                     <hr align="center">
                 </div>
             {% endif %}
+            {% if user.pk is curr_user.pk %}
             <div class="url">
                 <a href="{% url 'create_post' %}" >CREATE POST</a>
                 <hr align="center">
             </div>
+            {% endif %}
         </div>
     </div>
     <!-- Main -->

@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="sidenav-url">
-        {% if user.pk is not organization.pk %}
+        {% if user.pk is not curr_user.pk %}
             <div class="url">
                 <a href="#" id="roomConnect" onclick="toggleChatOrg()">CHAT</a>
                 <hr align="center">
