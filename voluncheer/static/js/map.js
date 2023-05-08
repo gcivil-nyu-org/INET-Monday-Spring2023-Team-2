@@ -200,7 +200,7 @@ function buildContentOpp(opp) {
         <span class="fa-sr-only">${opp.type}</span>
     </div>
     <div class="details">
-        <div class="title">${opp.title}</div>
+        <div class="name">${opp.title}</div>
         <div class="address">${opp.address}</div>
         <div class="type">${opp.type}</div>
     </div>
